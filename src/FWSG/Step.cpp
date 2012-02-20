@@ -7,16 +7,6 @@ Step::Step( BufferObject::PtrConst bo ) :
 {
 }
 
-Step::Step( BufferObject::PtrConst bo, TexturePtrConst texture ) :
-	m_bo( bo ),
-	m_texture( texture )
-{
-}
-
-Step::TexturePtrConst Step::get_texture() const {
-	return m_texture;
-}
-
 BufferObject::PtrConst Step::get_buffer_object() const {
 	return m_bo;
 }

@@ -12,19 +12,10 @@ BOOST_AUTO_TEST_CASE( TestStep ) {
 	{
 		sg::Step step( bo );
 
+		BOOST_CHECK( step.get_translation() == sf::Vector3f( 0, 0, 0 ) );
+		BOOST_CHECK( step.get_rotation() == sf::Vector3f( 0, 0, 0 ) );
+		BOOST_CHECK( step.get_scale() == sf::Vector3f( 0, 0, 0 ) );
 		BOOST_CHECK( step.get_buffer_object() == bo );
-		BOOST_CHECK( step.get_texture() == false );
-	}
-
-	// Ctors.
-	{
-		{
-			std::shared_ptr<sf::Texture> texture( new sf::Texture );
-
-			sg::Step step( bo, texture );
-			BOOST_CHECK( step.get_buffer_object() == bo );
-			BOOST_CHECK( step.get_texture() == texture );
-		}
 	}
 
 	// Basic properties.
