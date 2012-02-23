@@ -28,10 +28,14 @@ set( INC_DIR "include" )
 set(
 	SOURCES
 	${INC_DIR}/FWSG/BufferObject.hpp
+	${INC_DIR}/FWSG/Leaf.hpp
+	${INC_DIR}/FWSG/Node.hpp
 	${INC_DIR}/FWSG/NonCopyable.hpp
 	${INC_DIR}/FWSG/Step.hpp
 	${INC_DIR}/FWSG/Vertex.hpp
 	${SRC_DIR}/FWSG/BufferObject.cpp
+	${SRC_DIR}/FWSG/Leaf.cpp
+	${SRC_DIR}/FWSG/Node.cpp
 	${SRC_DIR}/FWSG/NonCopyable.cpp
 	${SRC_DIR}/FWSG/Step.cpp
 	${SRC_DIR}/FWSG/Vertex.cpp
