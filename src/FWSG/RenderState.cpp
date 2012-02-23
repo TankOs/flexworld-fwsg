@@ -9,4 +9,13 @@ RenderState::RenderState() :
 {
 }
 
+bool RenderState::operator==( const RenderState& other ) const {
+	return
+		texture.get() == other.texture.get() &&
+		wireframe == other.wireframe &&
+		depth_test == other.depth_test &&
+		cull == other.cull
+	;
+}
+
 }

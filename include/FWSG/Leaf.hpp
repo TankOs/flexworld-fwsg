@@ -1,6 +1,7 @@
 #pragma once
 
 #include <FWSG/NonCopyable.hpp>
+#include <FWSG/RenderState.hpp>
 #include <FWSG/State.hpp>
 
 #include <SFML/System/Vector3.hpp>
@@ -27,7 +28,7 @@ class Leaf : public NonCopyable {
 		 */
 		virtual ~Leaf();
 
-		/** Set parent.
+		/** Set parent (for internal use!).
 		 * @param node Node.
 		 */
 		void set_parent( std::shared_ptr<Node> node );
@@ -98,6 +99,10 @@ class Leaf : public NonCopyable {
 		 */
 		void recalculate_global_transform();
 
+		/** Update render state.
+		 */
+		void update_render_state();
+
 		/** Get number of set states.
 		 * @return Number of set states.
 		 */
@@ -121,6 +126,11 @@ class Leaf : public NonCopyable {
 		template <class StateType>
 		void reset_state();
 
+		/** Get set of states (render state).
+		 * @return Render state.
+		 */
+		const RenderState& get_render_state() const;
+
 	protected:
 		/** Ctor.
 		 */
@@ -135,6 +145,11 @@ class Leaf : public NonCopyable {
 		 */
 		virtual void handle_recalculate_global_transform();
 
+		/** Handle update of render state.
+		 * Called after update_render_state().
+		 */
+		virtual void handle_update_render_state();
+
 	private:
 		struct StateTypeComparator {
 			bool operator()( const State* first, const State* second );
@@ -142,6 +157,8 @@ class Leaf : public NonCopyable {
 		};
 
 		typedef std::vector<const State*> StateVector;
+
+		RenderState m_render_state;
 
 		sf::Vector3f m_global_translation;
 		sf::Vector3f m_global_rotation;

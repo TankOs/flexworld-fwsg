@@ -12,6 +12,12 @@ struct RenderState {
 	 */
 	RenderState();
 
+	/** Equality.
+	 * @param other Other RenderState object.
+	 * @return true if equal.
+	 */
+	bool operator==( const RenderState& other ) const;
+
 	std::shared_ptr<const sf::Texture> texture;
 	bool wireframe;
 	bool depth_test;

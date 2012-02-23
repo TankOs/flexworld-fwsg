@@ -4,6 +4,8 @@
 
 namespace sg {
 
+const State::Type TextureState::TYPE_ID = State::TEXTURE;
+
 TextureState::TextureState( TexturePtrConst texture ) :
 	State( State::TEXTURE ),
 	m_texture( texture )

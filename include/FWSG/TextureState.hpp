@@ -14,6 +14,8 @@ class TextureState : public State {
 	public:
 		typedef std::shared_ptr<const sf::Texture> TexturePtrConst; ///< Shared pointer to const texture.
 
+		static const Type TYPE_ID; ///< Texture state type ID.
+
 		/** Ctor.
 		 * Undefined behaviour if texture is null.
 		 * @param texture Texture.

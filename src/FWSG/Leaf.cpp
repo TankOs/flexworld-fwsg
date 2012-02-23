@@ -1,5 +1,7 @@
 #include <FWSG/Leaf.hpp>
 #include <FWSG/Node.hpp>
+#include <FWSG/TextureState.hpp>
+#include <FWSG/WireframeState.hpp>
 
 #include <cassert>
 
@@ -132,6 +134,41 @@ bool Leaf::StateTypeComparator::operator()( const State* first, const State* sec
 
 bool Leaf::StateTypeComparator::operator()( const State* first, const State::Type type ) {
 	return first->get_type() < type;
+}
+
+const RenderState& Leaf::get_render_state() const {
+	return m_render_state;
+}
+
+void Leaf::update_render_state() {
+	// Reset.
+	m_render_state = RenderState();
+
+	Node::Ptr parent = m_parent.lock();
+
+	const TextureState* texture = find_state<TextureState>();
+	if( !texture && parent ) {
+		texture = parent->find_state<TextureState>();
+	}
+
+	const WireframeState* wireframe = find_state<WireframeState>();
+	if( !wireframe && parent ) {
+		wireframe = parent->find_state<WireframeState>();
+	}
+
+	// Set render state.
+	if( texture ) {
+		m_render_state.texture = texture->get_texture();
+	}
+
+	if( wireframe ) {
+		m_render_state.wireframe = wireframe->is_set();
+	}
+
+	handle_update_render_state();
+}
+
+void Leaf::handle_update_render_state() {
 }
 
 }
