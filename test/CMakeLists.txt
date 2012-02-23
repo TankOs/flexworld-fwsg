@@ -13,10 +13,13 @@ set( INC_DIR "src" )
 set(
 	SOURCES
 	${SRC_DIR}/Test.cpp
+	${SRC_DIR}/TestBoolState.cpp
 	${SRC_DIR}/TestBufferObject.cpp
 	${SRC_DIR}/TestLeaf.cpp
 	${SRC_DIR}/TestNode.cpp
+	${SRC_DIR}/TestRenderState.cpp
 	${SRC_DIR}/TestStep.cpp
+	${SRC_DIR}/TestTextureState.cpp
 	${SRC_DIR}/TestVertex.cpp
 )
 

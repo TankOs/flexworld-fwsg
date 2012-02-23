@@ -27,17 +27,25 @@ set( INC_DIR "include" )
 
 set(
 	SOURCES
+	${INC_DIR}/FWSG/BoolState.hpp
 	${INC_DIR}/FWSG/BufferObject.hpp
 	${INC_DIR}/FWSG/Leaf.hpp
 	${INC_DIR}/FWSG/Node.hpp
 	${INC_DIR}/FWSG/NonCopyable.hpp
+	${INC_DIR}/FWSG/RenderState.hpp
+	${INC_DIR}/FWSG/State.hpp
 	${INC_DIR}/FWSG/Step.hpp
+	${INC_DIR}/FWSG/TextureState.hpp
 	${INC_DIR}/FWSG/Vertex.hpp
+	${SRC_DIR}/FWSG/BoolState.cpp
 	${SRC_DIR}/FWSG/BufferObject.cpp
 	${SRC_DIR}/FWSG/Leaf.cpp
 	${SRC_DIR}/FWSG/Node.cpp
 	${SRC_DIR}/FWSG/NonCopyable.cpp
+	${SRC_DIR}/FWSG/RenderState.cpp
+	${SRC_DIR}/FWSG/State.cpp
 	${SRC_DIR}/FWSG/Step.cpp
+	${SRC_DIR}/FWSG/TextureState.cpp
 	${SRC_DIR}/FWSG/Vertex.cpp
 )
 
