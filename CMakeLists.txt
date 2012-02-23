@@ -37,6 +37,7 @@ set(
 	${INC_DIR}/FWSG/Step.hpp
 	${INC_DIR}/FWSG/TextureState.hpp
 	${INC_DIR}/FWSG/Vertex.hpp
+	${INC_DIR}/FWSG/WireframeState.hpp
 	${SRC_DIR}/FWSG/BoolState.cpp
 	${SRC_DIR}/FWSG/BufferObject.cpp
 	${SRC_DIR}/FWSG/Leaf.cpp
@@ -47,6 +48,7 @@ set(
 	${SRC_DIR}/FWSG/Step.cpp
 	${SRC_DIR}/FWSG/TextureState.cpp
 	${SRC_DIR}/FWSG/Vertex.cpp
+	${SRC_DIR}/FWSG/WireframeState.cpp
 )
 
 include_directories( ${INC_DIR} )

@@ -21,6 +21,7 @@ set(
 	${SRC_DIR}/TestStep.cpp
 	${SRC_DIR}/TestTextureState.cpp
 	${SRC_DIR}/TestVertex.cpp
+	${SRC_DIR}/TestWireframeState.cpp
 )
 
 include_directories( ${PROJECT_SOURCE_DIR}/../include )
