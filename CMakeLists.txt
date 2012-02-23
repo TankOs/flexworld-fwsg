@@ -29,6 +29,7 @@ set(
 	SOURCES
 	${INC_DIR}/FWSG/BoolState.hpp
 	${INC_DIR}/FWSG/BufferObject.hpp
+	${INC_DIR}/FWSG/Leaf.inl
 	${INC_DIR}/FWSG/Leaf.hpp
 	${INC_DIR}/FWSG/Node.hpp
 	${INC_DIR}/FWSG/NonCopyable.hpp

@@ -1,9 +1,11 @@
 #pragma once
 
 #include <FWSG/NonCopyable.hpp>
+#include <FWSG/State.hpp>
 
 #include <SFML/System/Vector3.hpp>
 #include <memory>
+#include <vector>
 
 namespace sg {
 
@@ -96,6 +98,29 @@ class Leaf : public NonCopyable {
 		 */
 		void recalculate_global_transform();
 
+		/** Get number of set states.
+		 * @return Number of set states.
+		 */
+		std::size_t get_num_states() const;
+
+		/** Find state by type.
+		 * @return State or nullptr if not set.
+		 */
+		template <class StateType>
+		const StateType* find_state() const;
+
+		/** Set state.
+		 * Previous states with the same type get overwritten.
+		 * @param state State.
+		 */
+		template <class StateType>
+		void set_state( const StateType& state );
+
+		/** Reset state.
+		 */
+		template <class StateType>
+		void reset_state();
+
 	protected:
 		/** Ctor.
 		 */
@@ -111,6 +136,13 @@ class Leaf : public NonCopyable {
 		virtual void handle_recalculate_global_transform();
 
 	private:
+		struct StateTypeComparator {
+			bool operator()( const State* first, const State* second );
+			bool operator()( const State* first, const State::Type type );
+		};
+
+		typedef std::vector<const State*> StateVector;
+
 		sf::Vector3f m_global_translation;
 		sf::Vector3f m_global_rotation;
 		sf::Vector3f m_global_scale;
@@ -118,9 +150,13 @@ class Leaf : public NonCopyable {
 		sf::Vector3f m_local_rotation;
 		sf::Vector3f m_scale;
 
+		StateVector m_states;
+
 		std::weak_ptr<Node> m_parent;
 
 		bool m_needs_update;
 };
 
 }
+
+#include "Leaf.inl"

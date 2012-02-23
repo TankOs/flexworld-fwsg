@@ -2,8 +2,10 @@
 
 namespace sg {
 
+const State::Type WireframeState::TYPE_ID = State::WIREFRAME;
+
 WireframeState::WireframeState( bool enable ) :
-	BoolState( WIREFRAME, enable )
+	BoolState( TYPE_ID, enable )
 {
 }
 

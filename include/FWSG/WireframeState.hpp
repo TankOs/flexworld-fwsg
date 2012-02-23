@@ -8,6 +8,8 @@ namespace sg {
  */
 class WireframeState : public BoolState {
 	public:
+		static const Type TYPE_ID; ///< Wireframe state type ID.
+
 		/** Ctor.
 		 * @param enable Enable wireframe.
 		 */

@@ -1,5 +1,6 @@
 #include <FWSG/Leaf.hpp>
 #include <FWSG/Node.hpp>
+#include <FWSG/WireframeState.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -15,6 +16,7 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		BOOST_CHECK( leaf->get_global_translation() == sf::Vector3f( 0, 0, 0 ) );
 		BOOST_CHECK( leaf->get_global_rotation() == sf::Vector3f( 0, 0, 0 ) );
 		BOOST_CHECK( leaf->is_update_needed() == true );
+		BOOST_CHECK( leaf->get_num_states() == 0 );
 	}
 
 	// Set transform.
@@ -76,5 +78,23 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		BOOST_CHECK( root->is_update_needed() == true );
 		BOOST_CHECK( child->is_update_needed() == true );
 		BOOST_CHECK( leaf->is_update_needed() == true );
+	}
+
+	// States.
+	{
+		sg::Leaf::Ptr leaf = sg::Leaf::create();
+
+		BOOST_CHECK( leaf->find_state<sg::WireframeState>() == nullptr );
+
+		leaf->set_state( sg::WireframeState( true ) );
+		BOOST_CHECK( leaf->find_state<sg::WireframeState>() != nullptr );
+		BOOST_CHECK( leaf->find_state<sg::WireframeState>()->is_set() == true );
+
+		leaf->set_state( sg::WireframeState( false ) );
+		BOOST_CHECK( leaf->find_state<sg::WireframeState>() != nullptr );
+		BOOST_CHECK( leaf->find_state<sg::WireframeState>()->is_set() == false );
+
+		leaf->reset_state<sg::WireframeState>();
+		BOOST_CHECK( leaf->find_state<sg::WireframeState>() == nullptr );
 	}
 }

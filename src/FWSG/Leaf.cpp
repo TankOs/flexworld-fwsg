@@ -22,6 +22,12 @@ Leaf::Leaf() :
 }
 
 Leaf::~Leaf() {
+	// Kill states.
+	for( std::size_t state_idx = 0; state_idx < m_states.size(); ++state_idx ) {
+		delete m_states[state_idx];
+	}
+
+	m_states.clear();
 }
 
 void Leaf::set_parent( std::shared_ptr<Node> node ) {
@@ -114,6 +120,18 @@ void Leaf::set_scale( const sf::Vector3f& scale ) {
 }
 
 void Leaf::handle_recalculate_global_transform() {
+}
+
+std::size_t Leaf::get_num_states() const {
+	return m_states.size();
+}
+
+bool Leaf::StateTypeComparator::operator()( const State* first, const State* second ) {
+	return first->get_type() < second->get_type();
+}
+
+bool Leaf::StateTypeComparator::operator()( const State* first, const State::Type type ) {
+	return first->get_type() < type;
 }
 
 }
