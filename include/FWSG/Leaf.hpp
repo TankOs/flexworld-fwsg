@@ -35,20 +35,47 @@ class Leaf : public NonCopyable {
 		 */
 		std::shared_ptr<Node> get_parent() const;
 
-		/** Get translation.
+		/** Set local translation.
+		 * This will update the global translation, too.
+		 * @param translation Translation.
+		 */
+		void set_local_translation( const sf::Vector3f& translation );
+
+		/** Get local translation.
 		 * @return Translation.
 		 */
-		const sf::Vector3f& get_translation() const;
+		const sf::Vector3f& get_local_translation() const;
 
-		/** Get rotation.
+		/** Set local rotation.
+		 * This will update the global rotation, too.
+		 * @param rotation Rotation.
+		 */
+		void set_local_rotation( const sf::Vector3f& rotation );
+
+		/** Get local rotation.
 		 * @return Rotation.
 		 */
-		const sf::Vector3f& get_rotation() const;
+		const sf::Vector3f& get_local_rotation() const;
+
+		/** Set scale.
+		 * @param scale Scale.
+		 */
+		void set_scale( const sf::Vector3f& scale );
 
 		/** Get scale.
 		 * @return Scale.
 		 */
 		const sf::Vector3f& get_scale() const;
+
+		/** Get global translation.
+		 * @return Global translation.
+		 */
+		const sf::Vector3f& get_global_translation() const;
+
+		/** Get global rotation.
+		 * @return Global rotation.
+		 */
+		const sf::Vector3f& get_global_rotation() const;
 
 		/** Check if update is needed.
 		 * @return true if update needed.
@@ -65,6 +92,10 @@ class Leaf : public NonCopyable {
 		 */
 		void queue_update();
 
+		/** Recalculate global transform.
+		 */
+		void recalculate_global_transform();
+
 	protected:
 		/** Ctor.
 		 */
@@ -74,9 +105,17 @@ class Leaf : public NonCopyable {
 		 */
 		virtual void handle_update();
 
+		/** Handle recaculation of global transform.
+		 * Called after recalculate_global_transform().
+		 */
+		virtual void handle_recalculate_global_transform();
+
 	private:
-		sf::Vector3f m_translation;
-		sf::Vector3f m_rotation;
+		sf::Vector3f m_global_translation;
+		sf::Vector3f m_global_rotation;
+		sf::Vector3f m_global_scale;
+		sf::Vector3f m_local_translation;
+		sf::Vector3f m_local_rotation;
 		sf::Vector3f m_scale;
 
 		std::weak_ptr<Node> m_parent;

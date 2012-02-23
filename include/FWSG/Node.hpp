@@ -46,11 +46,8 @@ class Node : public Leaf, public std::enable_shared_from_this<Node> {
 		 */
 		Node();
 
-		/** Handle update.
-		 * When implementing this method in a derived class, make sure to call this
-		 * method at the end.
-		 */
 		virtual void handle_update();
+		void handle_recalculate_global_transform();
 
 	private:
 		typedef std::vector<Leaf::Ptr> LeafVector;

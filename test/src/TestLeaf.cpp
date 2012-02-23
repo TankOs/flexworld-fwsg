@@ -9,10 +9,29 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		sg::Leaf::Ptr leaf = sg::Leaf::create();
 
 		BOOST_CHECK( leaf->get_parent() == false );
-		BOOST_CHECK( leaf->get_translation() == sf::Vector3f( 0, 0, 0 ) );
-		BOOST_CHECK( leaf->get_rotation() == sf::Vector3f( 0, 0, 0 ) );
+		BOOST_CHECK( leaf->get_local_translation() == sf::Vector3f( 0, 0, 0 ) );
+		BOOST_CHECK( leaf->get_local_rotation() == sf::Vector3f( 0, 0, 0 ) );
 		BOOST_CHECK( leaf->get_scale() == sf::Vector3f( 0, 0, 0 ) );
+		BOOST_CHECK( leaf->get_global_translation() == sf::Vector3f( 0, 0, 0 ) );
+		BOOST_CHECK( leaf->get_global_rotation() == sf::Vector3f( 0, 0, 0 ) );
 		BOOST_CHECK( leaf->is_update_needed() == true );
+	}
+
+	// Set transform.
+	{
+		sg::Leaf::Ptr leaf = sg::Leaf::create();
+
+		leaf->set_local_translation( sf::Vector3f( 10, 11, 12 ) );
+		leaf->set_local_rotation( sf::Vector3f( 20, 21, 22 ) );
+		leaf->set_scale( sf::Vector3f( 30, 31, 32 ) );
+
+		BOOST_CHECK( leaf->get_local_translation() == sf::Vector3f( 10, 11, 12 ) );
+		BOOST_CHECK( leaf->get_local_rotation() == sf::Vector3f( 20, 21, 22 ) );
+		BOOST_CHECK( leaf->get_scale() == sf::Vector3f( 30, 31, 32 ) );
+
+		// No parent, so global == local.
+		BOOST_CHECK( leaf->get_global_translation() == sf::Vector3f( 10, 11, 12 ) );
+		BOOST_CHECK( leaf->get_global_rotation() == sf::Vector3f( 20, 21, 22 ) );
 	}
 
 	// Update.
