@@ -141,22 +141,21 @@ const RenderState& Leaf::get_render_state() const {
 }
 
 void Leaf::update_render_state() {
-	// Reset.
-	m_render_state = RenderState();
-
 	Node::Ptr parent = m_parent.lock();
 
+	if( parent ) {
+		// Inherit render state from parent and overwrite by own states.
+		m_render_state = parent->get_render_state();
+	}
+	else {
+		// No parent, start with fresh render state.
+		m_render_state = RenderState();
+	}
+
 	const TextureState* texture = find_state<TextureState>();
-	if( !texture && parent ) {
-		texture = parent->find_state<TextureState>();
-	}
-
 	const WireframeState* wireframe = find_state<WireframeState>();
-	if( !wireframe && parent ) {
-		wireframe = parent->find_state<WireframeState>();
-	}
 
-	// Set render state.
+	// Overwrite render states with found states.
 	if( texture ) {
 		m_render_state.texture = texture->get_texture();
 	}

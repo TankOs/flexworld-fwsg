@@ -10,7 +10,6 @@
 
 BOOST_AUTO_TEST_CASE( TestLeaf ) {
 	sf::RenderWindow window( sf::VideoMode( 100, 100 ), "Unittest" );
-	std::shared_ptr<sf::Texture> texture( new sf::Texture );
 
 	// Initial state.
 	{
@@ -88,6 +87,8 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		BOOST_CHECK( leaf->is_update_needed() == true );
 	}
 
+	std::shared_ptr<sf::Texture> texture( new sf::Texture );
+
 	// States.
 	{
 		sg::Leaf::Ptr leaf = sg::Leaf::create();
@@ -135,16 +136,4 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		BOOST_CHECK( leaf->find_state<sg::WireframeState>() == nullptr );
 	}
 
-	// Inherit states.
-	{
-		sg::Node::Ptr root = sg::Node::create();
-		sg::Leaf::Ptr leaf = sg::Leaf::create();
-
-		root->set_state( sg::TextureState( texture ) );
-		root->set_state( sg::WireframeState( true ) );
-
-		root->add_child( leaf );
-
-
-	}
 }

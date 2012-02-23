@@ -41,8 +41,9 @@ void Node::add_child( Leaf::Ptr leaf ) {
 		queue_update();
 	}
 
-	// Recalculate global transform at child.
+	// Recalculate global transform and update render state at child.
 	leaf->recalculate_global_transform();
+	leaf->update_render_state();
 }
 
 bool Node::has_child( Leaf::Ptr leaf ) const {
@@ -53,6 +54,13 @@ void Node::handle_recalculate_global_transform() {
 	// Delegate to children.
 	for( std::size_t child_idx = 0; child_idx < m_children.size(); ++child_idx ) {
 		m_children[child_idx]->recalculate_global_transform();
+	}
+}
+
+void Node::handle_update_render_state() {
+	// Delegate to children.
+	for( std::size_t child_idx = 0; child_idx < m_children.size(); ++child_idx ) {
+		m_children[child_idx]->update_render_state();
 	}
 }
 

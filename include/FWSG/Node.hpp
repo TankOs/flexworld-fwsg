@@ -48,6 +48,7 @@ class Node : public Leaf, public std::enable_shared_from_this<Node> {
 
 		virtual void handle_update();
 		void handle_recalculate_global_transform();
+		void handle_update_render_state();
 
 	private:
 		typedef std::vector<Leaf::Ptr> LeafVector;

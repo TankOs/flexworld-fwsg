@@ -1,28 +1,21 @@
 #include <FWSG/Node.hpp>
+#include <FWSG/RenderState.hpp>
+#include <FWSG/WireframeState.hpp>
+#include <FWSG/TextureState.hpp>
 
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_CASE( TestNode ) {
+	sf::RenderWindow window( sf::VideoMode( 100, 100 ), "Unittest" );
+
 	// Initial state.
 	{
 		sg::Node::Ptr node = sg::Node::create();
-
-		BOOST_CHECK( node->get_parent() == false );
-		BOOST_CHECK( node->get_local_translation() == sf::Vector3f( 0, 0, 0 ) );
-		BOOST_CHECK( node->get_local_rotation() == sf::Vector3f( 0, 0, 0 ) );
-		BOOST_CHECK( node->get_scale() == sf::Vector3f( 0, 0, 0 ) );
-		BOOST_CHECK( node->is_update_needed() == true );
-
 		BOOST_CHECK( node->get_num_children() == 0 );
-	}
 
-	// Update.
-	{
-		sg::Node::Ptr node = sg::Node::create();
-
-		BOOST_CHECK( node->is_update_needed() == true );
-		node->update();
-		BOOST_CHECK( node->is_update_needed() == false );
+		// Other properties are checked in TestLeaf.
 	}
 
 	// Add some children.
@@ -192,6 +185,48 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			BOOST_CHECK( leaf->get_global_translation() == sf::Vector3f( 10 + 20 + 30, 100 + 200 + 300, 1000 + 2000 + 3000 ) );
 			BOOST_CHECK( leaf->get_global_rotation() == sf::Vector3f( 11 + 21 + 31, 110 + 210 + 310, 1100 + 2100 + 3100 ) );
 			BOOST_CHECK( leaf->get_scale() == sf::Vector3f( 32, 320, 3200 ) );
+		}
+	}
+
+	std::shared_ptr<sf::Texture> texture( new sf::Texture );
+
+	// Inherit states.
+	{
+		sg::Node::Ptr root = sg::Node::create();
+		sg::Node::Ptr child = sg::Node::create();
+		sg::Leaf::Ptr leaf = sg::Leaf::create();
+
+		root->set_state( sg::TextureState( texture ) );
+		child->set_state( sg::WireframeState( true ) );
+		leaf->set_state( sg::WireframeState( false ) );
+
+		child->add_child( leaf );
+		root->add_child( child );
+
+		// Check root.
+		{
+			sg::RenderState r_state;
+			r_state.texture = texture;
+
+			BOOST_CHECK( root->get_render_state() == r_state );
+		}
+
+		// Check child.
+		{
+			sg::RenderState r_state;
+			r_state.texture = texture;
+			r_state.wireframe = true;
+
+			BOOST_CHECK( child->get_render_state() == r_state );
+		}
+
+		// Check leaf.
+		{
+			sg::RenderState r_state;
+			r_state.texture = texture;
+			r_state.wireframe = false;
+
+			BOOST_CHECK( leaf->get_render_state() == r_state );
 		}
 	}
 }
