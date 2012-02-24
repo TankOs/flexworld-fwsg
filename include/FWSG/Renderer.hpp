@@ -17,6 +17,10 @@ class Renderer {
 		 */
 		Renderer();
 
+		/** Dtor.
+		 */
+		~Renderer();
+
 		/** Get number of render states.
 		 * @return Number of render states.
 		 */
@@ -43,14 +47,16 @@ class Renderer {
 		typedef std::vector<Step::Ptr> StepVector;
 
 		struct RenderStateGroup {
-			bool operator<( const RenderState& other ) const;
-			bool operator<( const RenderStateGroup& other ) const;
-
 			RenderState render_state;
 			StepVector steps;
 		};
 
-		typedef std::vector<RenderStateGroup> GroupVector;
+		struct GroupComparator {
+			bool operator()( const RenderStateGroup* first, const RenderState& second );
+			bool operator()( const RenderStateGroup* first, const RenderStateGroup* second );
+		};
+
+		typedef std::vector<RenderStateGroup*> GroupVector;
 
 		GroupVector m_groups;
 };
