@@ -1,4 +1,5 @@
 #include <FWSG/Renderer.hpp>
+#include <FWSG/BufferObject.hpp>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -15,7 +16,15 @@ BOOST_AUTO_TEST_CASE( TestRenderer ) {
 		BOOST_CHECK( renderer.get_num_render_states() == 0 );
 	}
 
-	// Create steps.
+	// Create single step.
 	{
+		sg::Renderer renderer;
+		sg::RenderState r_state;
+		sg::BufferObject::Ptr buffer_object( new sg::BufferObject );
+
+		sg::StepProxy::Ptr step = renderer.create_step( r_state, buffer_object );
+
+		BOOST_CHECK( renderer.get_num_steps() == 1 );
+		BOOST_CHECK( renderer.get_num_render_states() == 1 );
 	}
 }

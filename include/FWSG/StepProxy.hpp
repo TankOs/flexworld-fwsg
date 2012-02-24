@@ -2,6 +2,8 @@
 
 #include <FWSG/Step.hpp>
 
+#include <memory>
+
 namespace sg {
 
 class Renderer;
@@ -10,6 +12,9 @@ class Renderer;
  */
 class StepProxy {
 	public:
+		typedef std::shared_ptr<StepProxy> Ptr; ///< Shared pointer.
+		typedef std::shared_ptr<const StepProxy> PtrConst; ///< Shared pointer to const.
+
 		/** Ctor.
 		 * @param step Step.
 		 * @param renderer Renderer.
