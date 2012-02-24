@@ -13,6 +13,9 @@ namespace sg {
  */
 class Step {
 	public:
+		typedef std::shared_ptr<Step> Ptr; ///< Shared pointer.
+		typedef std::shared_ptr<const Step> PtrConst; ///< Shared pointer to const.
+
 		/** Ctor.
 		 * @param bo Buffer object.
 		 */

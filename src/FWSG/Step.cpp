@@ -3,7 +3,10 @@
 namespace sg {
 
 Step::Step( BufferObject::PtrConst bo ) :
-	m_bo( bo )
+	m_bo( bo ),
+	m_translation( 0, 0, 0 ),
+	m_rotation( 0, 0, 0 ),
+	m_scale( 1, 1, 1 )
 {
 }
 
