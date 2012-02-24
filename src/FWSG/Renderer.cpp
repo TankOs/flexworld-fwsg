@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <iostream> // XXX 
 
 namespace sg {
 
@@ -32,18 +31,17 @@ StepProxy::Ptr Renderer::create_step( const RenderState& render_state, BufferObj
 
 	// Check if it's equal.
 	if( bound_iter != m_groups.end() && bound_iter->render_state == render_state ) {
-		std::cout << "Render state already there." << std::endl;
 		bound_iter->steps.push_back( step );
+		std::sort( bound_iter->steps.begin(), bound_iter->steps.end() );
 	}
 	else {
-		std::cout << "New render state." << std::endl;
-
 		// Not equal, insert new group.
 		RenderStateGroup group;
 		group.render_state = render_state;
 
 		m_groups.push_back( group );
 		m_groups.back().steps.push_back( step );
+		std::sort( m_groups.back().steps.begin(), m_groups.back().steps.end() );
 
 		// Sort.
 		std::sort( m_groups.begin(), m_groups.end() );

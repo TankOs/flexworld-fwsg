@@ -33,4 +33,18 @@ BOOST_AUTO_TEST_CASE( TestRenderer ) {
 		BOOST_CHECK( renderer.get_num_steps() == 0 );
 		BOOST_CHECK( renderer.get_num_render_states() == 0 );
 	}
+
+	// Create multiple steps.
+	{
+		sg::Renderer renderer;
+		sg::RenderState r_state;
+		sg::BufferObject::Ptr buffer_object( new sg::BufferObject );
+
+		// Create two steps within same render state.
+		sg::StepProxy::Ptr step0 = renderer.create_step( r_state, buffer_object );
+		sg::StepProxy::Ptr step1 = renderer.create_step( r_state, buffer_object );
+
+		BOOST_CHECK( renderer.get_num_steps() == 2 );
+		BOOST_CHECK( renderer.get_num_render_states() == 1 );
+	}
 }
