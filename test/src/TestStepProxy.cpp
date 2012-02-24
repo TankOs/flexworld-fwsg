@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_CASE( TestStepProxy ) {
 	// Initial state.
 	{
 		sg::Step::Ptr step( new sg::Step( bo ) );
-		sg::StepProxy proxy( step, renderer );
+		sg::StepProxy proxy( step, renderer, false );
 
 		BOOST_CHECK( proxy.get_step() == step );
 		BOOST_CHECK( &proxy.get_renderer() == &renderer );
@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_CASE( TestStepProxy ) {
 	// Operations.
 	{
 		sg::Step::Ptr step( new sg::Step( bo ) );
-		sg::StepProxy proxy( step, renderer );
+		sg::StepProxy proxy( step, renderer, false );
 
 		BOOST_CHECK( step->get_translation() == sf::Vector3f( 0, 0, 0 ) );
 		proxy.set_translation( sf::Vector3f( 1, 1, 1 ) );

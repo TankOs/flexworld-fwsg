@@ -18,8 +18,14 @@ class StepProxy {
 		/** Ctor.
 		 * @param step Step.
 		 * @param renderer Renderer.
+		 * @param auto_remove Auto-remove step from renderer when proxy gets destroyed.
 		 */
-		StepProxy( Step::Ptr step, Renderer& renderer );
+		StepProxy( Step::Ptr step, Renderer& renderer, bool auto_remove = true );
+
+		/** Dtor.
+		 * Automatically unregisters step at renderer.
+		 */
+		~StepProxy();
 
 		/** Get renderer.
 		 * @return Renderer.
@@ -49,6 +55,7 @@ class StepProxy {
 	private:
 		Step::Ptr m_step;
 		Renderer& m_renderer;
+		bool m_auto_remove;
 };
 
 }

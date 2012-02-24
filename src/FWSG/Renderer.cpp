@@ -1,6 +1,8 @@
 #include <FWSG/Renderer.hpp>
 
 #include <algorithm>
+#include <cassert>
+#include <iostream> // XXX 
 
 namespace sg {
 
@@ -30,9 +32,12 @@ StepProxy::Ptr Renderer::create_step( const RenderState& render_state, BufferObj
 
 	// Check if it's equal.
 	if( bound_iter != m_groups.end() && bound_iter->render_state == render_state ) {
+		std::cout << "Render state already there." << std::endl;
 		bound_iter->steps.push_back( step );
 	}
 	else {
+		std::cout << "New render state." << std::endl;
+
 		// Not equal, insert new group.
 		RenderStateGroup group;
 		group.render_state = render_state;
@@ -55,6 +60,30 @@ bool Renderer::RenderStateGroup::operator<( const RenderState& other ) const {
 
 bool Renderer::RenderStateGroup::operator<( const RenderStateGroup& other ) const {
 	return render_state < other.render_state;
+}
+
+void Renderer::remove_step( const StepProxy& proxy ) {
+	assert( &proxy.get_renderer() == this && "Step doesn't belong to this renderer." );
+
+	// Find surrounding render state.
+	StepVector::iterator step_iter;
+
+	for( std::size_t state_idx = 0; state_idx < m_groups.size(); ++state_idx ) {
+		step_iter = std::lower_bound( m_groups[state_idx].steps.begin(), m_groups[state_idx].steps.end(), proxy.get_step() );
+
+		if( step_iter != m_groups[state_idx].steps.end() && *step_iter == proxy.get_step() ) {
+			m_groups[state_idx].steps.erase( step_iter );
+
+			// If this was the last step, kill group.
+			if( m_groups[state_idx].steps.size() < 1 ) {
+				m_groups.erase( m_groups.begin() + state_idx );
+			}
+
+			return;
+		}
+	}
+
+	assert( 0 && "Step not registered." );
 }
 
 }

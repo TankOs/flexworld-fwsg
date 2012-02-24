@@ -34,6 +34,11 @@ class Renderer {
 		 */
 		StepProxy::Ptr create_step( const RenderState& render_state, BufferObject::PtrConst buffer_object );
 
+		/** Remove step (called automatically by proxy).
+		 * @param proxy Step proxy.
+		 */
+		void remove_step( const StepProxy& proxy );
+
 	private:
 		typedef std::vector<Step::Ptr> StepVector;
 

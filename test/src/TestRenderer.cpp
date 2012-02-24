@@ -22,9 +22,15 @@ BOOST_AUTO_TEST_CASE( TestRenderer ) {
 		sg::RenderState r_state;
 		sg::BufferObject::Ptr buffer_object( new sg::BufferObject );
 
-		sg::StepProxy::Ptr step = renderer.create_step( r_state, buffer_object );
+		// Do in own scope to check auto-removal of the step.
+		{
+			sg::StepProxy::Ptr step = renderer.create_step( r_state, buffer_object );
 
-		BOOST_CHECK( renderer.get_num_steps() == 1 );
-		BOOST_CHECK( renderer.get_num_render_states() == 1 );
+			BOOST_CHECK( renderer.get_num_steps() == 1 );
+			BOOST_CHECK( renderer.get_num_render_states() == 1 );
+		}
+
+		BOOST_CHECK( renderer.get_num_steps() == 0 );
+		BOOST_CHECK( renderer.get_num_render_states() == 0 );
 	}
 }
