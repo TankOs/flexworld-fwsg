@@ -19,6 +19,7 @@ set(
 	${SRC_DIR}/TestNode.cpp
 	${SRC_DIR}/TestRenderState.cpp
 	${SRC_DIR}/TestRenderer.cpp
+	${SRC_DIR}/TestStaticMesh.cpp
 	${SRC_DIR}/TestStep.cpp
 	${SRC_DIR}/TestStepProxy.cpp
 	${SRC_DIR}/TestTextureState.cpp

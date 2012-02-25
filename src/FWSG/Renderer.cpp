@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <iostream> // XXX 
 
 namespace sg {
 
@@ -90,6 +91,53 @@ bool Renderer::GroupComparator::operator()( const RenderStateGroup* first, const
 
 bool Renderer::GroupComparator::operator()( const RenderStateGroup* first, const RenderStateGroup* second ) {
 	return first->render_state < second->render_state;
+}
+
+void Renderer::render() const {
+	std::size_t group_idx = 0;
+	std::size_t step_idx = 0;
+	const RenderState* state = nullptr;
+	const StepVector* steps = nullptr;
+	const Step* step = nullptr;
+	const sf::Texture* current_texture = 0;
+	const bool* wireframe = nullptr;
+
+	glMatrixMode( GL_MODELVIEW );
+
+	for( group_idx = 0; group_idx < m_groups.size(); ++group_idx ) {
+		state = &m_groups[group_idx]->render_state;
+		steps = &m_groups[group_idx]->steps;
+
+		// Texture.
+		if( current_texture != state->texture.get() ) {
+			current_texture = &*state->texture;
+		}
+
+		// Wireframe.
+		if( wireframe == nullptr || *wireframe != state->wireframe ) {
+			wireframe = &state->wireframe;
+
+			glPolygonMode( GL_FRONT_AND_BACK, *wireframe ? GL_LINE : GL_FILL );
+		}
+
+		for( step_idx = 0; step_idx < steps->size(); ++step_idx ) {
+			step = (*steps)[step_idx].get();
+
+			// Transform.
+			glLoadIdentity();
+			glTranslatef(
+				step->get_translation().x,
+				step->get_translation().y,
+				step->get_translation().z
+			);
+
+			// Render.
+			step->get_buffer_object()->render();
+		}
+	}
+
+	// Restore OpenGL states.
+	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
 
 }

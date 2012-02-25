@@ -43,6 +43,10 @@ class Renderer {
 		 */
 		void remove_step( const StepProxy& proxy );
 
+		/** Render.
+		 */
+		void render() const;
+
 	private:
 		typedef std::vector<Step::Ptr> StepVector;
 
