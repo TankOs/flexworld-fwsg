@@ -41,7 +41,9 @@ void BufferObject::add_vertex( const Vertex& vertex ) {
 }
 
 void BufferObject::render() const {
-	assert( m_num_vertices > 0 );
+	if( m_num_vertices < 1 ) {
+		return;
+	}
 
 	// We don't used the element buffer, so make sure it's not set.
 	glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, 0 );
@@ -88,6 +90,9 @@ void BufferObject::render() const {
 
 void BufferObject::upload() {
 	assert( is_upload_needed() );
+	if( !is_upload_needed() ) {
+		return;
+	}
 
 	m_num_vertices = m_vertices.size();
 

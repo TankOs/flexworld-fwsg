@@ -17,7 +17,6 @@ int main() {
 	mesh->add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 0 ) ) );
 	mesh->add_vertex( sg::Vertex( sf::Vector3f( 1, 0, 0 ) ) );
 	mesh->add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ) ) );
-	mesh->upload();
 
 	// Setup renderer.
 	sg::Renderer renderer;
@@ -65,8 +64,9 @@ int main() {
 			}
 		}
 
-		// Update scene graph.
+		// Update scene graph and renderer.
 		root_node->update();
+		renderer.update();
 
 		// Rendering.
 		window.Clear();

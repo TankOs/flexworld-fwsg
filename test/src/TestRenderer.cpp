@@ -47,4 +47,21 @@ BOOST_AUTO_TEST_CASE( TestRenderer ) {
 		BOOST_CHECK( renderer.get_num_steps() == 2 );
 		BOOST_CHECK( renderer.get_num_render_states() == 1 );
 	}
+
+	// Upload buffer object.
+	{
+		sg::Renderer renderer;
+		sg::RenderState r_state;
+		sg::BufferObject::Ptr buffer_object( new sg::BufferObject );
+
+		buffer_object->add_vertex( sg::Vertex() );
+		buffer_object->add_vertex( sg::Vertex() );
+		buffer_object->add_vertex( sg::Vertex() );
+
+		sg::StepProxy::Ptr step = renderer.create_step( r_state, buffer_object );
+
+		BOOST_CHECK( buffer_object->is_upload_needed() == true );
+		renderer.update();
+		BOOST_CHECK( buffer_object->is_upload_needed() == false );
+	}
 }
