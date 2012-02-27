@@ -103,6 +103,7 @@ void Renderer::render() const {
 	const bool* wireframe = nullptr;
 
 	glMatrixMode( GL_MODELVIEW );
+	glBindTexture( GL_TEXTURE_2D, 0 );
 
 	for( group_idx = 0; group_idx < m_groups.size(); ++group_idx ) {
 		state = &m_groups[group_idx]->render_state;
@@ -111,6 +112,13 @@ void Renderer::render() const {
 		// Texture.
 		if( current_texture != state->texture.get() ) {
 			current_texture = &*state->texture;
+
+			if( current_texture ) {
+				current_texture->Bind();
+			}
+			else {
+				glBindTexture( GL_TEXTURE_2D, 0 );
+			}
 		}
 
 		// Wireframe.

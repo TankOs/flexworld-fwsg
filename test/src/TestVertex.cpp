@@ -18,11 +18,20 @@ BOOST_AUTO_TEST_CASE( TestVertex ) {
 		const sf::Vector3f NORMAL( 10, 11, 12 );
 		const sf::Vector2f UV( 20, 21 );
 
-		sg::Vertex vertex( VECTOR, NORMAL, UV );
+		{
+			sg::Vertex vertex( VECTOR, NORMAL, UV );
 
-		BOOST_CHECK( vertex.vector == VECTOR );
-		BOOST_CHECK( vertex.normal == NORMAL );
-		BOOST_CHECK( vertex.uv == UV );
+			BOOST_CHECK( vertex.vector == VECTOR );
+			BOOST_CHECK( vertex.normal == NORMAL );
+			BOOST_CHECK( vertex.uv == UV );
+		}
+		{
+			sg::Vertex vertex( VECTOR, UV );
+
+			BOOST_CHECK( vertex.vector == VECTOR );
+			BOOST_CHECK( vertex.normal == sf::Vector3f( 0, 0, 0 ) );
+			BOOST_CHECK( vertex.uv == UV );
+		}
 	}
 
 	// Equality.

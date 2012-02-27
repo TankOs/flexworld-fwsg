@@ -19,6 +19,15 @@ struct Vertex {
 		const sf::Vector2f& uv_ = sf::Vector2f( 0, 0 )
 	);
 
+	/** Ctor.
+	 * @param vector_ Vector.
+	 * @param uv_ Texture coordinate.
+	 */
+	Vertex(
+		const sf::Vector3f& vector_,
+		const sf::Vector2f& uv_
+	);
+
 	sf::Vector3f vector; ///< Vector.
 	sf::Vector3f normal; ///< Normal vector.
 	sf::Vector2f uv; ///< Texture coordinate.

@@ -13,6 +13,15 @@ Vertex::Vertex(
 {
 }
 
+Vertex::Vertex(
+	const sf::Vector3f& vector_,
+	const sf::Vector2f& uv_
+) :
+	vector( vector_ ),
+	uv( uv_ )
+{
+}
+
 bool operator==( const Vertex& first, const Vertex& second ) {
 	return
 		first.vector == second.vector &&

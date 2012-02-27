@@ -2,7 +2,7 @@ cmake_minimum_required( VERSION 2.8 )
 
 find_package( SFML 2.0 REQUIRED GRAPHICS WINDOW SYSTEM )
 
-macro( BUILD_EXAMPLE target sources )
+macro( build_example target sources )
 	include_directories( ${PROJECT_SOURCE_DIR}/../include/ )
 	include_directories( ${SFML_INCLUDE_DIR}/../include/ )
 
@@ -19,4 +19,5 @@ macro( BUILD_EXAMPLE target sources )
 	)
 endmacro()
 
-BUILD_EXAMPLE( helloworld HelloWorld.cpp )
+build_example( helloworld HelloWorld.cpp )
+build_example( texture Texture.cpp )
