@@ -69,8 +69,8 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		sg::Node::Ptr child = sg::Node::create();
 		sg::Leaf::Ptr leaf = sg::Leaf::create();
 
-		root->add_child( child );
-		child->add_child( leaf );
+		root->attach( child );
+		child->attach( leaf );
 
 		// Make sure update flag is reset.
 		root->update();

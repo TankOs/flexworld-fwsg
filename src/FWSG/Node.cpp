@@ -29,7 +29,7 @@ std::size_t Node::get_num_children() const {
 	return m_children.size();
 }
 
-void Node::add_child( Leaf::Ptr leaf ) {
+void Node::attach( Leaf::Ptr leaf ) {
 	assert( leaf->get_parent() == false );
 	assert( std::find( m_children.begin(), m_children.end(), leaf ) == m_children.end() );
 
@@ -44,6 +44,18 @@ void Node::add_child( Leaf::Ptr leaf ) {
 	// Recalculate global transform and update render state at child.
 	leaf->recalculate_global_transform();
 	leaf->update_render_state();
+}
+
+void Node::detach( Leaf::Ptr leaf ) {
+	assert( leaf->get_parent().get() == this );
+
+	LeafVector::iterator leaf_iter = std::lower_bound( m_children.begin(), m_children.end(), leaf );
+	assert( leaf_iter != m_children.end() && *leaf_iter == leaf );
+
+	if( leaf_iter != m_children.end() && *leaf_iter == leaf ) {
+		(*leaf_iter)->set_parent( Node::Ptr() );
+		m_children.erase( leaf_iter );
+	}
 }
 
 bool Node::has_child( Leaf::Ptr leaf ) const {

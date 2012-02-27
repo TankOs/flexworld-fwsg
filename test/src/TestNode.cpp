@@ -18,16 +18,16 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		// Other properties are checked in TestLeaf.
 	}
 
-	// Add some children.
+	// Attach.
 	{
 		sg::Leaf::Ptr leaf0 = sg::Leaf::create();
 		sg::Leaf::Ptr leaf1 = sg::Leaf::create();
 		sg::Leaf::Ptr leaf2 = sg::Leaf::create();
 		sg::Node::Ptr node = sg::Node::create();
 
-		node->add_child( leaf0 );
-		node->add_child( leaf1 );
-		node->add_child( leaf2 );
+		node->attach( leaf0 );
+		node->attach( leaf1 );
+		node->attach( leaf2 );
 
 		BOOST_CHECK( node->get_num_children() == 3 );
 		BOOST_CHECK( node->has_child( leaf0 ) == true );
@@ -39,6 +39,20 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		BOOST_CHECK( leaf2->get_parent() == node );
 	}
 
+	// Detach.
+	{
+		sg::Leaf::Ptr leaf = sg::Leaf::create();
+		sg::Node::Ptr node = sg::Node::create();
+
+		node->attach( leaf );
+		BOOST_CHECK( node->get_num_children() == 1 );
+		BOOST_CHECK( leaf->get_parent() == node );
+
+		node->detach( leaf );
+		BOOST_CHECK( node->get_num_children() == 0 );
+		BOOST_CHECK( leaf->get_parent() == false );
+	}
+
 	// Delegation of update call.
 	{
 		sg::Leaf::Ptr leaf0 = sg::Leaf::create();
@@ -46,9 +60,9 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		sg::Leaf::Ptr leaf2 = sg::Leaf::create();
 		sg::Node::Ptr node = sg::Node::create();
 
-		node->add_child( leaf0 );
-		node->add_child( leaf1 );
-		node->add_child( leaf2 );
+		node->attach( leaf0 );
+		node->attach( leaf1 );
+		node->attach( leaf2 );
 
 		BOOST_CHECK( node->is_update_needed() == true );
 		BOOST_CHECK( leaf0->is_update_needed() == true );
@@ -69,14 +83,14 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		sg::Node::Ptr child = sg::Node::create();
 		sg::Leaf::Ptr leaf = sg::Leaf::create();
 
-		root->add_child( child );
+		root->attach( child );
 		root->update();
 
 		BOOST_CHECK( root->is_update_needed() == false );
 		BOOST_CHECK( child->is_update_needed() == false );
 		BOOST_CHECK( leaf->is_update_needed() == true );
 
-		child->add_child( leaf );
+		child->attach( leaf );
 
 		BOOST_CHECK( root->is_update_needed() == true );
 		BOOST_CHECK( child->is_update_needed() == true );
@@ -85,7 +99,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 
 	// Transform delegation/recalculation.
 	{
-		// Recalculate when calling add_child().
+		// Recalculate when calling attach().
 		{
 			sg::Node::Ptr root = sg::Node::create();
 			sg::Node::Ptr child = sg::Node::create();
@@ -103,8 +117,8 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			leaf->set_local_rotation( sf::Vector3f( 31, 310, 3100 ) );
 			leaf->set_scale( sf::Vector3f( 32, 320, 3200 ) );
 
-			root->add_child( child );
-			child->add_child( leaf );
+			root->attach( child );
+			child->attach( leaf );
 
 			BOOST_CHECK( root->get_global_translation() == sf::Vector3f( 10, 100, 1000 ) );
 			BOOST_CHECK( root->get_global_rotation() == sf::Vector3f( 11, 110, 1100 ) );
@@ -137,8 +151,8 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			leaf->set_local_rotation( sf::Vector3f( 31, 310, 3100 ) );
 			leaf->set_scale( sf::Vector3f( 32, 320, 3200 ) );
 
-			child->add_child( leaf );
-			root->add_child( child );
+			child->attach( leaf );
+			root->attach( child );
 
 			BOOST_CHECK( root->get_global_translation() == sf::Vector3f( 10, 100, 1000 ) );
 			BOOST_CHECK( root->get_global_rotation() == sf::Vector3f( 11, 110, 1100 ) );
@@ -159,8 +173,8 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			sg::Node::Ptr child = sg::Node::create();
 			sg::Leaf::Ptr leaf = sg::Leaf::create();
 
-			child->add_child( leaf );
-			root->add_child( child );
+			child->attach( leaf );
+			root->attach( child );
 
 			root->set_local_translation( sf::Vector3f( 10, 100, 1000 ) );
 			root->set_local_rotation( sf::Vector3f( 11, 110, 1100 ) );
@@ -200,8 +214,8 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		child->set_state( sg::WireframeState( true ) );
 		leaf->set_state( sg::WireframeState( false ) );
 
-		child->add_child( leaf );
-		root->add_child( child );
+		child->attach( leaf );
+		root->attach( child );
 
 		// Check root.
 		{

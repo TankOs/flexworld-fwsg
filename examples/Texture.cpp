@@ -61,8 +61,8 @@ int main() {
 
 	// Create root node and add meshes to it.
 	sg::Node::Ptr root_node = sg::Node::create();
-	root_node->add_child( mesh_leaf );
-	root_node->add_child( wireframe_mesh_leaf );
+	root_node->attach( mesh_leaf );
+	root_node->attach( wireframe_mesh_leaf );
 	root_node->set_state( sg::TextureState( texture ) );
 
 	// Setup SFML window.

@@ -27,13 +27,20 @@ class Node : public Leaf, public std::enable_shared_from_this<Node> {
 		 */
 		std::size_t get_num_children() const;
 
-		/** Add child.
+		/** Attach a leaf.
 		 * Undefined behaviour if leaf has already been added. The leaf must be in
 		 * a detached state.
 		 * @param leaf Leaf.
-		 * @see has_child to check if a child has already been added.
+		 * @see has_child to check if a child has already been attached.
 		 */
-		void add_child( Leaf::Ptr leaf );
+		void attach( Leaf::Ptr leaf );
+
+		/** Detach a leaf.
+		 * Undefined behaviour if leaf hasn't been attached.
+		 * @param leaf Leaf.
+		 * @see has_child to check if a leaf has been attached.
+		 */
+		void detach( Leaf::Ptr leaf );
 
 		/** Check if child has been added (slow operation).
 		 * @param leaf Leaf.
