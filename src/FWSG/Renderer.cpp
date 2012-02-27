@@ -102,8 +102,11 @@ void Renderer::render() const {
 	const sf::Texture* current_texture = 0;
 	const bool* wireframe = nullptr;
 
+	// Setup OpenGL.
 	glMatrixMode( GL_MODELVIEW );
 	glBindTexture( GL_TEXTURE_2D, 0 );
+	glCullFace( GL_BACK );
+	glEnable( GL_CULL_FACE );
 
 	for( group_idx = 0; group_idx < m_groups.size(); ++group_idx ) {
 		state = &m_groups[group_idx]->render_state;
