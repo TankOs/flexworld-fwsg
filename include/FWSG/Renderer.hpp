@@ -5,11 +5,17 @@
 #include <FWSG/StepProxy.hpp>
 #include <FWSG/BufferObject.hpp>
 
+#include <SFML/System/Mutex.hpp>
 #include <vector>
 
 namespace sg {
 
 /** OpenGL renderer.
+ *
+ * The renderer is prepared to be used from multiple threads (e.g. to create
+ * and prepare steps in one thread and render in another). Make sure to call
+ * lock() and unlock() respectively before accessing ANY method in
+ * multi-threaded environments.
  */
 class Renderer {
 	public:
@@ -47,6 +53,17 @@ class Renderer {
 		 */
 		void render() const;
 
+		/** Lock.
+		 * A call to this method will block until a previous blocker releases the
+		 * lock.
+		 */
+		void lock() const;
+
+		/** Unlock.
+		 * Call this only from the thread that locked the renderer!
+		 */
+		void unlock() const;
+
 	private:
 		typedef std::vector<Step::Ptr> StepVector;
 
@@ -63,6 +80,7 @@ class Renderer {
 		typedef std::vector<RenderStateGroup*> GroupVector;
 
 		GroupVector m_groups;
+		mutable sf::Mutex m_mutex;
 };
 
 }

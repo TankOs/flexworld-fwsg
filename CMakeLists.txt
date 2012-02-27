@@ -1,7 +1,7 @@
 cmake_minimum_required( VERSION 2.8 )
 project( FWSG )
 
-find_package( SFML 2.0 REQUIRED GRAPHICS WINDOW )
+find_package( SFML 2.0 REQUIRED GRAPHICS WINDOW SYSTEM )
 
 set( FWSG_BUILD_SHARED_LIBS FALSE CACHE BOOL "Build shared libraries." )
 set( FWSG_BUILD_TEST FALSE CACHE BOOL "Build test suite." )
@@ -68,6 +68,7 @@ add_library( fwsg ${LIB_TYPE} ${SOURCES} )
 
 target_link_libraries( fwsg ${SFML_GRAPHICS_LIBRARY} )
 target_link_libraries( fwsg ${SFML_WINDOW_LIBRARY} )
+target_link_libraries( fwsg ${SFML_SYSTEM_LIBRARY} )
 
 install(
 	TARGETS fwsg

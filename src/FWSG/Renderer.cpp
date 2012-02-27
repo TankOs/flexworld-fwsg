@@ -10,27 +10,43 @@ Renderer::Renderer() {
 }
 
 Renderer::~Renderer() {
+	lock();
+
 	// Cleanup render states.
 	for( std::size_t group_idx = 0; group_idx < m_groups.size(); ++group_idx ) {
 		delete m_groups[group_idx];
 	}
+
+	m_groups.clear();
+
+	unlock();
 }
 
 std::size_t Renderer::get_num_render_states() const {
-	return m_groups.size();
+	lock();
+	std::size_t size = m_groups.size();
+	unlock();
+
+	return size;
 }
 
 std::size_t Renderer::get_num_steps() const {
+	lock();
+
 	std::size_t num = 0;
 
 	for( std::size_t group_idx = 0; group_idx < m_groups.size(); ++group_idx ) {
 		num += m_groups[group_idx]->steps.size();
 	}
 
+	unlock();
+
 	return num;
 }
 
 StepProxy::Ptr Renderer::create_step( const RenderState& render_state, BufferObject::PtrConst buffer_object ) {
+	lock();
+
 	// Create step.
 	Step::Ptr step( new Step( buffer_object ) );
 
@@ -57,10 +73,15 @@ StepProxy::Ptr Renderer::create_step( const RenderState& render_state, BufferObj
 
 	// Create and return proxy.
 	StepProxy::Ptr proxy( new StepProxy( step, *this ) );
+
+	unlock();
+
 	return proxy;
 }
 
 void Renderer::remove_step( const StepProxy& proxy ) {
+	lock();
+
 	assert( &proxy.get_renderer() == this && "Step doesn't belong to this renderer." );
 
 	// Find surrounding render state.
@@ -78,10 +99,12 @@ void Renderer::remove_step( const StepProxy& proxy ) {
 				m_groups.erase( m_groups.begin() + state_idx );
 			}
 
+			unlock();
 			return;
 		}
 	}
 
+	unlock();
 	assert( 0 && "Step not registered." );
 }
 
@@ -107,6 +130,8 @@ void Renderer::render() const {
 	glBindTexture( GL_TEXTURE_2D, 0 );
 	glCullFace( GL_BACK );
 	glEnable( GL_CULL_FACE );
+
+	lock();
 
 	for( group_idx = 0; group_idx < m_groups.size(); ++group_idx ) {
 		state = &m_groups[group_idx]->render_state;
@@ -147,8 +172,18 @@ void Renderer::render() const {
 		}
 	}
 
+	unlock();
+
 	// Restore OpenGL states.
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+}
+
+void Renderer::lock() const {
+	m_mutex.Lock();
+}
+
+void Renderer::unlock() const {
+	m_mutex.Unlock();
 }
 
 }
