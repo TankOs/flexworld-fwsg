@@ -15,6 +15,7 @@ set(
 	${SRC_DIR}/Test.cpp
 	${SRC_DIR}/TestBoolState.cpp
 	${SRC_DIR}/TestBufferObject.cpp
+	${SRC_DIR}/TestGeometry.cpp
 	${SRC_DIR}/TestLeaf.cpp
 	${SRC_DIR}/TestNode.cpp
 	${SRC_DIR}/TestRenderState.cpp

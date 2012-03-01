@@ -44,7 +44,7 @@ std::size_t Renderer::get_num_steps() const {
 	return num;
 }
 
-StepProxy::Ptr Renderer::create_step( const RenderState& render_state, BufferObject::Ptr buffer_object ) {
+StepProxy::Ptr Renderer::create_step( const RenderState& render_state, BufferObject::PtrConst buffer_object ) {
 	lock();
 
 	// Create step.
@@ -73,9 +73,6 @@ StepProxy::Ptr Renderer::create_step( const RenderState& render_state, BufferObj
 
 	// Create proxy.
 	StepProxy::Ptr proxy( new StepProxy( step, *this ) );
-
-	// Add step to steps that have to be uploaded in update().
-	m_uploadable_buffer_objects.push_back( buffer_object );
 
 	unlock();
 
@@ -178,23 +175,6 @@ void Renderer::render() const {
 
 	// Restore OpenGL states.
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-}
-
-void Renderer::update() {
-	lock();
-
-	// Upload buffer objects.
-	if( m_uploadable_buffer_objects.size() > 0 ) {
-		for( std::size_t step_idx = 0; step_idx < m_uploadable_buffer_objects.size(); ++step_idx ) {
-			if( m_uploadable_buffer_objects[step_idx]->is_upload_needed() ) {
-				m_uploadable_buffer_objects[step_idx]->upload();
-			}
-		}
-	}
-
-	m_uploadable_buffer_objects.clear();
-
-	unlock();
 }
 
 void Renderer::lock() const {

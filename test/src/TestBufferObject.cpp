@@ -10,8 +10,8 @@ BOOST_AUTO_TEST_CASE( TestBufferObject ) {
 	{
 		sg::BufferObject bo;
 
-		BOOST_CHECK( bo.get_num_prepared_vertices() == 0 );
-		BOOST_CHECK( bo.get_num_uploaded_vertices() == 0 );
+		BOOST_CHECK( bo.get_num_client_vertices() == 0 );
+		BOOST_CHECK( bo.get_num_server_vertices() == 0 );
 		BOOST_CHECK( bo.is_upload_needed() == false );
 	}
 
@@ -26,8 +26,8 @@ BOOST_AUTO_TEST_CASE( TestBufferObject ) {
 			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 102, 202 ) ) );
 			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 103, 203 ) ) );
 
-			BOOST_CHECK( bo.get_num_prepared_vertices() == 4 );
-			BOOST_CHECK( bo.get_num_uploaded_vertices() == 0 );
+			BOOST_CHECK( bo.get_num_client_vertices() == 4 );
+			BOOST_CHECK( bo.get_num_server_vertices() == 0 );
 
 			BOOST_CHECK( bo.get_prepared_vertex( 0 ) == sg::Vertex( sf::Vector3f( 0, 0, 0 ) ) );
 			BOOST_CHECK( bo.get_prepared_vertex( 1 ) == sg::Vertex( sf::Vector3f( 1, 0, 0 ) ) );
@@ -44,8 +44,8 @@ BOOST_AUTO_TEST_CASE( TestBufferObject ) {
 			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 7, 8, 9 ), sf::Vector2f( 102, 202 ) ) );
 			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 10, 11, 12 ), sf::Vector2f( 103, 203 ) ) );
 
-			BOOST_CHECK( bo.get_num_prepared_vertices() == 4 );
-			BOOST_CHECK( bo.get_num_uploaded_vertices() == 0 );
+			BOOST_CHECK( bo.get_num_client_vertices() == 4 );
+			BOOST_CHECK( bo.get_num_server_vertices() == 0 );
 
 			BOOST_CHECK( bo.get_prepared_vertex( 0 ) == sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 1, 2, 3 ) ) );
 			BOOST_CHECK( bo.get_prepared_vertex( 1 ) == sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 4, 5, 6 ) ) );
@@ -61,8 +61,8 @@ BOOST_AUTO_TEST_CASE( TestBufferObject ) {
 			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 7, 8, 9 ), sf::Vector2f( 102, 202 ) ) );
 			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 10, 11, 12 ), sf::Vector2f( 103, 203 ) ) );
 
-			BOOST_CHECK( bo.get_num_prepared_vertices() == 4 );
-			BOOST_CHECK( bo.get_num_uploaded_vertices() == 0 );
+			BOOST_CHECK( bo.get_num_client_vertices() == 4 );
+			BOOST_CHECK( bo.get_num_server_vertices() == 0 );
 
 			BOOST_CHECK( bo.get_prepared_vertex( 0 ) == sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 0, 0, 0 ), sf::Vector2f( 100, 200 ) ) );
 			BOOST_CHECK( bo.get_prepared_vertex( 1 ) == sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 0, 0, 0 ), sf::Vector2f( 101, 201 ) ) );
@@ -78,8 +78,8 @@ BOOST_AUTO_TEST_CASE( TestBufferObject ) {
 			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 7, 8, 9 ), sf::Vector2f( 102, 202 ) ) );
 			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 10, 11, 12 ), sf::Vector2f( 103, 203 ) ) );
 
-			BOOST_CHECK( bo.get_num_prepared_vertices() == 4 );
-			BOOST_CHECK( bo.get_num_uploaded_vertices() == 0 );
+			BOOST_CHECK( bo.get_num_client_vertices() == 4 );
+			BOOST_CHECK( bo.get_num_server_vertices() == 0 );
 
 			BOOST_CHECK( bo.get_prepared_vertex( 0 ) == sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 100, 200 ) ) );
 			BOOST_CHECK( bo.get_prepared_vertex( 1 ) == sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 4, 5, 6 ), sf::Vector2f( 101, 201 ) ) );
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE( TestBufferObject ) {
 
 		bo.upload();
 
-		BOOST_CHECK( bo.get_num_prepared_vertices() == 0 );
-		BOOST_CHECK( bo.get_num_uploaded_vertices() == 4 );
+		BOOST_CHECK( bo.get_num_client_vertices() == 0 );
+		BOOST_CHECK( bo.get_num_server_vertices() == 4 );
 	}
 }

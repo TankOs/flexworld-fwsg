@@ -5,12 +5,12 @@
 
 namespace sg {
 
-StaticMesh::Ptr StaticMesh::create( sg::BufferObject::Ptr buffer_object, sg::Renderer& renderer ) {
+StaticMesh::Ptr StaticMesh::create( sg::BufferObject::PtrConst buffer_object, sg::Renderer& renderer ) {
 	Ptr static_mesh( new StaticMesh( buffer_object, renderer ) );
 	return static_mesh;
 }
 
-StaticMesh::StaticMesh( sg::BufferObject::Ptr buffer_object, sg::Renderer& renderer ) :
+StaticMesh::StaticMesh( sg::BufferObject::PtrConst buffer_object, sg::Renderer& renderer ) :
 	Drawable( renderer ),
 	m_buffer_object( buffer_object )
 {
@@ -21,14 +21,14 @@ BufferObject::PtrConst StaticMesh::get_buffer_object() const {
 }
 
 void StaticMesh::handle_update() {
-	update_buffer_object();
+	invalidate_step();
 }
 
 void StaticMesh::handle_update_render_state() {
-	update_buffer_object();
+	invalidate_step();
 }
 
-void StaticMesh::update_buffer_object() {
+void StaticMesh::invalidate_step() {
 	m_step = get_renderer().create_step( get_render_state(), m_buffer_object );
 
 	// Apply transformation.

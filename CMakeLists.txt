@@ -31,6 +31,7 @@ set(
 	${INC_DIR}/FWSG/BoolState.hpp
 	${INC_DIR}/FWSG/BufferObject.hpp
 	${INC_DIR}/FWSG/Drawable.hpp
+	${INC_DIR}/FWSG/Geometry.hpp
 	${INC_DIR}/FWSG/Leaf.hpp
 	${INC_DIR}/FWSG/Leaf.inl
 	${INC_DIR}/FWSG/Node.hpp
@@ -47,6 +48,7 @@ set(
 	${SRC_DIR}/FWSG/BoolState.cpp
 	${SRC_DIR}/FWSG/BufferObject.cpp
 	${SRC_DIR}/FWSG/Drawable.cpp
+	${SRC_DIR}/FWSG/Geometry.cpp
 	${SRC_DIR}/FWSG/Leaf.cpp
 	${SRC_DIR}/FWSG/Node.cpp
 	${SRC_DIR}/FWSG/NonCopyable.cpp

@@ -138,11 +138,11 @@ bool BufferObject::is_upload_needed() const {
 	return m_vertices.size() > 0;
 }
 
-std::size_t BufferObject::get_num_prepared_vertices() const {
+std::size_t BufferObject::get_num_client_vertices() const {
 	return m_vertices.size();
 }
 
-std::size_t BufferObject::get_num_uploaded_vertices() const {
+std::size_t BufferObject::get_num_server_vertices() const {
 	return m_num_vertices;
 }
 

@@ -64,12 +64,12 @@ class BufferObject : public NonCopyable {
 		/** Get number of prepared vertices.
 		 * @return Number of prepared vertices.
 		 */
-		std::size_t get_num_prepared_vertices() const;
+		std::size_t get_num_client_vertices() const;
 
 		/** Get number of uploaded vertices.
 		 * @return Number of uploaded vertices.
 		 */
-		std::size_t get_num_uploaded_vertices() const;
+		std::size_t get_num_server_vertices() const;
 
 		/** Get prepared vertex.
 		 * The returned vertex has set unused components to sg::Vertex' defaults.

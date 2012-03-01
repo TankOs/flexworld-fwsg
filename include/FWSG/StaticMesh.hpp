@@ -20,7 +20,7 @@ class StaticMesh : public Drawable {
 		 * @param renderer Renderer.
 		 * @return Created StaticMesh.
 		 */
-		static Ptr create( BufferObject::Ptr buffer_object, Renderer& renderer );
+		static Ptr create( BufferObject::PtrConst buffer_object, Renderer& renderer );
 
 		/** Get buffer object.
 		 * @return Buffer object.
@@ -32,11 +32,11 @@ class StaticMesh : public Drawable {
 		void handle_update_render_state();
 
 	private:
-		StaticMesh( BufferObject::Ptr buffer_object, Renderer& renderer );
+		StaticMesh( BufferObject::PtrConst buffer_object, Renderer& renderer );
 
-		void update_buffer_object();
+		void invalidate_step();
 
-		BufferObject::Ptr m_buffer_object;
+		BufferObject::PtrConst m_buffer_object;
 		StepProxy::Ptr m_step;
 };
 

@@ -103,7 +103,6 @@ int main() {
 
 		// Update scene graph and renderer.
 		root_node->update();
-		renderer.update();
 
 		// Rendering.
 		window.Clear();
