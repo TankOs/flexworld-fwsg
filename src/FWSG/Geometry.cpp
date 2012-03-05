@@ -34,4 +34,16 @@ void Geometry::add_index( uint32_t index ) {
 	m_indices.push_back( index );
 }
 
+const Vertex& Geometry::get_vertex( uint32_t index ) {
+	assert( index < m_vertices.size() );
+
+	return m_vertices[index];
+}
+
+uint32_t Geometry::get_index( std::size_t index ) const {
+	assert( index < m_indices.size() );
+
+	return m_indices[index];
+}
+
 }

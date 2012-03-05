@@ -56,6 +56,22 @@ class Geometry {
 		 */
 		void add_index( uint32_t index );
 
+		/** Get vertex.
+		 * Undefined behaviour if index is invalid.
+		 * @param index Index.
+		 * @return Vertex.
+		 * @see get_num_vertices
+		 */
+		const Vertex& get_vertex( uint32_t index );
+
+		/** Get vertex index.
+		 * Undefined behaviour if index is invalid.
+		 * @param index Vertex-index index.
+		 * @return Vertex-index.
+		 * @see get_num_indices
+		 */
+		uint32_t get_index( std::size_t index ) const;
+
 	private:
 		typedef std::vector<sg::Vertex> VertexVector;
 		typedef uint32_t VertexIndex;
