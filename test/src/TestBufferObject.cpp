@@ -1,4 +1,5 @@
 #include <FWSG/BufferObject.hpp>
+#include <FWSG/TriangleGeometry.hpp>
 
 #include <SFML/Graphics.hpp>
 #include <boost/test/unit_test.hpp>
@@ -10,96 +11,48 @@ BOOST_AUTO_TEST_CASE( TestBufferObject ) {
 	{
 		sg::BufferObject bo;
 
-		BOOST_CHECK( bo.get_num_client_vertices() == 0 );
-		BOOST_CHECK( bo.get_num_server_vertices() == 0 );
-		BOOST_CHECK( bo.is_upload_needed() == false );
+		BOOST_CHECK( bo.get_num_vertices() == 0 );
 	}
 
-	// Add vertices.
+	// Build geometry for testing.
+	sg::TriangleGeometry tri_geo;
+
 	{
-		// Vertex vectors only.
-		{
-			sg::BufferObject bo( sg::BufferObject::VERTICES_ONLY );
+		std::vector<sg::Vertex> vertices;
+		vertices.push_back( sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 0, 1, 0 ), sf::Vector2f( 0, 0 ) ) ); // Not unique!
+		vertices.push_back( sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 0, 1, 0 ), sf::Vector2f( 0, 0 ) ) );
+		vertices.push_back( sg::Vertex( sf::Vector3f( 1, 0, 1 ), sf::Vector3f( 0, 1, 0 ), sf::Vector2f( 0, 0 ) ) ); // Not unique!
+		vertices.push_back( sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 0, 1, 0 ), sf::Vector2f( 0, 0 ) ) ); // Not unique!
+		vertices.push_back( sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 0, 1, 0 ), sf::Vector2f( 0, 0 ) ) );
+		vertices.push_back( sg::Vertex( sf::Vector3f( 1, 0, 1 ), sf::Vector3f( 0, 1, 0 ), sf::Vector2f( 0, 0 ) ) ); // Not unique!
 
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 100, 200 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 101, 201 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 102, 202 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 103, 203 ) ) );
-
-			BOOST_CHECK( bo.get_num_client_vertices() == 4 );
-			BOOST_CHECK( bo.get_num_server_vertices() == 0 );
-
-			BOOST_CHECK( bo.get_prepared_vertex( 0 ) == sg::Vertex( sf::Vector3f( 0, 0, 0 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 1 ) == sg::Vertex( sf::Vector3f( 1, 0, 0 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 2 ) == sg::Vertex( sf::Vector3f( 0, 1, 0 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 3 ) == sg::Vertex( sf::Vector3f( 0, 0, 1 ) ) );
-		}
-
-		// Vectors + normals.
-		{
-			sg::BufferObject bo( sg::BufferObject::NORMALS );
-
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 100, 200 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 4, 5, 6 ), sf::Vector2f( 101, 201 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 7, 8, 9 ), sf::Vector2f( 102, 202 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 10, 11, 12 ), sf::Vector2f( 103, 203 ) ) );
-
-			BOOST_CHECK( bo.get_num_client_vertices() == 4 );
-			BOOST_CHECK( bo.get_num_server_vertices() == 0 );
-
-			BOOST_CHECK( bo.get_prepared_vertex( 0 ) == sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 1, 2, 3 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 1 ) == sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 4, 5, 6 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 2 ) == sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 7, 8, 9 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 3 ) == sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 10, 11, 12 ) ) );
-		}
-		// Vectors + texture coordinates.
-		{
-			sg::BufferObject bo( sg::BufferObject::TEX_COORDS );
-
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 100, 200 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 4, 5, 6 ), sf::Vector2f( 101, 201 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 7, 8, 9 ), sf::Vector2f( 102, 202 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 10, 11, 12 ), sf::Vector2f( 103, 203 ) ) );
-
-			BOOST_CHECK( bo.get_num_client_vertices() == 4 );
-			BOOST_CHECK( bo.get_num_server_vertices() == 0 );
-
-			BOOST_CHECK( bo.get_prepared_vertex( 0 ) == sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 0, 0, 0 ), sf::Vector2f( 100, 200 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 1 ) == sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 0, 0, 0 ), sf::Vector2f( 101, 201 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 2 ) == sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 0, 0, 0 ), sf::Vector2f( 102, 202 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 3 ) == sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 0, 0, 0 ), sf::Vector2f( 103, 203 ) ) );
-		}
-		// Vectors + normals + texture coordinates.
-		{
-			sg::BufferObject bo( sg::BufferObject::NORMALS | sg::BufferObject::TEX_COORDS );
-
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 100, 200 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 4, 5, 6 ), sf::Vector2f( 101, 201 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 7, 8, 9 ), sf::Vector2f( 102, 202 ) ) );
-			bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 10, 11, 12 ), sf::Vector2f( 103, 203 ) ) );
-
-			BOOST_CHECK( bo.get_num_client_vertices() == 4 );
-			BOOST_CHECK( bo.get_num_server_vertices() == 0 );
-
-			BOOST_CHECK( bo.get_prepared_vertex( 0 ) == sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 100, 200 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 1 ) == sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 4, 5, 6 ), sf::Vector2f( 101, 201 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 2 ) == sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 7, 8, 9 ), sf::Vector2f( 102, 202 ) ) );
-			BOOST_CHECK( bo.get_prepared_vertex( 3 ) == sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 10, 11, 12 ), sf::Vector2f( 103, 203 ) ) );
+		for( std::size_t idx = 0; idx < vertices.size(); idx += 3 ) {
+			tri_geo.add_triangle(
+				vertices[idx + 0],
+				vertices[idx + 1],
+				vertices[idx + 2],
+				true
+			);
 		}
 	}
 
-	// Upload.
+	// Client-side buffer object.
 	{
-		sg::BufferObject bo;
+		sg::BufferObject client_bo( sg::BufferObject::EVERYTHING, true );
 
-		bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector3f( 1, 2, 3 ), sf::Vector2f( 100, 200 ) ) );
-		bo.add_vertex( sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector3f( 4, 5, 6 ), sf::Vector2f( 101, 201 ) ) );
-		bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector3f( 7, 8, 9 ), sf::Vector2f( 102, 202 ) ) );
-		bo.add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 1 ), sf::Vector3f( 10, 11, 12 ), sf::Vector2f( 103, 203 ) ) );
+		BOOST_CHECK( client_bo.is_client_buffer() == true );
 
-		bo.upload();
+		client_bo.load( tri_geo );
+		BOOST_CHECK( client_bo.get_num_vertices() == 6 );
+	}
 
-		BOOST_CHECK( bo.get_num_client_vertices() == 0 );
-		BOOST_CHECK( bo.get_num_server_vertices() == 4 );
+	// GPU-side buffer object.
+	{
+		sg::BufferObject gpu_bo( sg::BufferObject::EVERYTHING, false );
+
+		BOOST_CHECK( gpu_bo.is_client_buffer() == false );
+
+		gpu_bo.load( tri_geo );
+		BOOST_CHECK( gpu_bo.get_num_vertices() == 6 );
 	}
 }

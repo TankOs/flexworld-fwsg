@@ -9,12 +9,18 @@
 
 namespace sg {
 
+class Geometry;
+
 /** Buffer object.
  * OpenGL buffer object for storing vertices, normals, texture coordinates and
- * colors.
- * The buffers are uploaded to the GPU only when upload() is called. All other
- * calls do not use OpenGL and can be therefore used in threads not having an
- * active OpenGL context.
+ * colors. The buffer object works in two ways:
+ *
+ *   * Client-side.
+ *   * GPU-side.
+ *
+ * When in GPU mode, buffers get initialized and filled in the load() call.
+ * All other methods except render() can be safely called from an
+ * OpenGL-inactive thread.
  */
 class BufferObject : public NonCopyable {
 	public:
@@ -27,60 +33,47 @@ class BufferObject : public NonCopyable {
 			VERTICES_ONLY = 0,
 			NORMALS = 1 << 0,
 			TEX_COORDS = 1 << 1,
-			INDICES = 1 << 2
+			INDICES = 1 << 2,
+			EVERYTHING = NORMALS | TEX_COORDS | INDICES
 		};
 
 		/** Ctor.
 		 * @param flags Flags.
+		 * @param client_buffer Stored at client? (false for GPU buffer object).
 		 */
-		BufferObject( int flags = VERTICES_ONLY );
+		BufferObject( int flags = VERTICES_ONLY, bool client_buffer = false );
 
 		/** Dtor.
 		 */
 		~BufferObject();
-
-		/** Add vertex.
-		 * Only the properties of the vertex are used that were specified in the
-		 * constructor's flags before.
-		 * @param vertex Vertex.
-		 */
-		void add_vertex( const Vertex& vertex );
-
-		/** Upload data to GPU.
-		 * The internal buffers are cleared, i.e. added vertices.
-		 */
-		void upload();
 
 		/** Render.
 		 * Make sure to upload() before.
 		 */
 		void render() const;
 
-		/** Check if buffer object needs upload.
-		 * @return true if upload is needed.
+		/** Get number of vertices.
+		 * @return Number of vertices.
 		 */
-		bool is_upload_needed() const;
+		std::size_t get_num_vertices() const;
 
-		/** Get number of prepared vertices.
-		 * @return Number of prepared vertices.
+		/** Check if buffer is stored at client.
+		 * @return true if stored at client, false if stored at GPU.
 		 */
-		std::size_t get_num_client_vertices() const;
+		bool is_client_buffer() const;
 
-		/** Get number of uploaded vertices.
-		 * @return Number of uploaded vertices.
+		/** Load geometry into buffer object.
+		 * This will also initialize and fill buffer objects (VBO, TBO, CBO, IBO).
+		 * Be sure to NOT call this method from a thread not having an OpenGL
+		 * context active.
+		 * @param geometry Geometry.
 		 */
-		std::size_t get_num_server_vertices() const;
-
-		/** Get prepared vertex.
-		 * The returned vertex has set unused components to sg::Vertex' defaults.
-		 * @param index (must be valid).
-		 * @return Prepared vertex.
-		 */
-		sg::Vertex get_prepared_vertex( std::size_t index ) const;
+		void load( const Geometry& geometry );
 
 	private:
 		typedef std::vector<sf::Vector3f> Vector3Array;
 		typedef std::vector<sf::Vector2f> Vector2Array;
+		typedef std::vector<GLushort> GLuintArray;
 
 		enum {
 			VBO_INDEX = 0,
@@ -90,14 +83,19 @@ class BufferObject : public NonCopyable {
 			NUM_BUFFERS
 		};
 
+		void release_buffers();
+
 		Vector3Array m_vertices;
 		Vector3Array m_normals;
 		Vector2Array m_tex_coords;
+		GLuintArray m_indices;
 
 		std::size_t m_num_vertices;
 		int m_flags;
 
-		GLuint m_buffers[NUM_BUFFERS];
+		GLuint* m_buffers;
+
+		bool m_client_buffer;
 };
 
 }

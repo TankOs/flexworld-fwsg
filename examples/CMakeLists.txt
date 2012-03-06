@@ -19,5 +19,5 @@ macro( build_example target sources )
 	)
 endmacro()
 
-build_example( helloworld HelloWorld.cpp )
-build_example( texture Texture.cpp )
+#build_example( helloworld HelloWorld.cpp )
+#build_example( texture Texture.cpp )

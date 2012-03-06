@@ -62,7 +62,7 @@ class Geometry {
 		 * @return Vertex.
 		 * @see get_num_vertices
 		 */
-		const Vertex& get_vertex( uint32_t index );
+		const Vertex& get_vertex( uint32_t index ) const;
 
 		/** Get vertex index.
 		 * Undefined behaviour if index is invalid.
