@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 
+#include <FWSG/TriangleGeometry.hpp>
 #include <FWSG/Renderer.hpp>
 #include <FWSG/Node.hpp>
 #include <FWSG/StaticMesh.hpp>
@@ -12,29 +13,36 @@ int main() {
 	sf::RenderWindow window( sf::VideoMode( 800, 600 ), "Hello World (FWSG example)" );
 	sf::Event event;
 
-	// Create a simple triangle mesh.
-	sg::BufferObject::Ptr mesh( new sg::BufferObject( sg::BufferObject::VERTICES_ONLY ) );
-	mesh->add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 0 ) ) );
-	mesh->add_vertex( sg::Vertex( sf::Vector3f( 1, 0, 0 ) ) );
-	mesh->add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ) ) );
+	// Create a simple geometry object.
+	sg::TriangleGeometry geometry;
+
+	geometry.add_triangle(
+		sg::Vertex( sf::Vector3f( 0, 0, 0 ) ),
+		sg::Vertex( sf::Vector3f( 1, 0, 0 ) ),
+		sg::Vertex( sf::Vector3f( 0, 1, 0 ) )
+	);
+
+	// Create the buffer object and load the geometry into it.
+	sg::BufferObject::Ptr buffer_object( new sg::BufferObject( sg::BufferObject::VERTICES_ONLY, true ) );
+	buffer_object->load( geometry );
 
 	// Setup renderer.
 	sg::Renderer renderer;
 
 	// Setup the scene graph.
 	// Static mesh.
-	sg::StaticMesh::Ptr mesh_leaf = sg::StaticMesh::create( mesh, renderer );
+	sg::StaticMesh::Ptr static_mesh = sg::StaticMesh::create( buffer_object, renderer );
 
 	// Same mesh, but in wireframe mode. Also translate it a little bit so it's
 	// visible.
-	sg::StaticMesh::Ptr wireframe_mesh_leaf = sg::StaticMesh::create( mesh, renderer );
-	wireframe_mesh_leaf->set_state( sg::WireframeState( true ) );
-	wireframe_mesh_leaf->set_local_translation( sf::Vector3f( -1, 0, 0 ) );
+	sg::StaticMesh::Ptr wireframe_static_mesh = sg::StaticMesh::create( buffer_object, renderer );
+	wireframe_static_mesh->set_state( sg::WireframeState( true ) );
+	wireframe_static_mesh->set_local_translation( sf::Vector3f( -1, 0, 0 ) );
 
 	// Create root node and add meshes to it.
 	sg::Node::Ptr root_node = sg::Node::create();
-	root_node->attach( mesh_leaf );
-	root_node->attach( wireframe_mesh_leaf );
+	root_node->attach( static_mesh );
+	root_node->attach( wireframe_static_mesh );
 
 	// Setup SFML window.
 	window.EnableVerticalSync( true );
@@ -65,7 +73,7 @@ int main() {
 		}
 
 		// Update scene graph and renderer.
-		root_node->update();
+		//root_node->update();
 
 		// Rendering.
 		window.Clear();
@@ -79,6 +87,7 @@ int main() {
 		glEnableClientState( GL_COLOR_ARRAY );
 		glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 		glBindBuffer( GL_ARRAY_BUFFER, 0 );
+		glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
 		// Render UI.
 		window.Draw( info_text );

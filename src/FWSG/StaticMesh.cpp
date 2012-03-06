@@ -1,8 +1,6 @@
 #include <FWSG/StaticMesh.hpp>
 #include <FWSG/Renderer.hpp>
 
-#include <iostream> // XXX 
-
 namespace sg {
 
 StaticMesh::Ptr StaticMesh::create( sg::BufferObject::PtrConst buffer_object, sg::Renderer& renderer ) {

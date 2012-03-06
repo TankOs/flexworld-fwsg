@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 
+#include <FWSG/TriangleGeometry.hpp>
 #include <FWSG/Renderer.hpp>
 #include <FWSG/Node.hpp>
 #include <FWSG/StaticMesh.hpp>
@@ -14,14 +15,22 @@ int main() {
 	sf::RenderWindow window( sf::VideoMode( 800, 600 ), "Texture (FWSG example)" );
 	sf::Event event;
 
-	// Create a simple quad mesh.
-	sg::BufferObject::Ptr mesh( new sg::BufferObject( sg::BufferObject::TEX_COORDS ) );
-	mesh->add_vertex( sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector2f( 0, 1 ) ) );
-	mesh->add_vertex( sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector2f( 1, 1 ) ) );
-	mesh->add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector2f( 0, 0 ) ) );
-	mesh->add_vertex( sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector2f( 1, 1 ) ) );
-	mesh->add_vertex( sg::Vertex( sf::Vector3f( 1, 1, 0 ), sf::Vector2f( 1, 0 ) ) );
-	mesh->add_vertex( sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector2f( 0, 0 ) ) );
+	// Create a simple geometry object.
+	sg::TriangleGeometry geometry;
+
+	geometry.add_triangle(
+		sg::Vertex( sf::Vector3f( 0, 0, 0 ), sf::Vector2f( 0, 1 ) ),
+		sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector2f( 1, 1 ) ),
+		sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector2f( 0, 0 ) )
+	);
+	geometry.add_triangle(
+		sg::Vertex( sf::Vector3f( 1, 0, 0 ), sf::Vector2f( 1, 1 ) ),
+		sg::Vertex( sf::Vector3f( 1, 1, 0 ), sf::Vector2f( 1, 0 ) ),
+		sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector2f( 0, 0 ) )
+	);
+
+	sg::BufferObject::Ptr buffer_object( new sg::BufferObject( sg::BufferObject::TEX_COORDS, true ) );
+	buffer_object->load( geometry );
 
 	// Setup renderer.
 	sg::Renderer renderer;
@@ -48,21 +57,20 @@ int main() {
 		texture->LoadFromImage( image );
 	}
 
-
 	// Setup the scene graph.
 	// Static mesh.
-	sg::StaticMesh::Ptr mesh_leaf = sg::StaticMesh::create( mesh, renderer );
+	sg::StaticMesh::Ptr static_mesh = sg::StaticMesh::create( buffer_object, renderer );
 
 	// Same mesh, but in wireframe mode. Also translate it a little bit so it's
 	// visible.
-	sg::StaticMesh::Ptr wireframe_mesh_leaf = sg::StaticMesh::create( mesh, renderer );
-	wireframe_mesh_leaf->set_state( sg::WireframeState( true ) );
-	wireframe_mesh_leaf->set_local_translation( sf::Vector3f( -1, 0, 0 ) );
+	sg::StaticMesh::Ptr wireframe_static_mesh = sg::StaticMesh::create( buffer_object, renderer );
+	wireframe_static_mesh->set_state( sg::WireframeState( true ) );
+	wireframe_static_mesh->set_local_translation( sf::Vector3f( -1, 0, 0 ) );
 
 	// Create root node and add meshes to it.
 	sg::Node::Ptr root_node = sg::Node::create();
-	root_node->attach( mesh_leaf );
-	root_node->attach( wireframe_mesh_leaf );
+	root_node->attach( static_mesh );
+	root_node->attach( wireframe_static_mesh );
 	root_node->set_state( sg::TextureState( texture ) );
 
 	// Setup SFML window.

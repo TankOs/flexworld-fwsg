@@ -51,13 +51,6 @@ void BufferObject::render() const {
 		glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 	}
 
-	if( (m_flags & INDICES) == INDICES ) {
-		glEnableClientState( GL_INDEX_ARRAY );
-	}
-	else {
-		glDisableClientState( GL_INDEX_ARRAY );
-	}
-
 	// TODO Implement!
 	glDisableClientState( GL_COLOR_ARRAY );
 
@@ -78,13 +71,18 @@ void BufferObject::render() const {
 
 		if( (m_flags & INDICES) == INDICES ) {
 			glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, m_buffers[IBO_INDEX] );
+
+			// Render.
+			glDrawElements( GL_TRIANGLES, static_cast<GLsizei>( m_num_vertices ), GL_UNSIGNED_SHORT, 0 );
 		}
 		else {
 			// Unbind the buffer.
 			glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, 0 );
+
+			// Render.
+			glDrawArrays( GL_TRIANGLES, 0, static_cast<GLsizei>( m_num_vertices ) );
 		}
 
-		glDrawElements( GL_TRIANGLES, static_cast<GLsizei>( m_num_vertices ), GL_UNSIGNED_SHORT, 0 );
 	}
 	else {
 		glVertexPointer( 3, GL_FLOAT, 0, &m_vertices[0] );
@@ -95,7 +93,7 @@ void BufferObject::render() const {
 			glDrawElements( GL_TRIANGLES, static_cast<GLsizei>( m_num_vertices ), GL_UNSIGNED_SHORT, &m_indices[0] );
 		}
 		else {
-			glDrawElements( GL_TRIANGLES, static_cast<GLsizei>( m_num_vertices ), GL_UNSIGNED_SHORT, 0 );
+			glDrawArrays( GL_TRIANGLES, 0, static_cast<GLint>( m_num_vertices ) );
 		}
 	}
 }
@@ -191,6 +189,13 @@ void BufferObject::load( const Geometry& geometry ) {
 			glBufferDataARB( GL_ARRAY_BUFFER, m_num_vertices * sizeof( Vector2Array::value_type ), &m_tex_coords[0], GL_STATIC_DRAW );
 		}
 
+		// IBO.
+		if( m_flags & INDICES ) {
+			glGenBuffersARB( 1, &m_buffers[IBO_INDEX] );
+			glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, m_buffers[IBO_INDEX] );
+			glBufferDataARB( GL_ELEMENT_ARRAY_BUFFER, m_num_vertices * sizeof( IndexArray::value_type ), &m_indices[0], GL_STATIC_DRAW );
+		}
+
 		// Unbind buffers.
 		glBindBufferARB( GL_ARRAY_BUFFER, 0 );
 		glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, 0 );
@@ -199,6 +204,7 @@ void BufferObject::load( const Geometry& geometry ) {
 		m_vertices.clear();
 		m_normals.clear();
 		m_tex_coords.clear();
+		m_indices.clear();
 	}
 }
 

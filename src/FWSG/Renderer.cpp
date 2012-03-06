@@ -175,6 +175,8 @@ void Renderer::render() const {
 
 	// Restore OpenGL states.
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+	glBindTexture( GL_TEXTURE_2D, 0 );
+	glDisable( GL_CULL_FACE );
 }
 
 void Renderer::lock() const {

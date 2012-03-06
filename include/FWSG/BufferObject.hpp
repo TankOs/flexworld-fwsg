@@ -73,7 +73,7 @@ class BufferObject : public NonCopyable {
 	private:
 		typedef std::vector<sf::Vector3f> Vector3Array;
 		typedef std::vector<sf::Vector2f> Vector2Array;
-		typedef std::vector<GLushort> GLuintArray;
+		typedef std::vector<GLushort> IndexArray;
 
 		enum {
 			VBO_INDEX = 0,
@@ -88,7 +88,7 @@ class BufferObject : public NonCopyable {
 		Vector3Array m_vertices;
 		Vector3Array m_normals;
 		Vector2Array m_tex_coords;
-		GLuintArray m_indices;
+		IndexArray m_indices;
 
 		std::size_t m_num_vertices;
 		int m_flags;
