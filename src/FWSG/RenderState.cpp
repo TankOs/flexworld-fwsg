@@ -5,7 +5,7 @@ namespace sg {
 RenderState::RenderState() :
 	wireframe( false ),
 	depth_test( false ),
-	cull( false )
+	backface_culling( true )
 {
 }
 
@@ -14,7 +14,7 @@ bool RenderState::operator==( const RenderState& other ) const {
 		texture.get() == other.texture.get() &&
 		wireframe == other.wireframe &&
 		depth_test == other.depth_test &&
-		cull == other.cull
+		backface_culling == other.backface_culling
 	;
 }
 
@@ -23,7 +23,7 @@ bool RenderState::operator!=( const RenderState& other ) const {
 		texture.get() != other.texture.get() ||
 		wireframe != other.wireframe ||
 		depth_test != other.depth_test ||
-		cull != other.cull
+		backface_culling != other.backface_culling
 	;
 }
 
@@ -49,10 +49,10 @@ bool RenderState::operator<( const RenderState& other ) const {
 		return false;
 	}
 
-	if( cull && !other.cull ) {
+	if( backface_culling && !other.backface_culling ) {
 		return true;
 	}
-	else if( !cull && other.cull ) {
+	else if( !backface_culling && other.backface_culling ) {
 		return false;
 	}
 

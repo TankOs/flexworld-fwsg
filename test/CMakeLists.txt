@@ -13,6 +13,7 @@ set( INC_DIR "src" )
 set(
 	SOURCES
 	${SRC_DIR}/Test.cpp
+	${SRC_DIR}/TestBackfaceCullingState.cpp
 	${SRC_DIR}/TestBoolState.cpp
 	${SRC_DIR}/TestBufferObject.cpp
 	${SRC_DIR}/TestGeometry.cpp

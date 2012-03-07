@@ -28,6 +28,7 @@ set( INC_DIR "include" )
 
 set(
 	SOURCES
+	${INC_DIR}/FWSG/BackfaceCullingState.hpp
 	${INC_DIR}/FWSG/BoolState.hpp
 	${INC_DIR}/FWSG/BufferObject.hpp
 	${INC_DIR}/FWSG/Drawable.hpp
@@ -47,6 +48,7 @@ set(
 	${INC_DIR}/FWSG/TriangleGeometry.hpp
 	${INC_DIR}/FWSG/Vertex.hpp
 	${INC_DIR}/FWSG/WireframeState.hpp
+	${SRC_DIR}/FWSG/BackfaceCullingState.cpp
 	${SRC_DIR}/FWSG/BoolState.cpp
 	${SRC_DIR}/FWSG/BufferObject.cpp
 	${SRC_DIR}/FWSG/Drawable.cpp

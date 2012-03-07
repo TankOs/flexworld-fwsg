@@ -125,6 +125,7 @@ void Renderer::render() const {
 	const Step* step = nullptr;
 	const sf::Texture* current_texture = 0;
 	const bool* wireframe = nullptr;
+	const bool* backface_culling = nullptr;
 
 	// Setup OpenGL.
 	glMatrixMode( GL_MODELVIEW );
@@ -157,11 +158,28 @@ void Renderer::render() const {
 			glPolygonMode( GL_FRONT_AND_BACK, *wireframe ? GL_LINE : GL_FILL );
 		}
 
+		// Backface culling.
+		if( backface_culling == nullptr || *backface_culling != state->backface_culling ) {
+			backface_culling = &state->backface_culling;
+
+			if( *backface_culling ) {
+				glEnable( GL_CULL_FACE );
+			}
+			else {
+				glDisable( GL_CULL_FACE );
+			}
+		}
+
 		for( step_idx = 0; step_idx < steps->size(); ++step_idx ) {
 			step = (*steps)[step_idx].get();
 
 			// Transform.
 			glLoadIdentity();
+
+			glRotatef( step->get_transform().get_rotation().x, 1, 0, 0 );
+			glRotatef( step->get_transform().get_rotation().y, 0, 1, 0 );
+			glRotatef( step->get_transform().get_rotation().z, 0, 0, 1 );
+
 			glTranslatef(
 				step->get_transform().get_translation().x,
 				step->get_transform().get_translation().y,

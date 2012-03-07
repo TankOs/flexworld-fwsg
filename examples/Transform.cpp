@@ -4,13 +4,13 @@
 #include <FWSG/Renderer.hpp>
 #include <FWSG/Node.hpp>
 #include <FWSG/StaticMesh.hpp>
-#include <FWSG/WireframeState.hpp>
+#include <FWSG/BackfaceCullingState.hpp>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 
 int main() {
-	sf::RenderWindow window( sf::VideoMode( 800, 600 ), "Hello World (FWSG example)" );
+	sf::RenderWindow window( sf::VideoMode( 800, 600 ), "Transform (FWSG example)" );
 	sf::Event event;
 
 	// Create a simple geometry object.
@@ -30,26 +30,25 @@ int main() {
 	sg::Renderer renderer;
 
 	// Setup the scene graph.
-	// Static mesh.
-	sg::StaticMesh::Ptr static_mesh = sg::StaticMesh::create( buffer_object, renderer );
+	// Static meshes.
+	sg::StaticMesh::Ptr static_mesh0 = sg::StaticMesh::create( buffer_object, renderer );
+	sg::StaticMesh::Ptr static_mesh1 = sg::StaticMesh::create( buffer_object, renderer );
+	sg::StaticMesh::Ptr static_mesh2 = sg::StaticMesh::create( buffer_object, renderer );
 
-	// Same mesh, but in wireframe mode. Also translate it a little bit so it's
-	// visible.
-	sg::StaticMesh::Ptr wireframe_static_mesh = sg::StaticMesh::create( buffer_object, renderer );
-	wireframe_static_mesh->set_state( sg::WireframeState( true ) );
-	wireframe_static_mesh->set_local_transform( sg::Transform( sf::Vector3f( -1, 0, 0 ) ) );
+	static_mesh1->set_local_transform( sg::Transform( sf::Vector3f( -1, 0, 0 ) ) );
+	static_mesh2->set_local_transform( sg::Transform( sf::Vector3f( -1, -1, 0 ) ) );
 
 	// Create root node and add meshes to it.
 	sg::Node::Ptr root_node = sg::Node::create();
-	root_node->attach( static_mesh );
-	root_node->attach( wireframe_static_mesh );
+	root_node->attach( static_mesh0 );
+	root_node->attach( static_mesh1 );
+	root_node->attach( static_mesh2 );
+
+	// Disable backface culling to see the back of the meshes.
+	root_node->set_state( sg::BackfaceCullingState( false ) );
 
 	// Setup SFML window.
 	window.EnableVerticalSync( true );
-
-	// Setup UI.
-	sf::Text info_text( L"Press W to toggle wireframe mode for all meshes." );
-	info_text.SetColor( sf::Color( 0xa2, 0xb4, 0xc6 ) );
 
 	while( window.IsOpen() ) {
 		while( window.PollEvent( event ) ) {
@@ -60,17 +59,33 @@ int main() {
 				if( event.Key.Code == sf::Keyboard::Escape ) {
 					window.Close();
 				}
-				else if( event.Key.Code == sf::Keyboard::W ) {
-					const sg::WireframeState* wireframe_state = root_node->find_state<sg::WireframeState>();
-
-					root_node->set_state(
-						sg::WireframeState(
-							(wireframe_state != nullptr) ? !wireframe_state->is_set() : true
-						)
-					);
-				}
 			}
 		}
+
+		// Rotate all 3 meshes.
+		static_mesh0->set_local_transform(
+			sg::Transform(
+				static_mesh0->get_local_transform().get_translation(),
+				static_mesh0->get_local_transform().get_rotation() + sf::Vector3f( 0, 0, 1 ),
+				static_mesh0->get_local_transform().get_scale()
+			)
+		);
+
+		static_mesh1->set_local_transform(
+			sg::Transform(
+				static_mesh1->get_local_transform().get_translation(),
+				static_mesh1->get_local_transform().get_rotation() + sf::Vector3f( 0, 1, 0 ),
+				static_mesh1->get_local_transform().get_scale()
+			)
+		);
+
+		static_mesh2->set_local_transform(
+			sg::Transform(
+				static_mesh2->get_local_transform().get_translation(),
+				static_mesh2->get_local_transform().get_rotation() + sf::Vector3f( 1, 0, 0 ),
+				static_mesh2->get_local_transform().get_scale()
+			)
+		);
 
 		// Update scene graph.
 		root_node->update();
@@ -88,9 +103,6 @@ int main() {
 		glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 		glBindBuffer( GL_ARRAY_BUFFER, 0 );
 		glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
-
-		// Render UI.
-		window.Draw( info_text );
 
 		// Flip buffers and restore states.
 		window.Display();

@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_CASE( TestRenderState ) {
 		BOOST_CHECK( state.texture == false );
 		BOOST_CHECK( state.wireframe == false );
 		BOOST_CHECK( state.depth_test == false );
-		BOOST_CHECK( state.cull == false );
+		BOOST_CHECK( state.backface_culling == true );
 	}
 
 	// Equality.
@@ -59,8 +59,8 @@ BOOST_AUTO_TEST_CASE( TestRenderState ) {
 			sg::RenderState first;
 			sg::RenderState second;
 
-			first.cull = !first.cull;
-			second.cull = !second.cull;
+			first.backface_culling = !first.backface_culling;
+			second.backface_culling = !second.backface_culling;
 
 			BOOST_CHECK( first == second );
 		}
@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE( TestRenderState ) {
 			sg::RenderState first;
 			sg::RenderState second;
 
-			second.cull = !first.cull;
+			second.backface_culling = !first.backface_culling;
 
 			BOOST_CHECK( first != second );
 		}
@@ -193,20 +193,20 @@ BOOST_AUTO_TEST_CASE( TestRenderState ) {
 			sg::RenderState first;
 			sg::RenderState second;
 
-			first.cull = false;
-			second.cull = false;
+			first.backface_culling = false;
+			second.backface_culling = false;
 
 			BOOST_CHECK( (first < second) == false );
 			BOOST_CHECK( (second < first) == false );
 
-			first.cull = true;
-			second.cull = false;
+			first.backface_culling = true;
+			second.backface_culling = false;
 
 			BOOST_CHECK( (first < second) == true );
 			BOOST_CHECK( (second < first) == false );
 
-			first.cull = false;
-			second.cull = true;
+			first.backface_culling = false;
+			second.backface_culling = true;
 
 			BOOST_CHECK( (first < second) == false );
 			BOOST_CHECK( (second < first) == true );

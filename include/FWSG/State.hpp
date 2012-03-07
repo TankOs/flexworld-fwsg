@@ -15,7 +15,8 @@ class State {
 			TEXTURE,
 			WIREFRAME,
 			DEPTH_TEST,
-			CULL,
+			FRUSTUM_CULLING,
+			BACKFACE_CULLING,
 			NUM_TYPES
 		};
 

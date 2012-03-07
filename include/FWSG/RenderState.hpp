@@ -35,7 +35,7 @@ struct RenderState {
 	std::shared_ptr<const sf::Texture> texture;
 	bool wireframe;
 	bool depth_test;
-	bool cull;
+	bool backface_culling;
 };
 
 }

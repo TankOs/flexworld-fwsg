@@ -109,7 +109,7 @@ int main() {
 			}
 		}
 
-		// Update scene graph and renderer.
+		// Update scene graph.
 		root_node->update();
 
 		// Rendering.

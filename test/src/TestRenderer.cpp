@@ -17,10 +17,6 @@ BOOST_AUTO_TEST_CASE( TestRenderer ) {
 		BOOST_CHECK( renderer.get_num_render_states() == 0 );
 	}
 
-	// Create buffer object.
-	{
-	}
-
 	// Create single step.
 	{
 		sg::Renderer renderer;

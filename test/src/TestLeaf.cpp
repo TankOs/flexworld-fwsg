@@ -2,6 +2,7 @@
 #include <FWSG/Node.hpp>
 #include <FWSG/RenderState.hpp>
 #include <FWSG/WireframeState.hpp>
+#include <FWSG/BackfaceCullingState.hpp>
 #include <FWSG/TextureState.hpp>
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -41,7 +42,6 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		BOOST_CHECK( leaf->get_global_transform() == TRANSFORM );
 	}
 
-#if 0
 	// Update.
 	{
 		sg::Leaf::Ptr leaf = sg::Leaf::create();
@@ -125,14 +125,30 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		BOOST_CHECK( leaf->find_state<sg::WireframeState>() != nullptr );
 		BOOST_CHECK( leaf->find_state<sg::WireframeState>()->is_set() == false );
 
+		// Backface culling.
+		BOOST_CHECK( leaf->find_state<sg::BackfaceCullingState>() == nullptr );
+
+		leaf->set_state( sg::BackfaceCullingState( true ) );
+		BOOST_CHECK( leaf->find_state<sg::BackfaceCullingState>() != nullptr );
+		BOOST_CHECK( leaf->find_state<sg::BackfaceCullingState>()->is_set() == true );
+
 		{
 			sg::RenderState r_state;
-			r_state.wireframe = false;
+			r_state.backface_culling = true;
+			BOOST_CHECK( leaf->get_render_state() == r_state );
+		}
+
+		leaf->set_state( sg::BackfaceCullingState( false ) );
+		BOOST_CHECK( leaf->find_state<sg::BackfaceCullingState>() != nullptr );
+		BOOST_CHECK( leaf->find_state<sg::BackfaceCullingState>()->is_set() == false );
+
+		{
+			sg::RenderState r_state;
+			r_state.backface_culling = false;
 			BOOST_CHECK( leaf->get_render_state() == r_state );
 		}
 
 		leaf->reset_state<sg::WireframeState>();
 		BOOST_CHECK( leaf->find_state<sg::WireframeState>() == nullptr );
 	}
-#endif
 }
