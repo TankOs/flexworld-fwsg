@@ -1,6 +1,7 @@
 #pragma once
 
 #include <FWSG/BufferObject.hpp>
+#include <FWSG/RenderState.hpp>
 #include <FWSG/NonCopyable.hpp>
 
 #include <memory>
@@ -20,10 +21,11 @@ class Step : public NonCopyable {
 		typedef std::shared_ptr<const Step> PtrConst; ///< Shared pointer to const.
 
 		/** Ctor.
+		 * @param render_state Render state.
 		 * @param transform Transform (reference is being held).
 		 * @param buffer_object Buffer object.
 		 */
-		Step( const Transform& transform, BufferObject::PtrConst buffer_object );
+		Step( const RenderState& render_state, const Transform& transform, BufferObject::PtrConst buffer_object );
 
 		/** Get buffer object.
 		 * @return Buffer object.
@@ -33,9 +35,15 @@ class Step : public NonCopyable {
 		/** Get transform.
 		 * @return Transform.
 		 */
-		const sg::Transform& get_transform() const;
+		const Transform& get_transform() const;
+
+		/** Get render state.
+		 * @return Render state.
+		 */
+		const RenderState& get_render_state() const;
 
 	private:
+		const RenderState m_render_state;
 		BufferObject::PtrConst m_buffer_object;
 		const sg::Transform& m_transform;
 };

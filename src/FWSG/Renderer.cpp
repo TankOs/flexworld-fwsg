@@ -49,7 +49,7 @@ StepProxy::Ptr Renderer::create_step( const RenderState& render_state, const Tra
 	lock();
 
 	// Create step.
-	Step::Ptr step( new Step( transform, buffer_object ) );
+	Step::Ptr step( new Step( render_state, transform, buffer_object ) );
 
 	// Find render state.
 	GroupVector::iterator bound_iter = std::lower_bound( m_groups.begin(), m_groups.end(), render_state, GroupComparator() );
