@@ -1,4 +1,5 @@
 #include <FWSG/Renderer.hpp>
+#include <FWSG/Transform.hpp>
 
 #include <algorithm>
 #include <cassert>
@@ -44,11 +45,11 @@ std::size_t Renderer::get_num_steps() const {
 	return num;
 }
 
-StepProxy::Ptr Renderer::create_step( const RenderState& render_state, BufferObject::PtrConst buffer_object ) {
+StepProxy::Ptr Renderer::create_step( const RenderState& render_state, const Transform& transform, BufferObject::PtrConst buffer_object ) {
 	lock();
 
 	// Create step.
-	Step::Ptr step( new Step( buffer_object ) );
+	Step::Ptr step( new Step( transform, buffer_object ) );
 
 	// Find render state.
 	GroupVector::iterator bound_iter = std::lower_bound( m_groups.begin(), m_groups.end(), render_state, GroupComparator() );
@@ -162,9 +163,9 @@ void Renderer::render() const {
 			// Transform.
 			glLoadIdentity();
 			glTranslatef(
-				step->get_translation().x,
-				step->get_translation().y,
-				step->get_translation().z
+				step->get_transform().get_translation().x,
+				step->get_transform().get_translation().y,
+				step->get_transform().get_translation().z
 			);
 
 			step->get_buffer_object()->render();

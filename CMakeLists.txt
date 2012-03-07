@@ -43,6 +43,7 @@ set(
 	${INC_DIR}/FWSG/Step.hpp
 	${INC_DIR}/FWSG/StepProxy.hpp
 	${INC_DIR}/FWSG/TextureState.hpp
+	${INC_DIR}/FWSG/Transform.hpp
 	${INC_DIR}/FWSG/TriangleGeometry.hpp
 	${INC_DIR}/FWSG/Vertex.hpp
 	${INC_DIR}/FWSG/WireframeState.hpp
@@ -60,6 +61,7 @@ set(
 	${SRC_DIR}/FWSG/Step.cpp
 	${SRC_DIR}/FWSG/StepProxy.cpp
 	${SRC_DIR}/FWSG/TextureState.cpp
+	${SRC_DIR}/FWSG/Transform.cpp
 	${SRC_DIR}/FWSG/TriangleGeometry.cpp
 	${SRC_DIR}/FWSG/Vertex.cpp
 	${SRC_DIR}/FWSG/WireframeState.cpp

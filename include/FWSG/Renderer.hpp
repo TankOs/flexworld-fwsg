@@ -41,10 +41,11 @@ class Renderer {
 		 * It's safe to call this method from a thread not having an active OpenGL
 		 * context.
 		 * @param render_state Render state the step belongs to.
+		 * @param transform Transform (reference is being held).
 		 * @param buffer_object Buffer object to render.
 		 * @return Proxied step.
 		 */
-		StepProxy::Ptr create_step( const RenderState& render_state, BufferObject::PtrConst buffer_object );
+		StepProxy::Ptr create_step( const RenderState& render_state, const Transform& transform, BufferObject::PtrConst buffer_object );
 
 		/** Remove step (called automatically by proxy).
 		 * @param proxy Step proxy.

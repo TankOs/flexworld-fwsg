@@ -3,6 +3,7 @@
 #include <FWSG/NonCopyable.hpp>
 #include <FWSG/RenderState.hpp>
 #include <FWSG/State.hpp>
+#include <FWSG/Transform.hpp>
 
 #include <SFML/System/Vector3.hpp>
 #include <memory>
@@ -38,47 +39,20 @@ class Leaf : public NonCopyable {
 		 */
 		std::shared_ptr<Node> get_parent() const;
 
-		/** Set local translation.
-		 * This will update the global translation, too.
-		 * @param translation Translation.
+		/** Set local transform.
+		 * @param transform Transform.
 		 */
-		void set_local_translation( const sf::Vector3f& translation );
+		void set_local_transform( const sg::Transform& transform );
 
-		/** Get local translation.
-		 * @return Translation.
+		/** Get local transform.
+		 * @return Local transform.
 		 */
-		const sf::Vector3f& get_local_translation() const;
+		const sg::Transform& get_local_transform() const;
 
-		/** Set local rotation.
-		 * This will update the global rotation, too.
-		 * @param rotation Rotation.
+		/** Get global transform.
+		 * @return Global transform.
 		 */
-		void set_local_rotation( const sf::Vector3f& rotation );
-
-		/** Get local rotation.
-		 * @return Rotation.
-		 */
-		const sf::Vector3f& get_local_rotation() const;
-
-		/** Set scale.
-		 * @param scale Scale.
-		 */
-		void set_scale( const sf::Vector3f& scale );
-
-		/** Get scale.
-		 * @return Scale.
-		 */
-		const sf::Vector3f& get_scale() const;
-
-		/** Get global translation.
-		 * @return Global translation.
-		 */
-		const sf::Vector3f& get_global_translation() const;
-
-		/** Get global rotation.
-		 * @return Global rotation.
-		 */
-		const sf::Vector3f& get_global_rotation() const;
+		const sg::Transform& get_global_transform() const;
 
 		/** Check if update is needed.
 		 * @return true if update needed.
@@ -160,11 +134,8 @@ class Leaf : public NonCopyable {
 
 		RenderState m_render_state;
 
-		sf::Vector3f m_global_translation;
-		sf::Vector3f m_global_rotation;
-		sf::Vector3f m_global_scale;
-		sf::Vector3f m_local_translation;
-		sf::Vector3f m_local_rotation;
+		Transform m_global_transform;
+		Transform m_local_transform;
 		sf::Vector3f m_scale;
 
 		StateVector m_states;

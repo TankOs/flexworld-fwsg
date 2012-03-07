@@ -37,7 +37,7 @@ int main() {
 	// visible.
 	sg::StaticMesh::Ptr wireframe_static_mesh = sg::StaticMesh::create( buffer_object, renderer );
 	wireframe_static_mesh->set_state( sg::WireframeState( true ) );
-	wireframe_static_mesh->set_local_translation( sf::Vector3f( -1, 0, 0 ) );
+	wireframe_static_mesh->set_local_transform( sg::Transform( sf::Vector3f( -1, 0, 0 ) ) );
 
 	// Create root node and add meshes to it.
 	sg::Node::Ptr root_node = sg::Node::create();

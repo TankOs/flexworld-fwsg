@@ -13,12 +13,6 @@ Leaf::Ptr Leaf::create() {
 }
 
 Leaf::Leaf() :
-	m_global_translation( 0, 0, 0 ),
-	m_global_rotation( 0, 0, 0 ),
-	m_global_scale( 0, 0, 0 ),
-	m_local_translation( 0, 0, 0 ),
-	m_local_rotation( 0, 0, 0 ),
-	m_scale( 0, 0, 0 ),
 	m_needs_update( true )
 {
 }
@@ -39,18 +33,6 @@ void Leaf::set_parent( std::shared_ptr<Node> node ) {
 std::shared_ptr<Node> Leaf::get_parent() const {
 	std::shared_ptr<Node> parent = m_parent.lock();
 	return parent;
-}
-
-const sf::Vector3f& Leaf::get_local_translation() const {
-	return m_local_translation;
-}
-
-const sf::Vector3f& Leaf::get_local_rotation() const {
-	return m_local_rotation;
-}
-
-const sf::Vector3f& Leaf::get_scale() const {
-	return m_scale;
 }
 
 bool Leaf::is_update_needed() const {
@@ -84,41 +66,17 @@ void Leaf::queue_update() {
 	}
 }
 
-const sf::Vector3f& Leaf::get_global_translation() const {
-	return m_global_translation;
-}
-
-const sf::Vector3f& Leaf::get_global_rotation() const {
-	return m_global_rotation;
-}
-
-void Leaf::set_local_translation( const sf::Vector3f& translation ) {
-	m_local_translation = translation;
-	recalculate_global_transform();
-}
-
-void Leaf::set_local_rotation( const sf::Vector3f& rotation ) {
-	m_local_rotation = rotation;
-	recalculate_global_transform();
-}
-
 void Leaf::recalculate_global_transform() {
 	sg::Node::Ptr parent = m_parent.lock();
 
 	if( parent ) {
-		m_global_translation = parent->get_global_translation() + m_local_translation;
-		m_global_rotation = parent->get_global_rotation() + m_local_rotation;
+		m_global_transform = parent->get_global_transform() + m_local_transform;
 	}
 	else {
-		m_global_translation = m_local_translation;
-		m_global_rotation = m_local_rotation;
+		m_global_transform = m_local_transform;
 	}
 
 	handle_recalculate_global_transform();
-}
-
-void Leaf::set_scale( const sf::Vector3f& scale ) {
-	m_scale = scale;
 }
 
 void Leaf::handle_recalculate_global_transform() {
@@ -168,6 +126,19 @@ void Leaf::update_render_state() {
 }
 
 void Leaf::handle_update_render_state() {
+}
+
+void Leaf::set_local_transform( const sg::Transform& transform ) {
+	m_local_transform = transform;
+	recalculate_global_transform();
+}
+
+const sg::Transform& Leaf::get_local_transform() const {
+	return m_local_transform;
+}
+
+const sg::Transform& Leaf::get_global_transform() const {
+	return m_global_transform;
 }
 
 }

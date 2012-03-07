@@ -27,12 +27,7 @@ void StaticMesh::handle_update_render_state() {
 }
 
 void StaticMesh::invalidate_step() {
-	m_step = get_renderer().create_step( get_render_state(), m_buffer_object );
-
-	// Apply transformation.
-	m_step->set_translation( get_global_translation() );
-	m_step->set_rotation( get_global_rotation() );
-	m_step->set_scale( get_scale() );
+	m_step = get_renderer().create_step( get_render_state(), get_local_transform(), m_buffer_object );
 }
 
 }

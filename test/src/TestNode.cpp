@@ -99,38 +99,38 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 
 	// Transform delegation/recalculation.
 	{
+		static const sg::Transform ROOT_TRANSFORM(
+			sf::Vector3f( 10, 100, 1000 ),
+			sf::Vector3f( 11, 110, 1100 ),
+			sf::Vector3f( 12, 120, 1200 )
+		);
+		static const sg::Transform CHILD_TRANSFORM(
+			sf::Vector3f( 20, 200, 2000 ),
+			sf::Vector3f( 21, 210, 2100 ),
+			sf::Vector3f( 22, 220, 2200 )
+		);
+		static const sg::Transform LEAF_TRANSFORM(
+			sf::Vector3f( 30, 300, 3000 ),
+			sf::Vector3f( 31, 310, 3100 ),
+			sf::Vector3f( 32, 320, 3200 )
+		);
+
 		// Recalculate when calling attach().
 		{
 			sg::Node::Ptr root = sg::Node::create();
 			sg::Node::Ptr child = sg::Node::create();
 			sg::Leaf::Ptr leaf = sg::Leaf::create();
 
-			root->set_local_translation( sf::Vector3f( 10, 100, 1000 ) );
-			root->set_local_rotation( sf::Vector3f( 11, 110, 1100 ) );
-			root->set_scale( sf::Vector3f( 12, 120, 1200 ) );
-
-			child->set_local_translation( sf::Vector3f( 20, 200, 2000 ) );
-			child->set_local_rotation( sf::Vector3f( 21, 210, 2100 ) );
-			child->set_scale( sf::Vector3f( 22, 220, 2200 ) );
-
-			leaf->set_local_translation( sf::Vector3f( 30, 300, 3000 ) );
-			leaf->set_local_rotation( sf::Vector3f( 31, 310, 3100 ) );
-			leaf->set_scale( sf::Vector3f( 32, 320, 3200 ) );
+			root->set_local_transform( ROOT_TRANSFORM );
+			child->set_local_transform( CHILD_TRANSFORM );
+			leaf->set_local_transform( LEAF_TRANSFORM );
 
 			root->attach( child );
 			child->attach( leaf );
 
-			BOOST_CHECK( root->get_global_translation() == sf::Vector3f( 10, 100, 1000 ) );
-			BOOST_CHECK( root->get_global_rotation() == sf::Vector3f( 11, 110, 1100 ) );
-			BOOST_CHECK( root->get_scale() == sf::Vector3f( 12, 120, 1200 ) );
-
-			BOOST_CHECK( child->get_global_translation() == sf::Vector3f( 10 + 20, 100 + 200, 1000 + 2000 ) );
-			BOOST_CHECK( child->get_global_rotation() == sf::Vector3f( 11 + 21, 110 + 210, 1100 + 2100 ) );
-			BOOST_CHECK( child->get_scale() == sf::Vector3f( 22, 220, 2200 ) );
-
-			BOOST_CHECK( leaf->get_global_translation() == sf::Vector3f( 10 + 20 + 30, 100 + 200 + 300, 1000 + 2000 + 3000 ) );
-			BOOST_CHECK( leaf->get_global_rotation() == sf::Vector3f( 11 + 21 + 31, 110 + 210 + 310, 1100 + 2100 + 3100 ) );
-			BOOST_CHECK( leaf->get_scale() == sf::Vector3f( 32, 320, 3200 ) );
+			BOOST_CHECK( root->get_global_transform() == ROOT_TRANSFORM );
+			BOOST_CHECK( child->get_global_transform() == ROOT_TRANSFORM + CHILD_TRANSFORM );
+			BOOST_CHECK( leaf->get_global_transform() == ROOT_TRANSFORM + CHILD_TRANSFORM + LEAF_TRANSFORM );
 		}
 
 		// Same, but other ordering.
@@ -139,32 +139,16 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			sg::Node::Ptr child = sg::Node::create();
 			sg::Leaf::Ptr leaf = sg::Leaf::create();
 
-			root->set_local_translation( sf::Vector3f( 10, 100, 1000 ) );
-			root->set_local_rotation( sf::Vector3f( 11, 110, 1100 ) );
-			root->set_scale( sf::Vector3f( 12, 120, 1200 ) );
-
-			child->set_local_translation( sf::Vector3f( 20, 200, 2000 ) );
-			child->set_local_rotation( sf::Vector3f( 21, 210, 2100 ) );
-			child->set_scale( sf::Vector3f( 22, 220, 2200 ) );
-
-			leaf->set_local_translation( sf::Vector3f( 30, 300, 3000 ) );
-			leaf->set_local_rotation( sf::Vector3f( 31, 310, 3100 ) );
-			leaf->set_scale( sf::Vector3f( 32, 320, 3200 ) );
+			root->set_local_transform( ROOT_TRANSFORM );
+			child->set_local_transform( CHILD_TRANSFORM );
+			leaf->set_local_transform( LEAF_TRANSFORM );
 
 			child->attach( leaf );
 			root->attach( child );
 
-			BOOST_CHECK( root->get_global_translation() == sf::Vector3f( 10, 100, 1000 ) );
-			BOOST_CHECK( root->get_global_rotation() == sf::Vector3f( 11, 110, 1100 ) );
-			BOOST_CHECK( root->get_scale() == sf::Vector3f( 12, 120, 1200 ) );
-
-			BOOST_CHECK( child->get_global_translation() == sf::Vector3f( 10 + 20, 100 + 200, 1000 + 2000 ) );
-			BOOST_CHECK( child->get_global_rotation() == sf::Vector3f( 11 + 21, 110 + 210, 1100 + 2100 ) );
-			BOOST_CHECK( child->get_scale() == sf::Vector3f( 22, 220, 2200 ) );
-
-			BOOST_CHECK( leaf->get_global_translation() == sf::Vector3f( 10 + 20 + 30, 100 + 200 + 300, 1000 + 2000 + 3000 ) );
-			BOOST_CHECK( leaf->get_global_rotation() == sf::Vector3f( 11 + 21 + 31, 110 + 210 + 310, 1100 + 2100 + 3100 ) );
-			BOOST_CHECK( leaf->get_scale() == sf::Vector3f( 32, 320, 3200 ) );
+			BOOST_CHECK( root->get_global_transform() == ROOT_TRANSFORM );
+			BOOST_CHECK( child->get_global_transform() == ROOT_TRANSFORM + CHILD_TRANSFORM );
+			BOOST_CHECK( leaf->get_global_transform() == ROOT_TRANSFORM + CHILD_TRANSFORM + LEAF_TRANSFORM );
 		}
 
 		// Update transformation after adding childs.
@@ -176,29 +160,13 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			child->attach( leaf );
 			root->attach( child );
 
-			root->set_local_translation( sf::Vector3f( 10, 100, 1000 ) );
-			root->set_local_rotation( sf::Vector3f( 11, 110, 1100 ) );
-			root->set_scale( sf::Vector3f( 12, 120, 1200 ) );
+			root->set_local_transform( ROOT_TRANSFORM );
+			child->set_local_transform( CHILD_TRANSFORM );
+			leaf->set_local_transform( LEAF_TRANSFORM );
 
-			child->set_local_translation( sf::Vector3f( 20, 200, 2000 ) );
-			child->set_local_rotation( sf::Vector3f( 21, 210, 2100 ) );
-			child->set_scale( sf::Vector3f( 22, 220, 2200 ) );
-
-			leaf->set_local_translation( sf::Vector3f( 30, 300, 3000 ) );
-			leaf->set_local_rotation( sf::Vector3f( 31, 310, 3100 ) );
-			leaf->set_scale( sf::Vector3f( 32, 320, 3200 ) );
-
-			BOOST_CHECK( root->get_global_translation() == sf::Vector3f( 10, 100, 1000 ) );
-			BOOST_CHECK( root->get_global_rotation() == sf::Vector3f( 11, 110, 1100 ) );
-			BOOST_CHECK( root->get_scale() == sf::Vector3f( 12, 120, 1200 ) );
-
-			BOOST_CHECK( child->get_global_translation() == sf::Vector3f( 10 + 20, 100 + 200, 1000 + 2000 ) );
-			BOOST_CHECK( child->get_global_rotation() == sf::Vector3f( 11 + 21, 110 + 210, 1100 + 2100 ) );
-			BOOST_CHECK( child->get_scale() == sf::Vector3f( 22, 220, 2200 ) );
-
-			BOOST_CHECK( leaf->get_global_translation() == sf::Vector3f( 10 + 20 + 30, 100 + 200 + 300, 1000 + 2000 + 3000 ) );
-			BOOST_CHECK( leaf->get_global_rotation() == sf::Vector3f( 11 + 21 + 31, 110 + 210 + 310, 1100 + 2100 + 3100 ) );
-			BOOST_CHECK( leaf->get_scale() == sf::Vector3f( 32, 320, 3200 ) );
+			BOOST_CHECK( root->get_global_transform() == ROOT_TRANSFORM );
+			BOOST_CHECK( child->get_global_transform() == ROOT_TRANSFORM + CHILD_TRANSFORM );
+			BOOST_CHECK( leaf->get_global_transform() == ROOT_TRANSFORM + CHILD_TRANSFORM + LEAF_TRANSFORM );
 		}
 	}
 

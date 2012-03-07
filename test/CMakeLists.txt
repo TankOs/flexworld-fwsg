@@ -24,6 +24,7 @@ set(
 	${SRC_DIR}/TestStep.cpp
 	${SRC_DIR}/TestStepProxy.cpp
 	${SRC_DIR}/TestTextureState.cpp
+	${SRC_DIR}/TestTransform.cpp
 	${SRC_DIR}/TestTriangleGeometry.cpp
 	${SRC_DIR}/TestVertex.cpp
 	${SRC_DIR}/TestWireframeState.cpp
