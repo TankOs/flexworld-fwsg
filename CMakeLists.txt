@@ -70,6 +70,7 @@ set(
 )
 
 include_directories( ${INC_DIR} )
+include_directories( extlibs/GLEW/include/ )
 include_directories( ${SFML_INCLUDE_DIR} )
 
 add_library( fwsg ${LIB_TYPE} ${SOURCES} )
