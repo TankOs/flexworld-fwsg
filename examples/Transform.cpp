@@ -48,16 +48,16 @@ int main() {
 	root_node->set_state( sg::BackfaceCullingState( false ) );
 
 	// Setup SFML window.
-	window.EnableVerticalSync( true );
+	window.setVerticalSyncEnabled( true );
 
-	while( window.IsOpen() ) {
-		while( window.PollEvent( event ) ) {
-			if( event.Type == sf::Event::Closed ) {
-				window.Close();
+	while( window.isOpen() ) {
+		while( window.pollEvent( event ) ) {
+			if( event.type == sf::Event::Closed ) {
+				window.close();
 			}
-			else if( event.Type == sf::Event::KeyPressed ) {
-				if( event.Key.Code == sf::Keyboard::Escape ) {
-					window.Close();
+			else if( event.type == sf::Event::KeyPressed ) {
+				if( event.key.code == sf::Keyboard::Escape ) {
+					window.close();
 				}
 			}
 		}
@@ -91,11 +91,11 @@ int main() {
 		root_node->update();
 
 		// Rendering.
-		window.Clear();
+		window.clear();
 
 		// Call renderer and save GL states from being changed by SFML.
 		renderer.render();
-		window.PushGLStates();
+		window.pushGLStates();
 
 		// Make SFML work again.
 		glEnableClientState( GL_VERTEX_ARRAY );
@@ -105,8 +105,8 @@ int main() {
 		glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
 		// Flip buffers and restore states.
-		window.Display();
-		window.PopGLStates();
+		window.display();
+		window.popGLStates();
 	}
 
 	return 0;

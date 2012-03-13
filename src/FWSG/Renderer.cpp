@@ -144,7 +144,7 @@ void Renderer::render() const {
 			current_texture = &*state->texture;
 
 			if( current_texture ) {
-				current_texture->Bind();
+				current_texture->bind();
 			}
 			else {
 				glBindTexture( GL_TEXTURE_2D, 0 );
@@ -199,11 +199,11 @@ void Renderer::render() const {
 }
 
 void Renderer::lock() const {
-	m_mutex.Lock();
+	m_mutex.lock();
 }
 
 void Renderer::unlock() const {
-	m_mutex.Unlock();
+	m_mutex.unlock();
 }
 
 }

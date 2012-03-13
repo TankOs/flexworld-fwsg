@@ -45,22 +45,22 @@ int main() {
 	root_node->attach( wireframe_static_mesh );
 
 	// Setup SFML window.
-	window.EnableVerticalSync( true );
+	window.setVerticalSyncEnabled( true );
 
 	// Setup UI.
 	sf::Text info_text( L"Press W to toggle wireframe mode for all meshes." );
-	info_text.SetColor( sf::Color( 0xa2, 0xb4, 0xc6 ) );
+	info_text.setColor( sf::Color( 0xa2, 0xb4, 0xc6 ) );
 
-	while( window.IsOpen() ) {
-		while( window.PollEvent( event ) ) {
-			if( event.Type == sf::Event::Closed ) {
-				window.Close();
+	while( window.isOpen() ) {
+		while( window.pollEvent( event ) ) {
+			if( event.type == sf::Event::Closed ) {
+				window.close();
 			}
-			else if( event.Type == sf::Event::KeyPressed ) {
-				if( event.Key.Code == sf::Keyboard::Escape ) {
-					window.Close();
+			else if( event.type == sf::Event::KeyPressed ) {
+				if( event.key.code == sf::Keyboard::Escape ) {
+					window.close();
 				}
-				else if( event.Key.Code == sf::Keyboard::W ) {
+				else if( event.key.code == sf::Keyboard::W ) {
 					const sg::WireframeState* wireframe_state = root_node->find_state<sg::WireframeState>();
 
 					root_node->set_state(
@@ -76,11 +76,11 @@ int main() {
 		root_node->update();
 
 		// Rendering.
-		window.Clear();
+		window.clear();
 
 		// Call renderer and save GL states from being changed by SFML.
 		renderer.render();
-		window.PushGLStates();
+		window.pushGLStates();
 
 		// Make SFML work again.
 		glEnableClientState( GL_VERTEX_ARRAY );
@@ -90,11 +90,11 @@ int main() {
 		glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
 		// Render UI.
-		window.Draw( info_text );
+		window.draw( info_text );
 
 		// Flip buffers and restore states.
-		window.Display();
-		window.PopGLStates();
+		window.display();
+		window.popGLStates();
 	}
 
 	return 0;
