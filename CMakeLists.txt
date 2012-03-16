@@ -79,12 +79,14 @@ target_link_libraries( fwsg ${SFML_GRAPHICS_LIBRARY} )
 target_link_libraries( fwsg ${SFML_WINDOW_LIBRARY} )
 target_link_libraries( fwsg ${SFML_SYSTEM_LIBRARY} )
 
-install(
-	TARGETS fwsg
-	RUNTIME DESTINATION bin COMPONENT bin
-	LIBRARY DESTINATION lib COMPONENT bin
-	ARCHIVE DESTINATION lib COMPONENT dev
-)
+if( NOT FWSG_SKIP_INSTALL )
+	install(
+		TARGETS fwsg
+		RUNTIME DESTINATION bin COMPONENT bin
+		LIBRARY DESTINATION lib COMPONENT bin
+		ARCHIVE DESTINATION lib COMPONENT dev
+	)
+endif()
 
 if( FWSG_BUILD_EXAMPLES )
 	add_subdirectory( examples )
