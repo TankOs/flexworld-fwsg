@@ -29,7 +29,8 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		static const sg::Transform TRANSFORM(
 			sf::Vector3f( 10, 11, 12 ),
 			sf::Vector3f( 20, 21, 22 ),
-			sf::Vector3f( 30, 31, 32 )
+			sf::Vector3f( 30, 31, 32 ),
+			sf::Vector3f( 40, 41, 42 )
 		);
 
 		sg::Leaf::Ptr leaf = sg::Leaf::create();

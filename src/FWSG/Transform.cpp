@@ -8,7 +8,8 @@ bool operator==( const Transform& first, const Transform& second ) {
 	return
 		(first.get_translation() == second.get_translation()) &&
 		(first.get_rotation() == second.get_rotation()) &&
-		(first.get_scale() == second.get_scale())
+		(first.get_scale() == second.get_scale()) &&
+		(first.get_origin() == second.get_origin())
 	;
 }
 
@@ -16,26 +17,16 @@ bool operator!=( const Transform& first, const Transform& second ) {
 	return
 		(first.get_translation() != second.get_translation()) ||
 		(first.get_rotation() != second.get_rotation()) ||
-		(first.get_scale() != second.get_scale())
+		(first.get_scale() != second.get_scale()) ||
+		(first.get_origin() != second.get_origin())
 	;
 }
 
-Transform operator+( const Transform& first, const Transform& second ) {
-	return Transform(
-		first.get_translation() + second.get_translation(),
-		first.get_rotation() + second.get_rotation(),
-		sf::Vector3f(
-			first.get_scale().x * second.get_scale().x,
-			first.get_scale().y * second.get_scale().y,
-			first.get_scale().z * second.get_scale().z
-		)
-	);
-}
-
-Transform::Transform( const sf::Vector3f& translation, const sf::Vector3f& rotation, const sf::Vector3f& scale ) :
+Transform::Transform( const sf::Vector3f& translation, const sf::Vector3f& rotation, const sf::Vector3f& scale, const sf::Vector3f& origin ) :
 	m_translation( translation ),
 	m_rotation( rotation ),
-	m_scale( scale )
+	m_scale( scale ),
+	m_origin( origin )
 {
 	assert( scale.x > 0 );
 	assert( scale.y > 0 );
@@ -68,6 +59,14 @@ void Transform::set_scale( const sf::Vector3f& scale ) {
 	assert( scale.z > 0 );
 
 	m_scale = scale;
+}
+
+void Transform::set_origin( const sf::Vector3f& origin ) {
+	m_origin = origin;
+}
+
+const sf::Vector3f& Transform::get_origin() const {
+	return m_origin;
 }
 
 }

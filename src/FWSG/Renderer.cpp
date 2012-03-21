@@ -176,21 +176,28 @@ void Renderer::render() const {
 			// Transform.
 			glLoadIdentity();
 
-			glScalef(
-				step->get_transform().get_scale().x,
-				step->get_transform().get_scale().y,
-				step->get_transform().get_scale().z
+			glTranslatef(
+				step->get_transform().get_translation().x,
+				step->get_transform().get_translation().y,
+				step->get_transform().get_translation().z
 			);
 
 			glRotatef( step->get_transform().get_rotation().x, 1, 0, 0 );
 			glRotatef( step->get_transform().get_rotation().y, 0, 1, 0 );
 			glRotatef( step->get_transform().get_rotation().z, 0, 0, 1 );
 
+			// Shift by origin.
 			glTranslatef(
-				step->get_transform().get_translation().x,
-				step->get_transform().get_translation().y,
-				step->get_transform().get_translation().z
+				-step->get_transform().get_origin().x,
+				-step->get_transform().get_origin().y,
+				-step->get_transform().get_origin().z
 			);
+
+			/*glScalef(
+				step->get_transform().get_scale().x,
+				step->get_transform().get_scale().y,
+				step->get_transform().get_scale().z
+			);*/
 
 			step->get_buffer_object()->render();
 		}

@@ -35,8 +35,17 @@ int main() {
 	sg::StaticMesh::Ptr static_mesh1 = sg::StaticMesh::create( buffer_object, renderer );
 	sg::StaticMesh::Ptr static_mesh2 = sg::StaticMesh::create( buffer_object, renderer );
 
-	static_mesh1->set_local_transform( sg::Transform( sf::Vector3f( -1, 0, 0 ) ) );
-	static_mesh2->set_local_transform( sg::Transform( sf::Vector3f( -1, -1, 0 ) ) );
+	sg::Transform transform;
+	transform.set_origin( sf::Vector3f( 0.5f, 0.5f, 0.0f ) );
+
+	transform.set_translation( sf::Vector3f( 0.5f, 0.5f, 0 ) );
+	static_mesh0->set_local_transform( transform );
+
+	transform.set_translation( sf::Vector3f( -0.5f, 0.5f, 0 ) );
+	static_mesh1->set_local_transform( transform );
+
+	transform.set_translation( sf::Vector3f( -0.5f, -0.5f, 0 ) );
+	static_mesh2->set_local_transform( transform );
 
 	// Create root node and add meshes to it.
 	sg::Node::Ptr root_node = sg::Node::create();
@@ -88,7 +97,8 @@ int main() {
 			sg::Transform(
 				static_mesh0->get_local_transform().get_translation(),
 				static_mesh0->get_local_transform().get_rotation() + sf::Vector3f( 0, 0, ROTATE_SPEED * secs ),
-				sf::Vector3f( scale, scale, scale )
+				sf::Vector3f( scale, scale, scale ),
+				static_mesh0->get_local_transform().get_origin()
 			)
 		);
 
@@ -96,7 +106,8 @@ int main() {
 			sg::Transform(
 				static_mesh1->get_local_transform().get_translation(),
 				static_mesh1->get_local_transform().get_rotation() + sf::Vector3f( 0, ROTATE_SPEED * secs, 0 ),
-				sf::Vector3f( scale, scale, scale )
+				sf::Vector3f( scale, scale, scale ),
+				static_mesh1->get_local_transform().get_origin()
 			)
 		);
 
@@ -104,7 +115,8 @@ int main() {
 			sg::Transform(
 				static_mesh2->get_local_transform().get_translation(),
 				static_mesh2->get_local_transform().get_rotation() + sf::Vector3f( ROTATE_SPEED * secs, 0, 0 ),
-				sf::Vector3f( scale, scale, scale )
+				sf::Vector3f( scale, scale, scale ),
+				static_mesh2->get_local_transform().get_origin()
 			)
 		);
 
