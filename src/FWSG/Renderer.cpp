@@ -193,11 +193,11 @@ void Renderer::render() const {
 				-step->get_transform().get_origin().z
 			);
 
-			/*glScalef(
+			glScalef(
 				step->get_transform().get_scale().x,
 				step->get_transform().get_scale().y,
 				step->get_transform().get_scale().z
-			);*/
+			);
 
 			step->get_buffer_object()->render();
 		}
