@@ -186,17 +186,17 @@ void Renderer::render() const {
 			glRotatef( step->get_transform().get_rotation().y, 0, 1, 0 );
 			glRotatef( step->get_transform().get_rotation().z, 0, 0, 1 );
 
+			glScalef(
+				step->get_transform().get_scale().x,
+				step->get_transform().get_scale().y,
+				step->get_transform().get_scale().z
+			);
+
 			// Shift by origin.
 			glTranslatef(
 				-step->get_transform().get_origin().x,
 				-step->get_transform().get_origin().y,
 				-step->get_transform().get_origin().z
-			);
-
-			glScalef(
-				step->get_transform().get_scale().x,
-				step->get_transform().get_scale().y,
-				step->get_transform().get_scale().z
 			);
 
 			step->get_buffer_object()->render();
