@@ -45,7 +45,12 @@ class Renderer {
 		 * @param buffer_object Buffer object to render.
 		 * @return Proxied step.
 		 */
-		StepProxy::Ptr create_step( const RenderState& render_state, const Transform& transform, BufferObject::PtrConst buffer_object );
+		StepProxy::Ptr create_step(
+			const RenderState& render_state,
+			const Transform& global_transform,
+			const Transform& local_transform,
+			BufferObject::PtrConst buffer_object
+		);
 
 		/** Remove step (called automatically by proxy).
 		 * @param proxy Step proxy.

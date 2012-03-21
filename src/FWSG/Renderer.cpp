@@ -45,11 +45,16 @@ std::size_t Renderer::get_num_steps() const {
 	return num;
 }
 
-StepProxy::Ptr Renderer::create_step( const RenderState& render_state, const Transform& transform, BufferObject::PtrConst buffer_object ) {
+StepProxy::Ptr Renderer::create_step(
+	const RenderState& render_state,
+	const Transform& global_transform,
+	const Transform& local_transform,
+	BufferObject::PtrConst buffer_object
+) {
 	lock();
 
 	// Create step.
-	Step::Ptr step( new Step( render_state, transform, buffer_object ) );
+	Step::Ptr step( new Step( render_state, global_transform, local_transform, buffer_object ) );
 
 	// Find render state.
 	GroupVector::iterator bound_iter = std::lower_bound( m_groups.begin(), m_groups.end(), render_state, GroupComparator() );
@@ -176,27 +181,35 @@ void Renderer::render() const {
 			// Transform.
 			glLoadIdentity();
 
+			// Global transformation.
+			glRotatef( step->get_global_transform().get_rotation().x, 1, 0, 0 );
+			glRotatef( step->get_global_transform().get_rotation().y, 0, 1, 0 );
+			glRotatef( step->get_global_transform().get_rotation().z, 0, 0, 1 );
+
 			glTranslatef(
-				step->get_transform().get_translation().x,
-				step->get_transform().get_translation().y,
-				step->get_transform().get_translation().z
+				step->get_global_transform().get_translation().x + step->get_local_transform().get_translation().x,
+				step->get_global_transform().get_translation().y + step->get_local_transform().get_translation().y,
+				step->get_global_transform().get_translation().z + step->get_local_transform().get_translation().z
 			);
 
-			glRotatef( step->get_transform().get_rotation().x, 1, 0, 0 );
-			glRotatef( step->get_transform().get_rotation().y, 0, 1, 0 );
-			glRotatef( step->get_transform().get_rotation().z, 0, 0, 1 );
+			// Local transformation.
+			// Rotation.
+			glRotatef( step->get_local_transform().get_rotation().x, 1, 0, 0 );
+			glRotatef( step->get_local_transform().get_rotation().y, 0, 1, 0 );
+			glRotatef( step->get_local_transform().get_rotation().z, 0, 0, 1 );
 
+			// Scale.
 			glScalef(
-				step->get_transform().get_scale().x,
-				step->get_transform().get_scale().y,
-				step->get_transform().get_scale().z
+				step->get_local_transform().get_scale().x,
+				step->get_local_transform().get_scale().y,
+				step->get_local_transform().get_scale().z
 			);
 
-			// Shift by origin.
+			// Origin.
 			glTranslatef(
-				-step->get_transform().get_origin().x,
-				-step->get_transform().get_origin().y,
-				-step->get_transform().get_origin().z
+				-step->get_local_transform().get_origin().x,
+				-step->get_local_transform().get_origin().y,
+				-step->get_local_transform().get_origin().z
 			);
 
 			step->get_buffer_object()->render();

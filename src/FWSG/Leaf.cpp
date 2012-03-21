@@ -72,20 +72,29 @@ void Leaf::recalculate_global_transform() {
 
 	if( parent ) {
 		const sg::Transform& parent_global = parent->get_global_transform();
+		const sg::Transform& parent_local = parent->get_local_transform();
 
-		m_global_transform = sg::Transform(
-			parent_global.get_translation() + m_local_transform.get_translation(),
-			parent_global.get_rotation() + m_local_transform.get_rotation(),
+		m_global_transform = sg::Transform(); /// XXX Remove
+
+		m_global_transform.set_translation(
+			parent_global.get_translation() + parent_local.get_translation()
+		);
+		m_global_transform.set_rotation(
+			parent_global.get_rotation() + parent_local.get_rotation()
+		);
+		m_global_transform.set_scale(
 			sf::Vector3f(
-				parent_global.get_scale().x * m_local_transform.get_scale().x,
-				parent_global.get_scale().y * m_local_transform.get_scale().y,
-				parent_global.get_scale().z * m_local_transform.get_scale().z
-			),
-			m_local_transform.get_origin()
+				parent_global.get_scale().x * parent_local.get_scale().x,
+				parent_global.get_scale().y * parent_local.get_scale().y,
+				parent_global.get_scale().z * parent_local.get_scale().z
+			)
+		);
+		m_global_transform.set_origin(
+			parent_global.get_origin() + parent_local.get_origin()
 		);
 	}
 	else {
-		m_global_transform = m_local_transform;
+		m_global_transform = sg::Transform();
 	}
 
 	handle_recalculate_global_transform();

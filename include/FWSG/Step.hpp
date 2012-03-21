@@ -22,20 +22,31 @@ class Step : public NonCopyable {
 
 		/** Ctor.
 		 * @param render_state Render state.
-		 * @param transform Transform (reference is being held).
+		 * @param global_transform Global transform (reference is being held).
+		 * @param local_transform Local transform (reference is being held).
 		 * @param buffer_object Buffer object.
 		 */
-		Step( const RenderState& render_state, const Transform& transform, BufferObject::PtrConst buffer_object );
+		Step(
+			const RenderState& render_state,
+			const Transform& global_transform,
+			const Transform& local_transform,
+			BufferObject::PtrConst buffer_object
+		);
 
 		/** Get buffer object.
 		 * @return Buffer object.
 		 */
 		BufferObject::PtrConst get_buffer_object() const;
 
-		/** Get transform.
-		 * @return Transform.
+		/** Get global transform.
+		 * @return Global transform.
 		 */
-		const Transform& get_transform() const;
+		const Transform& get_global_transform() const;
+
+		/** Get local transform.
+		 * @return Local transform.
+		 */
+		const Transform& get_local_transform() const;
 
 		/** Get render state.
 		 * @return Render state.
@@ -45,7 +56,8 @@ class Step : public NonCopyable {
 	private:
 		const RenderState m_render_state;
 		BufferObject::PtrConst m_buffer_object;
-		const sg::Transform& m_transform;
+		const sg::Transform& m_global_transform;
+		const sg::Transform& m_local_transform;
 };
 
 }
