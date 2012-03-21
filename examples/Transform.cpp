@@ -50,6 +50,13 @@ int main() {
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );
 
+	// Animation vars.
+	static const float ROTATE_SPEED = 90.0f;
+	float scale = 1.0f;
+	float scale_step = 1.0f;
+
+	sf::Clock timer;
+
 	while( window.isOpen() ) {
 		while( window.pollEvent( event ) ) {
 			if( event.type == sf::Event::Closed ) {
@@ -62,28 +69,42 @@ int main() {
 			}
 		}
 
-		// Rotate all 3 meshes.
+		sf::Time frametime = timer.restart();
+		float secs = frametime.asSeconds();
+
+		scale += scale_step * secs;
+
+		if( scale > 1.5f ) {
+			scale = 1.5f;
+			scale_step *= -1.0f;
+		}
+		else if( scale <= 0.2f ) {
+			scale = 0.2f;
+			scale_step *= -1.0f;
+		}
+
+		// Transform all 3 meshes.
 		static_mesh0->set_local_transform(
 			sg::Transform(
 				static_mesh0->get_local_transform().get_translation(),
-				static_mesh0->get_local_transform().get_rotation() + sf::Vector3f( 0, 0, 1 ),
-				static_mesh0->get_local_transform().get_scale()
+				static_mesh0->get_local_transform().get_rotation() + sf::Vector3f( 0, 0, ROTATE_SPEED * secs ),
+				sf::Vector3f( scale, scale, scale )
 			)
 		);
 
 		static_mesh1->set_local_transform(
 			sg::Transform(
 				static_mesh1->get_local_transform().get_translation(),
-				static_mesh1->get_local_transform().get_rotation() + sf::Vector3f( 0, 1, 0 ),
-				static_mesh1->get_local_transform().get_scale()
+				static_mesh1->get_local_transform().get_rotation() + sf::Vector3f( 0, ROTATE_SPEED * secs, 0 ),
+				sf::Vector3f( scale, scale, scale )
 			)
 		);
 
 		static_mesh2->set_local_transform(
 			sg::Transform(
 				static_mesh2->get_local_transform().get_translation(),
-				static_mesh2->get_local_transform().get_rotation() + sf::Vector3f( 1, 0, 0 ),
-				static_mesh2->get_local_transform().get_scale()
+				static_mesh2->get_local_transform().get_rotation() + sf::Vector3f( ROTATE_SPEED * secs, 0, 0 ),
+				sf::Vector3f( scale, scale, scale )
 			)
 		);
 

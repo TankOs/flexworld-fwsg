@@ -176,6 +176,12 @@ void Renderer::render() const {
 			// Transform.
 			glLoadIdentity();
 
+			glScalef(
+				step->get_transform().get_scale().x,
+				step->get_transform().get_scale().y,
+				step->get_transform().get_scale().z
+			);
+
 			glRotatef( step->get_transform().get_rotation().x, 1, 0, 0 );
 			glRotatef( step->get_transform().get_rotation().y, 0, 1, 0 );
 			glRotatef( step->get_transform().get_rotation().z, 0, 0, 1 );
