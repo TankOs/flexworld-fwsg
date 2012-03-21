@@ -118,7 +118,9 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			sf::Vector3f( 33, 330, 3300 )
 		);
 
-		static const sg::Transform GLOBAL_CHILD_TRANSFORM(
+		static const sg::Transform GLOBAL_ROOT_TRANSFORM = sg::Transform();
+		static const sg::Transform GLOBAL_CHILD_TRANSFORM = ROOT_TRANSFORM;
+		static const sg::Transform GLOBAL_LEAF_TRANSFORM(
 			ROOT_TRANSFORM.get_translation() + CHILD_TRANSFORM.get_translation(),
 			ROOT_TRANSFORM.get_rotation() + CHILD_TRANSFORM.get_rotation(),
 			sf::Vector3f(
@@ -126,18 +128,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 				ROOT_TRANSFORM.get_scale().y * CHILD_TRANSFORM.get_scale().y,
 				ROOT_TRANSFORM.get_scale().z * CHILD_TRANSFORM.get_scale().z
 			),
-			CHILD_TRANSFORM.get_origin()
-		);
-
-		static const sg::Transform GLOBAL_LEAF_TRANSFORM(
-			GLOBAL_CHILD_TRANSFORM.get_translation() + LEAF_TRANSFORM.get_translation(),
-			GLOBAL_CHILD_TRANSFORM.get_rotation() + LEAF_TRANSFORM.get_rotation(),
-			sf::Vector3f(
-				GLOBAL_CHILD_TRANSFORM.get_scale().x * LEAF_TRANSFORM.get_scale().x,
-				GLOBAL_CHILD_TRANSFORM.get_scale().y * LEAF_TRANSFORM.get_scale().y,
-				GLOBAL_CHILD_TRANSFORM.get_scale().z * LEAF_TRANSFORM.get_scale().z
-			),
-			LEAF_TRANSFORM.get_origin()
+			ROOT_TRANSFORM.get_origin() + CHILD_TRANSFORM.get_origin()
 		);
 
 		// Recalculate when calling attach().
@@ -153,7 +144,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			root->attach( child );
 			child->attach( leaf );
 
-			BOOST_CHECK( root->get_global_transform() == ROOT_TRANSFORM );
+			BOOST_CHECK( root->get_global_transform() == GLOBAL_ROOT_TRANSFORM );
 			BOOST_CHECK( child->get_global_transform() == GLOBAL_CHILD_TRANSFORM );
 			BOOST_CHECK( leaf->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
 		}
@@ -171,7 +162,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			child->attach( leaf );
 			root->attach( child );
 
-			BOOST_CHECK( root->get_global_transform() == ROOT_TRANSFORM );
+			BOOST_CHECK( root->get_global_transform() == GLOBAL_ROOT_TRANSFORM );
 			BOOST_CHECK( child->get_global_transform() == GLOBAL_CHILD_TRANSFORM );
 			BOOST_CHECK( leaf->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
 		}
@@ -189,7 +180,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			child->set_local_transform( CHILD_TRANSFORM );
 			leaf->set_local_transform( LEAF_TRANSFORM );
 
-			BOOST_CHECK( root->get_global_transform() == ROOT_TRANSFORM );
+			BOOST_CHECK( root->get_global_transform() == GLOBAL_ROOT_TRANSFORM );
 			BOOST_CHECK( child->get_global_transform() == GLOBAL_CHILD_TRANSFORM );
 			BOOST_CHECK( leaf->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
 		}

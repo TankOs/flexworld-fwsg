@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		BOOST_CHECK( leaf->get_local_transform() == TRANSFORM );
 
 		// No parent, so global == local.
-		BOOST_CHECK( leaf->get_global_transform() == TRANSFORM );
+		BOOST_CHECK( leaf->get_global_transform() == sg::Transform() );
 	}
 
 	// Update.

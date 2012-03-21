@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE( TestRenderer ) {
 
 		// Do in own scope to check auto-removal of the step.
 		{
-			sg::StepProxy::Ptr step = renderer.create_step( r_state, trans, buffer_object );
+			sg::StepProxy::Ptr step = renderer.create_step( r_state, trans, trans, buffer_object );
 
 			BOOST_CHECK( renderer.get_num_steps() == 1 );
 			BOOST_CHECK( renderer.get_num_render_states() == 1 );
@@ -44,8 +44,8 @@ BOOST_AUTO_TEST_CASE( TestRenderer ) {
 		sg::Transform trans;
 
 		// Create two steps within same render state.
-		sg::StepProxy::Ptr step0 = renderer.create_step( r_state, trans, buffer_object );
-		sg::StepProxy::Ptr step1 = renderer.create_step( r_state, trans, buffer_object );
+		sg::StepProxy::Ptr step0 = renderer.create_step( r_state, trans, trans, buffer_object );
+		sg::StepProxy::Ptr step1 = renderer.create_step( r_state, trans, trans, buffer_object );
 
 		BOOST_CHECK( renderer.get_num_steps() == 2 );
 		BOOST_CHECK( renderer.get_num_render_states() == 1 );
@@ -53,8 +53,8 @@ BOOST_AUTO_TEST_CASE( TestRenderer ) {
 		// Add another two steps with another render state.
 		r_state.wireframe = true;
 
-		sg::StepProxy::Ptr step2 = renderer.create_step( r_state, trans, buffer_object );
-		sg::StepProxy::Ptr step3 = renderer.create_step( r_state, trans, buffer_object );
+		sg::StepProxy::Ptr step2 = renderer.create_step( r_state, trans, trans, buffer_object );
+		sg::StepProxy::Ptr step3 = renderer.create_step( r_state, trans, trans, buffer_object );
 
 		BOOST_CHECK( renderer.get_num_steps() == 4 );
 		BOOST_CHECK( renderer.get_num_render_states() == 2 );

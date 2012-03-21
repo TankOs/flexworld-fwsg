@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE( TestStepProxy ) {
 	// Initial state.
 	{
 		sg::RenderState r_state;
-		sg::Step::Ptr step( new sg::Step( r_state, trans, bo ) );
+		sg::Step::Ptr step( new sg::Step( r_state, trans, trans, bo ) );
 		sg::StepProxy proxy( step, renderer, false );
 
 		BOOST_CHECK( proxy.get_step() == step );
