@@ -131,12 +131,15 @@ void Renderer::render() const {
 	const sf::Texture* current_texture = 0;
 	const bool* wireframe = nullptr;
 	const bool* backface_culling = nullptr;
+	const bool* depth_test = nullptr;
 
 	// Setup OpenGL.
 	glMatrixMode( GL_MODELVIEW );
 	glBindTexture( GL_TEXTURE_2D, 0 );
 	glCullFace( GL_BACK );
-	glEnable( GL_CULL_FACE );
+
+	glDisable( GL_CULL_FACE );
+	glDisable( GL_DEPTH_TEST );
 
 	lock();
 
@@ -161,6 +164,18 @@ void Renderer::render() const {
 			wireframe = &state->wireframe;
 
 			glPolygonMode( GL_FRONT_AND_BACK, *wireframe ? GL_LINE : GL_FILL );
+		}
+
+		// Depth test.
+		if( depth_test == nullptr || *depth_test != state->depth_test ) {
+			depth_test = &state->depth_test;
+
+			if( *depth_test ) {
+				glEnable( GL_DEPTH_TEST );
+			}
+			else {
+				glDisable( GL_DEPTH_TEST );
+			}
 		}
 
 		// Backface culling.
@@ -217,11 +232,6 @@ void Renderer::render() const {
 	}
 
 	unlock();
-
-	// Restore OpenGL states.
-	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-	glBindTexture( GL_TEXTURE_2D, 0 );
-	glDisable( GL_CULL_FACE );
 }
 
 void Renderer::lock() const {

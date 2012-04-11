@@ -85,6 +85,10 @@ void BufferObject::render() const {
 
 	}
 	else {
+		// Unbind buffers so client arrays are used.
+		glBindBufferARB( GL_ARRAY_BUFFER, 0 );
+		glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, 0 );
+
 		glVertexPointer( 3, GL_FLOAT, 0, &m_vertices[0] );
 		glNormalPointer( GL_FLOAT, 0, &m_normals[0] );
 		glTexCoordPointer( 2, GL_FLOAT, 0, &m_tex_coords[0] );
