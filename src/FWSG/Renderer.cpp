@@ -1,13 +1,15 @@
+#include <GL/glew.h>
+
 #include <FWSG/Renderer.hpp>
 #include <FWSG/Transform.hpp>
 
 #include <algorithm>
 #include <cassert>
-#include <iostream> // XXX 
 
 namespace sg {
 
 Renderer::Renderer() {
+	glewInit();
 }
 
 Renderer::~Renderer() {

@@ -1,3 +1,5 @@
+#include <GL/glew.h>
+
 #include <FWSG/BufferObject.hpp>
 #include <FWSG/TriangleGeometry.hpp>
 
@@ -6,6 +8,8 @@
 
 BOOST_AUTO_TEST_CASE( TestBufferObject ) {
 	sf::RenderWindow window( sf::VideoMode( 100, 100 ), "-" );
+
+	glewInit();
 
 	// Initial state.
 	{

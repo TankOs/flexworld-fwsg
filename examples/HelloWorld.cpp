@@ -89,6 +89,10 @@ int main() {
 		glBindBuffer( GL_ARRAY_BUFFER, 0 );
 		glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
+		glDisable( GL_CULL_FACE );
+		glDisable( GL_DEPTH_TEST );
+		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+
 		// Render UI.
 		window.draw( info_text );
 

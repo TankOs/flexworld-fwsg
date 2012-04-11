@@ -44,8 +44,8 @@ int main() {
 
 		image.create( 128, 128 );
 
-		for( sf::Uint32 y = 0; y < image.getHeight(); ++y ) {
-			for( sf::Uint32 x = 0; x < image.getWidth(); ++x ) {
+		for( sf::Uint32 y = 0; y < image.getSize().y; ++y ) {
+			for( sf::Uint32 x = 0; x < image.getSize().x; ++x ) {
 				image.setPixel( x, y, color_switch ? sf::Color::Red : sf::Color::White );
 			}
 
@@ -124,6 +124,10 @@ int main() {
 		glEnableClientState( GL_COLOR_ARRAY );
 		glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 		glBindBuffer( GL_ARRAY_BUFFER, 0 );
+
+		glDisable( GL_CULL_FACE );
+		glDisable( GL_DEPTH_TEST );
+		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
 		// Render UI.
 		window.draw( info_text );

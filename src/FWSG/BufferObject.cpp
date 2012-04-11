@@ -1,4 +1,5 @@
 #include <GL/glew.h>
+
 #include <FWSG/BufferObject.hpp>
 #include <FWSG/Geometry.hpp>
 
@@ -13,6 +14,9 @@ BufferObject::BufferObject( int flags, bool client_buffer ) :
 	m_buffers( nullptr ),
 	m_client_buffer( client_buffer )
 {
+	// Make sure GLEW is initialized.
+	glewInit();
+
 	// Prepare memory for buffer IDs.
 	if( !m_client_buffer ) {
 		m_buffers = new GLuint[NUM_BUFFERS];
@@ -26,7 +30,7 @@ BufferObject::~BufferObject() {
 		release_buffers();
 	}
 
-	delete m_buffers;
+	delete [] m_buffers;
 }
 
 void BufferObject::render() const {
