@@ -143,6 +143,8 @@ void Renderer::render() const {
 	glDisable( GL_CULL_FACE );
 	glDisable( GL_DEPTH_TEST );
 
+	glEnable( GL_TEXTURE_2D );
+
 	lock();
 
 	for( group_idx = 0; group_idx < m_groups.size(); ++group_idx ) {
