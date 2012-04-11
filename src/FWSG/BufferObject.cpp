@@ -55,8 +55,13 @@ void BufferObject::render() const {
 		glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 	}
 
-	// TODO Implement!
-	glDisableClientState( GL_COLOR_ARRAY );
+	if( (m_flags & COLORS) == COLORS ) {
+		glEnableClientState( GL_COLOR_ARRAY );
+	}
+	else {
+		glDisableClientState( GL_COLOR_ARRAY );
+	}
+
 
 	if( !m_client_buffer ) {
 		// GPU mode, bind buffers and setup pointers.
@@ -71,6 +76,11 @@ void BufferObject::render() const {
 		if( (m_flags & TEX_COORDS) == TEX_COORDS ) {
 			glBindBufferARB( GL_ARRAY_BUFFER, m_buffers[TBO_INDEX] );
 			glTexCoordPointer( 2, GL_FLOAT, 0, 0 );
+		}
+
+		if( (m_flags & COLORS) == COLORS ) {
+			glBindBufferARB( GL_ARRAY_BUFFER, m_buffers[CBO_INDEX] );
+			glColorPointer( 4, GL_UNSIGNED_BYTE, 0, 0 );
 		}
 
 		if( (m_flags & INDICES) == INDICES ) {
@@ -96,6 +106,7 @@ void BufferObject::render() const {
 		glVertexPointer( 3, GL_FLOAT, 0, &m_vertices[0] );
 		glNormalPointer( GL_FLOAT, 0, &m_normals[0] );
 		glTexCoordPointer( 2, GL_FLOAT, 0, &m_tex_coords[0] );
+		glColorPointer( 4, GL_UNSIGNED_BYTE, 0, &m_colors[0] );
 
 		if( (m_flags & INDICES) == INDICES ) {
 			glDrawElements( GL_TRIANGLES, static_cast<GLsizei>( m_num_vertices ), GL_UNSIGNED_SHORT, &m_indices[0] );
@@ -124,6 +135,7 @@ void BufferObject::load( const Geometry& geometry ) {
 	m_normals.clear();
 	m_tex_coords.clear();
 	m_indices.clear();
+	m_colors.clear();
 	m_num_vertices = 0;
 
 	if( (m_flags & INDICES) == 0 ) {
@@ -140,6 +152,10 @@ void BufferObject::load( const Geometry& geometry ) {
 
 			if( (m_flags & TEX_COORDS) == TEX_COORDS ) {
 				m_tex_coords.push_back( vertex.uv );
+			}
+
+			if( (m_flags & COLORS) == COLORS ) {
+				m_colors.push_back( vertex.color );
 			}
 
 			// Add vertex vector.
@@ -161,6 +177,10 @@ void BufferObject::load( const Geometry& geometry ) {
 
 			if( (m_flags & TEX_COORDS) == TEX_COORDS ) {
 				m_tex_coords.push_back( vertex.uv );
+			}
+
+			if( (m_flags & COLORS) == COLORS ) {
+				m_colors.push_back( vertex.color );
 			}
 
 			// Add vertex vector.
@@ -204,6 +224,13 @@ void BufferObject::load( const Geometry& geometry ) {
 			glBufferDataARB( GL_ELEMENT_ARRAY_BUFFER, m_num_vertices * sizeof( IndexArray::value_type ), &m_indices[0], GL_STATIC_DRAW );
 		}
 
+		// CBO.
+		if( m_flags & COLORS ) {
+			glGenBuffersARB( 1, &m_buffers[CBO_INDEX] );
+			glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, m_buffers[CBO_INDEX] );
+			glBufferDataARB( GL_ELEMENT_ARRAY_BUFFER, m_num_vertices * sizeof( ColorArray::value_type ), &m_colors[0], GL_STATIC_DRAW );
+		}
+
 		// Unbind buffers.
 		glBindBufferARB( GL_ARRAY_BUFFER, 0 );
 		glBindBufferARB( GL_ELEMENT_ARRAY_BUFFER, 0 );
@@ -213,6 +240,7 @@ void BufferObject::load( const Geometry& geometry ) {
 		m_normals.clear();
 		m_tex_coords.clear();
 		m_indices.clear();
+		m_colors.clear();
 	}
 }
 

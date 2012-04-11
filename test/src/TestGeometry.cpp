@@ -16,14 +16,14 @@ BOOST_AUTO_TEST_CASE( TestGeometry ) {
 	{
 		sg::Geometry geo;
 
-		geo.add_vertex( sg::Vertex( sf::Vector3f( 100, 101, 102 ), sf::Vector3f( 110, 111, 121 ), sf::Vector2f( 120, 121 ) ) );
-		geo.add_vertex( sg::Vertex( sf::Vector3f( 200, 201, 202 ), sf::Vector3f( 210, 211, 221 ), sf::Vector2f( 220, 221 ) ) );
-		geo.add_vertex( sg::Vertex( sf::Vector3f( 300, 301, 302 ), sf::Vector3f( 310, 311, 321 ), sf::Vector2f( 320, 321 ) ) );
+		geo.add_vertex( sg::Vertex( sf::Vector3f( 100, 101, 102 ), sf::Vector3f( 110, 111, 121 ), sf::Vector2f( 120, 121 ), sf::Color( 130, 131, 132 ) ) );
+		geo.add_vertex( sg::Vertex( sf::Vector3f( 200, 201, 202 ), sf::Vector3f( 210, 211, 221 ), sf::Vector2f( 220, 221 ), sf::Color( 230, 231, 232 ) ) );
+		geo.add_vertex( sg::Vertex( sf::Vector3f( 300, 301, 302 ), sf::Vector3f( 310, 311, 321 ), sf::Vector2f( 320, 321 ), sf::Color( 30, 31, 32 ) ) );
 		BOOST_CHECK( geo.get_num_vertices() == 3 );
 
-		BOOST_CHECK( geo.get_vertex( 0 ) == sg::Vertex( sf::Vector3f( 100, 101, 102 ), sf::Vector3f( 110, 111, 121 ), sf::Vector2f( 120, 121 ) ) );
-		BOOST_CHECK( geo.get_vertex( 1 ) == sg::Vertex( sf::Vector3f( 200, 201, 202 ), sf::Vector3f( 210, 211, 221 ), sf::Vector2f( 220, 221 ) ) );
-		BOOST_CHECK( geo.get_vertex( 2 ) == sg::Vertex( sf::Vector3f( 300, 301, 302 ), sf::Vector3f( 310, 311, 321 ), sf::Vector2f( 320, 321 ) ) );
+		BOOST_CHECK( geo.get_vertex( 0 ) == sg::Vertex( sf::Vector3f( 100, 101, 102 ), sf::Vector3f( 110, 111, 121 ), sf::Vector2f( 120, 121 ), sf::Color( 130, 131, 132 ) ) );
+		BOOST_CHECK( geo.get_vertex( 1 ) == sg::Vertex( sf::Vector3f( 200, 201, 202 ), sf::Vector3f( 210, 211, 221 ), sf::Vector2f( 220, 221 ), sf::Color( 230, 231, 232 ) ) );
+		BOOST_CHECK( geo.get_vertex( 2 ) == sg::Vertex( sf::Vector3f( 300, 301, 302 ), sf::Vector3f( 310, 311, 321 ), sf::Vector2f( 320, 321 ), sf::Color( 30, 31, 32 ) ) );
 
 		geo.add_index( 0 );
 		geo.add_index( 1 );

@@ -34,7 +34,8 @@ class BufferObject : public NonCopyable {
 			NORMALS = 1 << 0,
 			TEX_COORDS = 1 << 1,
 			INDICES = 1 << 2,
-			EVERYTHING = NORMALS | TEX_COORDS | INDICES
+			COLORS = 1 << 3,
+			EVERYTHING = NORMALS | TEX_COORDS | INDICES | COLORS
 		};
 
 		/** Ctor.
@@ -74,12 +75,14 @@ class BufferObject : public NonCopyable {
 		typedef std::vector<sf::Vector3f> Vector3Array;
 		typedef std::vector<sf::Vector2f> Vector2Array;
 		typedef std::vector<GLushort> IndexArray;
+		typedef std::vector<sf::Color> ColorArray;
 
 		enum {
 			VBO_INDEX = 0,
 			NBO_INDEX,
 			TBO_INDEX,
 			IBO_INDEX,
+			CBO_INDEX,
 			NUM_BUFFERS
 		};
 
@@ -89,6 +92,7 @@ class BufferObject : public NonCopyable {
 		Vector3Array m_normals;
 		Vector2Array m_tex_coords;
 		IndexArray m_indices;
+		ColorArray m_colors;
 
 		std::size_t m_num_vertices;
 		int m_flags;
