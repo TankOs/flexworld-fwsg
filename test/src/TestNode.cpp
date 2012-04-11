@@ -2,6 +2,8 @@
 #include <FWSG/RenderState.hpp>
 #include <FWSG/WireframeState.hpp>
 #include <FWSG/TextureState.hpp>
+#include <FWSG/BackfaceCullingState.hpp>
+#include <FWSG/DepthTestState.hpp>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -195,8 +197,14 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		sg::Leaf::Ptr leaf = sg::Leaf::create();
 
 		root->set_state( sg::TextureState( texture ) );
+		root->set_state( sg::DepthTestState( false ) );
+		root->set_state( sg::BackfaceCullingState( false ) );
 		child->set_state( sg::WireframeState( true ) );
+		child->set_state( sg::DepthTestState( true ) );
+		child->set_state( sg::BackfaceCullingState( true ) );
 		leaf->set_state( sg::WireframeState( false ) );
+		leaf->set_state( sg::DepthTestState( false ) );
+		leaf->set_state( sg::BackfaceCullingState( false ) );
 
 		child->attach( leaf );
 		root->attach( child );
@@ -205,6 +213,9 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		{
 			sg::RenderState r_state;
 			r_state.texture = texture;
+			r_state.wireframe = false;
+			r_state.depth_test = false;
+			r_state.backface_culling = false;
 
 			BOOST_CHECK( root->get_render_state() == r_state );
 		}
@@ -214,6 +225,8 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			sg::RenderState r_state;
 			r_state.texture = texture;
 			r_state.wireframe = true;
+			r_state.depth_test = true;
+			r_state.backface_culling = true;
 
 			BOOST_CHECK( child->get_render_state() == r_state );
 		}
@@ -223,6 +236,8 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			sg::RenderState r_state;
 			r_state.texture = texture;
 			r_state.wireframe = false;
+			r_state.depth_test = false;
+			r_state.backface_culling = false;
 
 			BOOST_CHECK( leaf->get_render_state() == r_state );
 		}

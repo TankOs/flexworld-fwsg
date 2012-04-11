@@ -3,6 +3,7 @@
 #include <FWSG/TextureState.hpp>
 #include <FWSG/WireframeState.hpp>
 #include <FWSG/BackfaceCullingState.hpp>
+#include <FWSG/DepthTestState.hpp>
 
 #include <cassert>
 
@@ -134,6 +135,7 @@ void Leaf::update_render_state() {
 	const TextureState* texture = find_state<TextureState>();
 	const WireframeState* wireframe = find_state<WireframeState>();
 	const BackfaceCullingState* backface_culling = find_state<BackfaceCullingState>();
+	const DepthTestState* depth_test = find_state<DepthTestState>();
 
 	// Overwrite render states with found states.
 	if( texture ) {
@@ -146,6 +148,10 @@ void Leaf::update_render_state() {
 
 	if( backface_culling ) {
 		m_render_state.backface_culling = backface_culling->is_set();
+	}
+
+	if( depth_test ) {
+		m_render_state.depth_test = depth_test->is_set();
 	}
 
 	handle_update_render_state();

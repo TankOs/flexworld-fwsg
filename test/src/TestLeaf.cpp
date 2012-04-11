@@ -4,6 +4,7 @@
 #include <FWSG/WireframeState.hpp>
 #include <FWSG/BackfaceCullingState.hpp>
 #include <FWSG/TextureState.hpp>
+#include <FWSG/DepthTestState.hpp>
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -126,6 +127,9 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		BOOST_CHECK( leaf->find_state<sg::WireframeState>() != nullptr );
 		BOOST_CHECK( leaf->find_state<sg::WireframeState>()->is_set() == false );
 
+		leaf->reset_state<sg::WireframeState>();
+		BOOST_CHECK( leaf->find_state<sg::WireframeState>() == nullptr );
+
 		// Backface culling.
 		BOOST_CHECK( leaf->find_state<sg::BackfaceCullingState>() == nullptr );
 
@@ -149,7 +153,30 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 			BOOST_CHECK( leaf->get_render_state() == r_state );
 		}
 
-		leaf->reset_state<sg::WireframeState>();
-		BOOST_CHECK( leaf->find_state<sg::WireframeState>() == nullptr );
+		leaf->reset_state<sg::BackfaceCullingState>();
+		BOOST_CHECK( leaf->find_state<sg::BackfaceCullingState>() == nullptr );
+
+		// Depth test.
+		BOOST_CHECK( leaf->find_state<sg::DepthTestState>() == nullptr );
+
+		leaf->set_state( sg::DepthTestState( true ) );
+		BOOST_CHECK( leaf->find_state<sg::DepthTestState>() != nullptr );
+		BOOST_CHECK( leaf->find_state<sg::DepthTestState>()->is_set() == true );
+
+		{
+			sg::RenderState r_state;
+			r_state.depth_test = true;
+			BOOST_CHECK( leaf->get_render_state() == r_state );
+		}
+
+		leaf->set_state( sg::DepthTestState( false ) );
+		BOOST_CHECK( leaf->find_state<sg::DepthTestState>() != nullptr );
+		BOOST_CHECK( leaf->find_state<sg::DepthTestState>()->is_set() == false );
+
+		{
+			sg::RenderState r_state;
+			r_state.depth_test = false;
+			BOOST_CHECK( leaf->get_render_state() == r_state );
+		}
 	}
 }
