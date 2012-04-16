@@ -189,6 +189,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 	}
 
 	std::shared_ptr<sf::Texture> texture( new sf::Texture );
+	std::shared_ptr<sf::Texture> texture2( new sf::Texture );
 
 	// Inherit states.
 	{
@@ -196,15 +197,14 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		sg::Node::Ptr child = sg::Node::create();
 		sg::Leaf::Ptr leaf = sg::Leaf::create();
 
-		root->set_state( sg::TextureState( texture ) );
+		root->set_state( sg::TextureState( texture, GL_LINEAR_MIPMAP_NEAREST, GL_NEAREST_MIPMAP_LINEAR ) );
+		root->set_state( sg::WireframeState( false ) );
 		root->set_state( sg::DepthTestState( false ) );
 		root->set_state( sg::BackfaceCullingState( false ) );
+		child->set_state( sg::TextureState( texture2, GL_NEAREST, GL_LINEAR ) );
 		child->set_state( sg::WireframeState( true ) );
 		child->set_state( sg::DepthTestState( true ) );
 		child->set_state( sg::BackfaceCullingState( true ) );
-		leaf->set_state( sg::WireframeState( false ) );
-		leaf->set_state( sg::DepthTestState( false ) );
-		leaf->set_state( sg::BackfaceCullingState( false ) );
 
 		child->attach( leaf );
 		root->attach( child );
@@ -213,6 +213,8 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		{
 			sg::RenderState r_state;
 			r_state.texture = texture;
+			r_state.min_filter = GL_LINEAR_MIPMAP_NEAREST;
+			r_state.mag_filter = GL_NEAREST_MIPMAP_LINEAR;
 			r_state.wireframe = false;
 			r_state.depth_test = false;
 			r_state.backface_culling = false;
@@ -220,25 +222,17 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			BOOST_CHECK( root->get_render_state() == r_state );
 		}
 
-		// Check child.
+		// Check child + leaf.
 		{
 			sg::RenderState r_state;
-			r_state.texture = texture;
+			r_state.texture = texture2;
+			r_state.min_filter = GL_NEAREST;
+			r_state.mag_filter = GL_LINEAR;
 			r_state.wireframe = true;
 			r_state.depth_test = true;
 			r_state.backface_culling = true;
 
 			BOOST_CHECK( child->get_render_state() == r_state );
-		}
-
-		// Check leaf.
-		{
-			sg::RenderState r_state;
-			r_state.texture = texture;
-			r_state.wireframe = false;
-			r_state.depth_test = false;
-			r_state.backface_culling = false;
-
 			BOOST_CHECK( leaf->get_render_state() == r_state );
 		}
 	}

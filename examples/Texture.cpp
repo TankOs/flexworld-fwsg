@@ -45,40 +45,101 @@ int main() {
 		image.create( 128, 128 );
 
 		for( sf::Uint32 y = 0; y < image.getSize().y; ++y ) {
-			for( sf::Uint32 x = 0; x < image.getSize().x; ++x ) {
-				image.setPixel( x, y, color_switch ? sf::Color::Red : sf::Color::White );
+			if( y % 16 == 0 ) {
+				color_switch = !color_switch;
 			}
 
-			if( y % 32 == 0 ) {
-				color_switch = !color_switch;
+			for( sf::Uint32 x = 0; x < image.getSize().x; ++x ) {
+				if( x % 16 == 0 ) {
+					color_switch = !color_switch;
+				}
+
+				image.setPixel( x, y, color_switch ? sf::Color::Red : sf::Color::White );
 			}
 		}
 
 		texture->loadFromImage( image );
+
+		// Build mipmaps.
+		texture->bind();
+
+		gluBuild2DMipmaps(
+			GL_TEXTURE_2D,
+			GL_RGBA, 
+			image.getSize().x,
+			image.getSize().y,
+			GL_RGBA,
+			GL_UNSIGNED_BYTE,
+			image.getPixelsPtr()
+		);
 	}
 
 	// Setup the scene graph.
-	// Static mesh.
-	sg::StaticMesh::Ptr static_mesh = sg::StaticMesh::create( buffer_object, renderer );
+	// Static meshes.
+	sg::StaticMesh::Ptr nearest_mesh = sg::StaticMesh::create( buffer_object, renderer );
+	nearest_mesh->set_local_transform( sg::Transform( sf::Vector3f( -0.5f, 0.5f, 0 ), sf::Vector3f( 20, 40, 0 ), sf::Vector3f( 1, 1, 1 ), sf::Vector3f( 0.5f, 0.5f, 0 ) ) );
 
-	// Same mesh, but in wireframe mode. Also translate it a little bit so it's
-	// visible.
-	sg::StaticMesh::Ptr wireframe_static_mesh = sg::StaticMesh::create( buffer_object, renderer );
-	wireframe_static_mesh->set_state( sg::WireframeState( true ) );
-	wireframe_static_mesh->set_local_transform( sg::Transform( sf::Vector3f( -1, 0, 0 ) ) );
+	sg::StaticMesh::Ptr linear_mesh = sg::StaticMesh::create( buffer_object, renderer );
+	linear_mesh->set_local_transform( sg::Transform( sf::Vector3f( 0.5f, 0.5f, 0 ), sf::Vector3f( 20, 40, 0 ), sf::Vector3f( 1, 1, 1 ), sf::Vector3f( 0.5f, 0.5f, 0 ) ) );
+
+	sg::StaticMesh::Ptr nearest_mipmap_mesh = sg::StaticMesh::create( buffer_object, renderer );
+	nearest_mipmap_mesh->set_local_transform( sg::Transform( sf::Vector3f( -0.5f, -0.5f, 0 ), sf::Vector3f( 20, 40, 0 ), sf::Vector3f( 1, 1, 1 ), sf::Vector3f( 0.5f, 0.5f, 0 ) ) );
+
+	sg::StaticMesh::Ptr linear_mipmap_mesh = sg::StaticMesh::create( buffer_object, renderer );
+	linear_mipmap_mesh->set_local_transform( sg::Transform( sf::Vector3f( 0.5f, -0.5f, 0 ), sf::Vector3f( 20, 40, 0 ), sf::Vector3f( 1, 1, 1 ), sf::Vector3f( 0.5f, 0.5f, 0 ) ) );
 
 	// Create root node and add meshes to it.
 	sg::Node::Ptr root_node = sg::Node::create();
-	root_node->attach( static_mesh );
-	root_node->attach( wireframe_static_mesh );
-	root_node->set_state( sg::TextureState( texture ) );
+	root_node->attach( nearest_mesh );
+	root_node->attach( linear_mesh );
+	root_node->attach( nearest_mipmap_mesh );
+	root_node->attach( linear_mipmap_mesh );
+
+	// Set states.
+	nearest_mesh->set_state( sg::TextureState( texture, GL_NEAREST, GL_NEAREST ) );
+	linear_mesh->set_state( sg::TextureState( texture, GL_LINEAR, GL_LINEAR ) );
+	nearest_mipmap_mesh->set_state( sg::TextureState( texture, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST ) );
+	linear_mipmap_mesh->set_state( sg::TextureState( texture, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR ) );
 
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );
 
 	// Setup UI.
-	sf::Text info_text( L"W: Toggle global wireframe / T: Toggle global texturing" );
-	info_text.setColor( sf::Color( 0xa2, 0xb4, 0xc6 ) );
+	sf::Text info_text( L"W: Toggle global wireframe", sf::Font::getDefaultFont(), 14 );
+	info_text.setPosition( 5.0f, static_cast<float>( window.getSize().y ) - info_text.getGlobalBounds().height - 5.0f );
+	info_text.setColor( sf::Color::Blue );
+
+	sf::Text filter_nearest = info_text;
+	filter_nearest.setString( "GL_NEAREST" );
+	filter_nearest.setPosition(
+		std::floor( static_cast<float>( window.getSize().x ) / 4.0f - filter_nearest.getGlobalBounds().width / 2.0f ),
+		std::floor( static_cast<float>( window.getSize().y ) / 4.0f - filter_nearest.getGlobalBounds().height / 2.0f )
+	);
+
+	sf::Text filter_linear = info_text;
+	filter_linear.setString( "GL_LINEAR" );
+	filter_linear.setPosition(
+		std::floor( static_cast<float>( window.getSize().x ) / 4.0f * 3.0f - filter_linear.getGlobalBounds().width / 2.0f ),
+		std::floor( static_cast<float>( window.getSize().y ) / 4.0f - filter_linear.getGlobalBounds().height / 2.0f )
+	);
+
+	sf::Text filter_mipmap_nearest = info_text;
+	filter_mipmap_nearest.setString( "GL_NEAREST_MIPMAP_NEAREST" );
+	filter_mipmap_nearest.setPosition(
+		std::floor( static_cast<float>( window.getSize().x ) / 4.0f - filter_mipmap_nearest.getGlobalBounds().width / 2.0f ),
+		std::floor( static_cast<float>( window.getSize().y ) / 4.0f * 3.0f - filter_mipmap_nearest.getGlobalBounds().height / 2.0f )
+	);
+
+	sf::Text filter_mipmap_linear = info_text;
+	filter_mipmap_linear.setString( "GL_LINEAR_MIPMAP_LINEAR" );
+	filter_mipmap_linear.setPosition(
+		std::floor( static_cast<float>( window.getSize().x ) / 4.0f * 3.0f - filter_mipmap_linear.getGlobalBounds().width / 2.0f ),
+		std::floor( static_cast<float>( window.getSize().y ) / 4.0f * 3.0f - filter_mipmap_linear.getGlobalBounds().height / 2.0f )
+	);
+
+	sf::Clock timer;
+	float pulse = 0;
+	static const float PULSE_INCREMENT = 20.0f;
 
 	while( window.isOpen() ) {
 		while( window.pollEvent( event ) ) {
@@ -98,15 +159,46 @@ int main() {
 						)
 					);
 				}
-				else if( event.key.code == sf::Keyboard::T ) {
-					if( root_node->find_state<sg::TextureState>() != nullptr ) {
-						root_node->reset_state<sg::TextureState>();
-					}
-					else {
-						root_node->set_state( sg::TextureState( texture ) );
-					}
-				}
 			}
+		}
+
+		if( timer.getElapsedTime().asSeconds() > 0.001f ) {
+			pulse += PULSE_INCREMENT * timer.restart().asSeconds();
+
+			float scale = std::max( 0.01f, std::abs( std::sin( pulse * 3.14159265f / 180.0f ) ) );
+
+			nearest_mesh->set_local_transform(
+				sg::Transform(
+					nearest_mesh->get_local_transform().get_translation(),
+					nearest_mesh->get_local_transform().get_rotation(),
+					sf::Vector3f( scale, scale, scale ),
+					nearest_mesh->get_local_transform().get_origin()
+				)
+			);
+			linear_mesh->set_local_transform(
+				sg::Transform(
+					linear_mesh->get_local_transform().get_translation(),
+					linear_mesh->get_local_transform().get_rotation(),
+					sf::Vector3f( scale, scale, scale ),
+					linear_mesh->get_local_transform().get_origin()
+				)
+			);
+			nearest_mipmap_mesh->set_local_transform(
+				sg::Transform(
+					nearest_mipmap_mesh->get_local_transform().get_translation(),
+					nearest_mipmap_mesh->get_local_transform().get_rotation(),
+					sf::Vector3f( scale, scale, scale ),
+					nearest_mipmap_mesh->get_local_transform().get_origin()
+				)
+			);
+			linear_mipmap_mesh->set_local_transform(
+				sg::Transform(
+					linear_mipmap_mesh->get_local_transform().get_translation(),
+					linear_mipmap_mesh->get_local_transform().get_rotation(),
+					sf::Vector3f( scale, scale, scale ),
+					linear_mipmap_mesh->get_local_transform().get_origin()
+				)
+			);
 		}
 
 		// Update scene graph.
@@ -131,6 +223,10 @@ int main() {
 
 		// Render UI.
 		window.draw( info_text );
+		window.draw( filter_nearest );
+		window.draw( filter_linear );
+		window.draw( filter_mipmap_nearest );
+		window.draw( filter_mipmap_linear );
 
 		// Flip buffers and restore states.
 		window.display();

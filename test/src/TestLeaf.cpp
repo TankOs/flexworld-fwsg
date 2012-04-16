@@ -97,13 +97,17 @@ BOOST_AUTO_TEST_CASE( TestLeaf ) {
 		// Texture.
 		BOOST_CHECK( leaf->find_state<sg::TextureState>() == nullptr );
 
-		leaf->set_state( sg::TextureState( texture ) );
+		leaf->set_state( sg::TextureState( texture, GL_LINEAR_MIPMAP_LINEAR, GL_NEAREST_MIPMAP_NEAREST ) );
 		BOOST_CHECK( leaf->find_state<sg::TextureState>() != nullptr );
 		BOOST_CHECK( leaf->find_state<sg::TextureState>()->get_texture() == texture );
+		BOOST_CHECK( leaf->find_state<sg::TextureState>()->get_min_filter() == GL_LINEAR_MIPMAP_LINEAR );
+		BOOST_CHECK( leaf->find_state<sg::TextureState>()->get_mag_filter() == GL_NEAREST_MIPMAP_NEAREST );
 
 		{
 			sg::RenderState r_state;
 			r_state.texture = texture;
+			r_state.min_filter = GL_LINEAR_MIPMAP_LINEAR;
+			r_state.mag_filter = GL_NEAREST_MIPMAP_NEAREST;
 			BOOST_CHECK( leaf->get_render_state() == r_state );
 		}
 

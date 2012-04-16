@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/OpenGL.hpp>
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_CASE( TestTextureState ) {
@@ -17,5 +18,19 @@ BOOST_AUTO_TEST_CASE( TestTextureState ) {
 
 		BOOST_CHECK( tex_state.get_type() == sg::TextureState::TYPE_ID );
 		BOOST_CHECK( tex_state.get_texture() == texture );
+		BOOST_CHECK( tex_state.get_min_filter() == GL_LINEAR );
+		BOOST_CHECK( tex_state.get_mag_filter() == GL_LINEAR );
+	}
+
+	// Ctor.
+	{
+		std::shared_ptr<sf::Texture> texture( new sf::Texture );
+
+		sg::TextureState tex_state( texture, GL_NEAREST_MIPMAP_LINEAR, GL_LINEAR_MIPMAP_NEAREST );
+
+		BOOST_CHECK( tex_state.get_type() == sg::TextureState::TYPE_ID );
+		BOOST_CHECK( tex_state.get_texture() == texture );
+		BOOST_CHECK( tex_state.get_min_filter() == GL_NEAREST_MIPMAP_LINEAR );
+		BOOST_CHECK( tex_state.get_mag_filter() == GL_LINEAR_MIPMAP_NEAREST );
 	}
 }

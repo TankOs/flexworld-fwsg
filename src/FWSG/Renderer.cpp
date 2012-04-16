@@ -130,7 +130,9 @@ void Renderer::render() const {
 	const RenderState* state = nullptr;
 	const StepVector* steps = nullptr;
 	const Step* step = nullptr;
-	const sf::Texture* current_texture = 0;
+	const sf::Texture* current_texture = nullptr;
+	const int* min_filter = nullptr;
+	const int* mag_filter = nullptr;
 	const bool* wireframe = nullptr;
 	const bool* backface_culling = nullptr;
 	const bool* depth_test = nullptr;
@@ -161,6 +163,19 @@ void Renderer::render() const {
 			else {
 				glBindTexture( GL_TEXTURE_2D, 0 );
 			}
+		}
+
+		// Texture filtering.
+		if( min_filter == nullptr || *min_filter != state->min_filter ) {
+			min_filter = &state->min_filter;
+
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, *min_filter );
+		}
+
+		if( mag_filter == nullptr || *mag_filter != state->mag_filter ) {
+			mag_filter = &state->mag_filter;
+
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, *mag_filter );
 		}
 
 		// Wireframe.
