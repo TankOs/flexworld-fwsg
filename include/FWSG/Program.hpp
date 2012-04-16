@@ -87,6 +87,74 @@ class Program : public NonCopyable {
 		 */
 		void use() const;
 
+		/** Set uniform (single float variable).
+		 * @param name Name of uniform.
+		 * @param value Value.
+		 * @return true on success.
+		 */
+		bool set_uniform( const std::string& name, float value );
+
+		/** Set uniform (vec2).
+		 * @param name Name of uniform.
+		 * @param x x value.
+		 * @param y y value.
+		 * @return true on success.
+		 */
+		bool set_uniform( const std::string& name, float x, float y );
+
+		/** Set uniform (vec3).
+		 * @param name Name of uniform.
+		 * @param x x value.
+		 * @param y y value.
+		 * @param z z value.
+		 * @return true on success.
+		 */
+		bool set_uniform( const std::string& name, float x, float y, float z );
+
+		/** Set uniform (vec4).
+		 * @param name Name of uniform.
+		 * @param x x value.
+		 * @param y y value.
+		 * @param z z value.
+		 * @param w w value.
+		 * @return true on success.
+		 */
+		bool set_uniform( const std::string& name, float x, float y, float z, float w );
+
+		/** Set uniform (single int variable).
+		 * @param name Name of uniform.
+		 * @param value Value.
+		 * @return true on success.
+		 */
+		bool set_uniform( const std::string& name, int value );
+
+		/** Set uniform (vec2).
+		 * @param name Name of uniform.
+		 * @param x x value.
+		 * @param y y value.
+		 * @return true on success.
+		 */
+		bool set_uniform( const std::string& name, int x, int y );
+
+		/** Set uniform (vec3).
+		 * @param name Name of uniform.
+		 * @param x x value.
+		 * @param y y value.
+		 * @param z z value.
+		 * @return true on success.
+		 */
+		bool set_uniform( const std::string& name, int x, int y, int z );
+
+		/** Set uniform (vec4).
+		 * @param name Name of uniform.
+		 * @param x x value.
+		 * @param y y value.
+		 * @param z z value.
+		 * @param w w value.
+		 * @return true on success.
+		 */
+		bool set_uniform( const std::string& name, int x, int y, int z, int w );
+
 	private:
 		typedef std::map<const std::string, GLint> UniformMap;
 		typedef std::vector<GLuint> ShaderArray;
