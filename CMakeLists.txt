@@ -38,6 +38,7 @@ set(
 	${INC_DIR}/FWSG/Leaf.inl
 	${INC_DIR}/FWSG/Node.hpp
 	${INC_DIR}/FWSG/NonCopyable.hpp
+	${INC_DIR}/FWSG/Program.hpp
 	${INC_DIR}/FWSG/RenderState.hpp
 	${INC_DIR}/FWSG/Renderer.hpp
 	${INC_DIR}/FWSG/State.hpp
@@ -58,6 +59,7 @@ set(
 	${SRC_DIR}/FWSG/Leaf.cpp
 	${SRC_DIR}/FWSG/Node.cpp
 	${SRC_DIR}/FWSG/NonCopyable.cpp
+	${SRC_DIR}/FWSG/Program.cpp
 	${SRC_DIR}/FWSG/RenderState.cpp
 	${SRC_DIR}/FWSG/Renderer.cpp
 	${SRC_DIR}/FWSG/State.cpp

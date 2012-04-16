@@ -19,6 +19,7 @@ set(
 	${SRC_DIR}/TestGeometry.cpp
 	${SRC_DIR}/TestLeaf.cpp
 	${SRC_DIR}/TestNode.cpp
+	${SRC_DIR}/TestProgram.cpp
 	${SRC_DIR}/TestRenderState.cpp
 	${SRC_DIR}/TestRenderer.cpp
 	${SRC_DIR}/TestStaticMesh.cpp
