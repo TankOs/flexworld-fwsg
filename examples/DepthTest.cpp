@@ -114,7 +114,7 @@ int main() {
 		root_node->update();
 
 		// Rendering.
-		window.clear();
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		// Call renderer and save GL states from being changed by SFML.
 		renderer.render();
