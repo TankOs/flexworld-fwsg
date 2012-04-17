@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <memory>
 
 namespace sg {
 
@@ -22,6 +23,9 @@ namespace sg {
  */
 class Program : public NonCopyable {
 	public:
+		typedef std::shared_ptr<Program> Ptr; ///< Shared pointer.
+		typedef std::shared_ptr<Program> PtrConst; ///< Shared pointer to const.
+
 		/** Shader type.
 		 */
 		enum ShaderType {
@@ -87,73 +91,12 @@ class Program : public NonCopyable {
 		 */
 		void use() const;
 
-		/** Set uniform (single float variable).
-		 * @param name Name of uniform.
-		 * @param value Value.
-		 * @return true on success.
+		/** Get uniform location.
+		 * The uniform must be registered before retrieving its location.
+		 * @param name Name.
+		 * @return Location (-1 on error).
 		 */
-		bool set_uniform( const std::string& name, float value );
-
-		/** Set uniform (vec2).
-		 * @param name Name of uniform.
-		 * @param x x value.
-		 * @param y y value.
-		 * @return true on success.
-		 */
-		bool set_uniform( const std::string& name, float x, float y );
-
-		/** Set uniform (vec3).
-		 * @param name Name of uniform.
-		 * @param x x value.
-		 * @param y y value.
-		 * @param z z value.
-		 * @return true on success.
-		 */
-		bool set_uniform( const std::string& name, float x, float y, float z );
-
-		/** Set uniform (vec4).
-		 * @param name Name of uniform.
-		 * @param x x value.
-		 * @param y y value.
-		 * @param z z value.
-		 * @param w w value.
-		 * @return true on success.
-		 */
-		bool set_uniform( const std::string& name, float x, float y, float z, float w );
-
-		/** Set uniform (single int variable).
-		 * @param name Name of uniform.
-		 * @param value Value.
-		 * @return true on success.
-		 */
-		bool set_uniform( const std::string& name, int value );
-
-		/** Set uniform (vec2).
-		 * @param name Name of uniform.
-		 * @param x x value.
-		 * @param y y value.
-		 * @return true on success.
-		 */
-		bool set_uniform( const std::string& name, int x, int y );
-
-		/** Set uniform (vec3).
-		 * @param name Name of uniform.
-		 * @param x x value.
-		 * @param y y value.
-		 * @param z z value.
-		 * @return true on success.
-		 */
-		bool set_uniform( const std::string& name, int x, int y, int z );
-
-		/** Set uniform (vec4).
-		 * @param name Name of uniform.
-		 * @param x x value.
-		 * @param y y value.
-		 * @param z z value.
-		 * @param w w value.
-		 * @return true on success.
-		 */
-		bool set_uniform( const std::string& name, int x, int y, int z, int w );
+		GLint get_uniform_location( const std::string& name ) const;
 
 	private:
 		typedef std::map<const std::string, GLint> UniformMap;

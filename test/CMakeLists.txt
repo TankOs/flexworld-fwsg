@@ -22,6 +22,7 @@ set(
 	${SRC_DIR}/TestLeaf.cpp
 	${SRC_DIR}/TestNode.cpp
 	${SRC_DIR}/TestProgram.cpp
+	${SRC_DIR}/TestProgramCommand.cpp
 	${SRC_DIR}/TestRenderState.cpp
 	${SRC_DIR}/TestRenderer.cpp
 	${SRC_DIR}/TestStaticMesh.cpp
@@ -30,6 +31,7 @@ set(
 	${SRC_DIR}/TestTextureState.cpp
 	${SRC_DIR}/TestTransform.cpp
 	${SRC_DIR}/TestTriangleGeometry.cpp
+	${SRC_DIR}/TestUniformValue.cpp
 	${SRC_DIR}/TestVertex.cpp
 	${SRC_DIR}/TestWireframeState.cpp
 	${SRC_DIR}/Window.cpp

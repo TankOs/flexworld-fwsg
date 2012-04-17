@@ -39,6 +39,7 @@ set(
 	${INC_DIR}/FWSG/Node.hpp
 	${INC_DIR}/FWSG/NonCopyable.hpp
 	${INC_DIR}/FWSG/Program.hpp
+	${INC_DIR}/FWSG/ProgramCommand.hpp
 	${INC_DIR}/FWSG/RenderState.hpp
 	${INC_DIR}/FWSG/Renderer.hpp
 	${INC_DIR}/FWSG/State.hpp
@@ -48,6 +49,11 @@ set(
 	${INC_DIR}/FWSG/TextureState.hpp
 	${INC_DIR}/FWSG/Transform.hpp
 	${INC_DIR}/FWSG/TriangleGeometry.hpp
+	${INC_DIR}/FWSG/Uniform1fValue.hpp
+	${INC_DIR}/FWSG/Uniform2fValue.hpp
+	${INC_DIR}/FWSG/Uniform3fValue.hpp
+	${INC_DIR}/FWSG/Uniform4fValue.hpp
+	${INC_DIR}/FWSG/UniformValue.hpp
 	${INC_DIR}/FWSG/Vertex.hpp
 	${INC_DIR}/FWSG/WireframeState.hpp
 	${SRC_DIR}/FWSG/BackfaceCullingState.cpp
@@ -60,6 +66,7 @@ set(
 	${SRC_DIR}/FWSG/Node.cpp
 	${SRC_DIR}/FWSG/NonCopyable.cpp
 	${SRC_DIR}/FWSG/Program.cpp
+	${SRC_DIR}/FWSG/ProgramCommand.cpp
 	${SRC_DIR}/FWSG/RenderState.cpp
 	${SRC_DIR}/FWSG/Renderer.cpp
 	${SRC_DIR}/FWSG/State.cpp
@@ -69,6 +76,11 @@ set(
 	${SRC_DIR}/FWSG/TextureState.cpp
 	${SRC_DIR}/FWSG/Transform.cpp
 	${SRC_DIR}/FWSG/TriangleGeometry.cpp
+	${SRC_DIR}/FWSG/Uniform1fValue.cpp
+	${SRC_DIR}/FWSG/Uniform2fValue.cpp
+	${SRC_DIR}/FWSG/Uniform3fValue.cpp
+	${SRC_DIR}/FWSG/Uniform4fValue.cpp
+	${SRC_DIR}/FWSG/UniformValue.cpp
 	${SRC_DIR}/FWSG/Vertex.cpp
 	${SRC_DIR}/FWSG/WireframeState.cpp
 )

@@ -174,140 +174,20 @@ void Program::use() const {
 	}
 }
 
-bool Program::set_uniform( const std::string& name, float value ) {
+GLint Program::get_uniform_location( const std::string& name ) const {
 	assert( m_is_linked );
-	assert( m_uniforms.find( name ) != m_uniforms.end() );
-
-	UniformMap::iterator uni_iter = m_uniforms.find( name );
-
-	if( uni_iter == m_uniforms.end() ) {
-		return false;
+	if( !m_is_linked ) {
+		return -1;
 	}
 
-	use();
+	UniformMap::const_iterator uni_iter = m_uniforms.find( name );
 
-	glUniform1f( uni_iter->second, value );
-
-	return glGetError() == 0;
-}
-
-bool Program::set_uniform( const std::string& name, float x, float y ) {
-	assert( m_is_linked );
-	assert( m_uniforms.find( name ) != m_uniforms.end() );
-
-	UniformMap::iterator uni_iter = m_uniforms.find( name );
-
+	assert( uni_iter != m_uniforms.end() );
 	if( uni_iter == m_uniforms.end() ) {
-		return false;
+		return -1;
 	}
 
-	use();
-
-	glUniform2f( uni_iter->second, x, y );
-
-	return glGetError() == 0;
-}
-
-bool Program::set_uniform( const std::string& name, float x, float y, float z ) {
-	assert( m_is_linked );
-	assert( m_uniforms.find( name ) != m_uniforms.end() );
-
-	UniformMap::iterator uni_iter = m_uniforms.find( name );
-
-	if( uni_iter == m_uniforms.end() ) {
-		return false;
-	}
-
-	use();
-
-	glUniform3f( uni_iter->second, x, y, z );
-
-	return glGetError() == 0;
-}
-
-bool Program::set_uniform( const std::string& name, float x, float y, float z, float w ) {
-	assert( m_is_linked );
-	assert( m_uniforms.find( name ) != m_uniforms.end() );
-
-	UniformMap::iterator uni_iter = m_uniforms.find( name );
-
-	if( uni_iter == m_uniforms.end() ) {
-		return false;
-	}
-
-	use();
-
-	glUniform4f( uni_iter->second, x, y, z, w );
-
-	return glGetError() == 0;
-}
-
-bool Program::set_uniform( const std::string& name, int value ) {
-	assert( m_is_linked );
-	assert( m_uniforms.find( name ) != m_uniforms.end() );
-
-	UniformMap::iterator uni_iter = m_uniforms.find( name );
-
-	if( uni_iter == m_uniforms.end() ) {
-		return false;
-	}
-
-	use();
-
-	glUniform1i( uni_iter->second, value );
-
-	return glGetError() == 0;
-}
-
-bool Program::set_uniform( const std::string& name, int x, int y ) {
-	assert( m_is_linked );
-	assert( m_uniforms.find( name ) != m_uniforms.end() );
-
-	UniformMap::iterator uni_iter = m_uniforms.find( name );
-
-	if( uni_iter == m_uniforms.end() ) {
-		return false;
-	}
-
-	use();
-
-	glUniform2i( uni_iter->second, x, y );
-
-	return glGetError() == 0;
-}
-
-bool Program::set_uniform( const std::string& name, int x, int y, int z ) {
-	assert( m_is_linked );
-	assert( m_uniforms.find( name ) != m_uniforms.end() );
-
-	UniformMap::iterator uni_iter = m_uniforms.find( name );
-
-	if( uni_iter == m_uniforms.end() ) {
-		return false;
-	}
-
-	use();
-
-	glUniform3i( uni_iter->second, x, y, z );
-
-	return glGetError() == 0;
-}
-
-bool Program::set_uniform( const std::string& name, int x, int y, int z, int w ) {
-	assert( m_is_linked );
-	assert( m_uniforms.find( name ) != m_uniforms.end() );
-
-	UniformMap::iterator uni_iter = m_uniforms.find( name );
-
-	if( uni_iter == m_uniforms.end() ) {
-		return false;
-	}
-
-	use();
-
-	glUniform4i( uni_iter->second, x, y, z, w );
-
-	return glGetError() == 0;
+	return uni_iter->second;
 }
 
 }
