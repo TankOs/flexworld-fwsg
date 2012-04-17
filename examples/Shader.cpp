@@ -30,7 +30,7 @@ int main() {
 		sg::Vertex( sf::Vector3f( 0, 1, 0 ), sf::Vector2f( 0, 0 ) )
 	);
 
-	sg::BufferObject::Ptr buffer_object( new sg::BufferObject( sg::BufferObject::TEX_COORDS, true ) );
+	sg::BufferObject::Ptr buffer_object( new sg::BufferObject( sg::BufferObject::VERTICES_ONLY, true ) );
 	buffer_object->load( geometry );
 
 	// Setup renderer.
