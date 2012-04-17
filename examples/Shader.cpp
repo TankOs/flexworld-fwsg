@@ -5,6 +5,8 @@
 #include <FWSG/Node.hpp>
 #include <FWSG/StaticMesh.hpp>
 #include <FWSG/Program.hpp>
+#include <FWSG/ProgramCommand.hpp>
+#include <FWSG/ProgramCommandState.hpp>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
@@ -56,10 +58,13 @@ int main() {
 		return EXIT_FAILURE;
 	}
 
-	/*sg::ProgramCommand::Ptr command( new sg::ProgramCommand( program ) );
+	// Register uniforms.
+	program->register_uniform( "color" );
+
+	sg::ProgramCommand::Ptr command( new sg::ProgramCommand( program ) );
 
 	command->set_argument( "color", 1.0f, 0.0f, 0.0f, 1.0f );
-	mesh_0->set_state( sg::ProgramState( command ) );*/
+	mesh_0->set_state( sg::ProgramCommandState( command ) );
 
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );

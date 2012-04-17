@@ -23,6 +23,9 @@ class UniformValue;
  */
 class ProgramCommand {
 	public:
+		typedef std::shared_ptr<ProgramCommand> Ptr; ///< Shared pointer.
+		typedef std::shared_ptr<const ProgramCommand> PtrConst; ///< Shared pointer to const.
+
 		/** Ctor.
 		 * @param program Program.
 		 */

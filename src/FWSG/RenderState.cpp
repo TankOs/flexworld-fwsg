@@ -1,4 +1,5 @@
 #include <FWSG/RenderState.hpp>
+#include <FWSG/ProgramCommand.hpp>
 
 #include <SFML/OpenGL.hpp>
 
@@ -15,6 +16,14 @@ RenderState::RenderState() :
 
 bool RenderState::operator==( const RenderState& other ) const {
 	return
+		(
+			program_command.get() == other.program_command.get() ||
+			(
+				program_command.get() &&
+				other.program_command.get() &&
+				program_command->get_program().get() == other.program_command->get_program().get()
+			)
+		) &&
 		texture.get() == other.texture.get() &&
 		min_filter == other.min_filter &&
 		mag_filter == other.mag_filter &&
@@ -26,6 +35,15 @@ bool RenderState::operator==( const RenderState& other ) const {
 
 bool RenderState::operator!=( const RenderState& other ) const {
 	return
+		(
+			(program_command.get() && !other.program_command.get()) ||
+			(!program_command.get() && other.program_command.get()) ||
+			(
+				program_command.get() &&
+				other.program_command.get() &&
+				program_command->get_program().get() != other.program_command->get_program().get()
+			)
+		) ||
 		texture.get() != other.texture.get() ||
 		min_filter != other.min_filter ||
 		mag_filter != other.mag_filter ||
@@ -36,6 +54,25 @@ bool RenderState::operator!=( const RenderState& other ) const {
 }
 
 bool RenderState::operator<( const RenderState& other ) const {
+	if( program_command.get() && !other.program_command.get() ) {
+		return true;
+	}
+	else if( !program_command.get() && other.program_command.get() ) {
+		return false;
+	}
+
+	if(
+		program_command.get() &&
+		other.program_command.get()
+	) {
+		if( program_command->get_program().get() < other.program_command->get_program().get() ) {
+			return true;
+		}
+		else if( program_command->get_program().get() > other.program_command->get_program().get() ) {
+			return false;
+		}
+	}
+
 	if( texture.get() < other.texture.get() ) {
 		return true;
 	}

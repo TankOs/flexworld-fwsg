@@ -5,6 +5,8 @@
 
 namespace sg {
 
+class ProgramCommand;
+
 /** Render state.
  */
 struct RenderState {
@@ -32,6 +34,7 @@ struct RenderState {
 	 */
 	bool operator<( const RenderState& other ) const;
 
+	std::shared_ptr<const ProgramCommand> program_command; ///< Shader program command.
 	std::shared_ptr<const sf::Texture> texture; ///< Texture.
 	int min_filter; ///< Minification texture filter.
 	int mag_filter; ///< Maginication texture filter.

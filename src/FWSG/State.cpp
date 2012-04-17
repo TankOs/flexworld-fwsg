@@ -7,7 +7,7 @@ namespace sg {
 State::State( Type type ) :
 	m_type( type )
 {
-	assert( type >= SHADER && type < NUM_TYPES );
+	assert( type >= PROGRAM_COMMAND && type < NUM_TYPES );
 }
 
 State::~State() {

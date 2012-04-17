@@ -11,12 +11,12 @@ class State {
 		/** State type.
 		 */
 		enum Type {
-			SHADER = 0,
-			TEXTURE,
-			WIREFRAME,
-			DEPTH_TEST,
-			FRUSTUM_CULLING,
-			BACKFACE_CULLING,
+			PROGRAM_COMMAND = 0, ///< Shader program command.
+			TEXTURE, ///< Texture.
+			WIREFRAME, ///< Wireframe.
+			DEPTH_TEST, ///< Depth test.
+			FRUSTUM_CULLING, ///< Frustum culling.
+			BACKFACE_CULLING, ///< Backface culling.
 			NUM_TYPES
 		};
 

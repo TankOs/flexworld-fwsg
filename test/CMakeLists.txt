@@ -23,6 +23,7 @@ set(
 	${SRC_DIR}/TestNode.cpp
 	${SRC_DIR}/TestProgram.cpp
 	${SRC_DIR}/TestProgramCommand.cpp
+	${SRC_DIR}/TestProgramCommandState.cpp
 	${SRC_DIR}/TestRenderState.cpp
 	${SRC_DIR}/TestRenderer.cpp
 	${SRC_DIR}/TestStaticMesh.cpp
