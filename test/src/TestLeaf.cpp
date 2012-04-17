@@ -1,3 +1,5 @@
+#include "Window.hpp"
+
 #include <FWSG/Leaf.hpp>
 #include <FWSG/Node.hpp>
 #include <FWSG/RenderState.hpp>
@@ -6,12 +8,11 @@
 #include <FWSG/TextureState.hpp>
 #include <FWSG/DepthTestState.hpp>
 
-#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_CASE( TestLeaf ) {
-	sf::RenderWindow window( sf::VideoMode( 100, 100 ), "Unittest" );
+	init_test_window();
 
 	// Initial state.
 	{

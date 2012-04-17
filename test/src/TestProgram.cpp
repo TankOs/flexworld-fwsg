@@ -1,3 +1,5 @@
+#include "Window.hpp"
+
 #include <GL/glew.h>
 
 #include <FWSG/Program.hpp>
@@ -7,9 +9,7 @@
 #include <string>
 
 BOOST_AUTO_TEST_CASE( TestProgram ) {
-	glewInit();
-
-	sf::Window window( sf::VideoMode( 32, 32 ), "-" );
+	init_test_window();
 
 	// Initial state.
 	{
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_CASE( TestProgram ) {
 	// Link program.
 	{
 		const std::string VERTEX_SOURCE = "void main() { gl_Position = ftransform(); }";
-		const std::string FRAGMENT_SOURCE = "void main() { gl_Color = gl_FragColor; }";
+		const std::string FRAGMENT_SOURCE = "void main() { gl_FragColor = gl_Color; }";
 
 		sg::Program program;
 

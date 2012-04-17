@@ -1,13 +1,14 @@
+#include "Window.hpp"
+
 #include <FWSG/RenderState.hpp>
 
-#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/OpenGL.hpp>
 #include <boost/test/unit_test.hpp>
 #include <memory>
 
 BOOST_AUTO_TEST_CASE( TestRenderState ) {
-	sf::RenderWindow window( sf::VideoMode( 100, 100 ), "Unittest" );
+	init_test_window();
 
 	// Initial state.
 	{

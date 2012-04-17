@@ -1,3 +1,5 @@
+#include "Window.hpp"
+
 #include <FWSG/TextureState.hpp>
 
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -6,7 +8,7 @@
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_CASE( TestTextureState ) {
-	sf::RenderWindow window( sf::VideoMode( 100, 100 ), "Unittest" );
+	init_test_window();
 
 	BOOST_CHECK( sg::TextureState::TYPE_ID == sg::State::TEXTURE );
 

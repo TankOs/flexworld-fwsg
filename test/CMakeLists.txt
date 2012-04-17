@@ -12,10 +12,12 @@ set( INC_DIR "src" )
 
 set(
 	SOURCES
+	${INC_DIR}/Window.hpp
 	${SRC_DIR}/Test.cpp
 	${SRC_DIR}/TestBackfaceCullingState.cpp
 	${SRC_DIR}/TestBoolState.cpp
 	${SRC_DIR}/TestBufferObject.cpp
+	${SRC_DIR}/TestDepthTestState.cpp
 	${SRC_DIR}/TestGeometry.cpp
 	${SRC_DIR}/TestLeaf.cpp
 	${SRC_DIR}/TestNode.cpp
@@ -30,6 +32,7 @@ set(
 	${SRC_DIR}/TestTriangleGeometry.cpp
 	${SRC_DIR}/TestVertex.cpp
 	${SRC_DIR}/TestWireframeState.cpp
+	${SRC_DIR}/Window.cpp
 )
 
 include_directories( ${PROJECT_SOURCE_DIR}/../include )
