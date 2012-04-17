@@ -49,7 +49,7 @@ int main() {
 	root_node->attach( mesh_0 );
 	root_node->attach( mesh_1 );
 
-	// Create and set shader state.
+	// Create shader program with a simple fragment shader.
 	sg::Program::Ptr program( new sg::Program );
 	program->add_shader( "uniform vec4 color; void main() { gl_FragColor = color; }", sg::Program::FRAGMENT_SHADER );
 
@@ -61,12 +61,15 @@ int main() {
 	// Register uniforms.
 	program->register_uniform( "color" );
 
+	// Create two separate program commands so that we can set different
+	// arguments for both meshes.
 	sg::ProgramCommand::Ptr command_0( new sg::ProgramCommand( program ) );
 	sg::ProgramCommand::Ptr command_1( new sg::ProgramCommand( program ) );
 
 	mesh_0->set_state( sg::ProgramCommandState( command_0 ) );
 	mesh_1->set_state( sg::ProgramCommandState( command_1 ) );
 
+	// Set initial values.
 	command_0->set_argument( "color", 1.0f, 0.0f, 0.0f, 1.0f );
 	command_1->set_argument( "color", 0.0f, 1.0f, 0.0f, 1.0f );
 
