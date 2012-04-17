@@ -4,6 +4,7 @@
 #include <FWSG/WireframeState.hpp>
 #include <FWSG/BackfaceCullingState.hpp>
 #include <FWSG/DepthTestState.hpp>
+#include <FWSG/ProgramCommandState.hpp>
 
 #include <cassert>
 
@@ -132,12 +133,17 @@ void Leaf::update_render_state() {
 		m_render_state = RenderState();
 	}
 
+	const ProgramCommandState* program_command = find_state<ProgramCommandState>();
 	const TextureState* texture = find_state<TextureState>();
 	const WireframeState* wireframe = find_state<WireframeState>();
 	const BackfaceCullingState* backface_culling = find_state<BackfaceCullingState>();
 	const DepthTestState* depth_test = find_state<DepthTestState>();
 
 	// Overwrite render states with found states.
+	if( program_command ) {
+		m_render_state.program_command = program_command->get_program_command();
+	}
+
 	if( texture ) {
 		m_render_state.texture = texture->get_texture();
 		m_render_state.min_filter = texture->get_min_filter();
