@@ -89,6 +89,11 @@ class ProgramCommand {
 		 */
 		const UniformValue* get_argument( std::size_t index ) const;
 
+		/** Apply uniform values.
+		 * Make sure to use() the program before applying.
+		 */
+		void apply_uniform_values() const;
+
 	private:
 		typedef std::map<const std::string, std::size_t> NameIndexMap;
 		typedef std::vector<UniformValue*> UniformValueArray;

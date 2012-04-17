@@ -96,4 +96,12 @@ const UniformValue* ProgramCommand::get_argument( std::size_t index ) const {
 	return m_values[index];
 }
 
+void ProgramCommand::apply_uniform_values() const {
+	std::size_t num = m_values.size();
+
+	for( std::size_t idx = 0; idx < num; ++idx ) {
+		m_values[idx]->apply();
+	}
+}
+
 }

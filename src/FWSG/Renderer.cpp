@@ -2,6 +2,8 @@
 
 #include <FWSG/Renderer.hpp>
 #include <FWSG/Transform.hpp>
+#include <FWSG/ProgramCommand.hpp>
+#include <FWSG/Program.hpp>
 
 #include <algorithm>
 #include <cassert>
@@ -130,6 +132,8 @@ void Renderer::render() const {
 	const RenderState* state = nullptr;
 	const StepVector* steps = nullptr;
 	const Step* step = nullptr;
+	const ProgramCommand* program_command = nullptr;
+	const Program* program = nullptr;
 	const sf::Texture* current_texture = nullptr;
 	const int* min_filter = nullptr;
 	const int* mag_filter = nullptr;
@@ -152,6 +156,29 @@ void Renderer::render() const {
 	for( group_idx = 0; group_idx < m_groups.size(); ++group_idx ) {
 		state = &m_groups[group_idx]->render_state;
 		steps = &m_groups[group_idx]->steps;
+
+		// Shader program.
+		if( program_command != state->program_command.get() ) {
+			program_command = state->program_command.get();
+
+			// If no command, deactivate shader.
+			if( !program_command ) {
+				glUseProgram( 0 );
+				program = nullptr;
+			}
+			else {
+				// Check if program is different.
+				if( program != program_command->get_program().get() ) {
+					// Activate new program.
+					program = program_command->get_program().get();
+
+					program->use();
+				}
+
+				// Commands are different, so make sure to apply new uniforms.
+				program_command->apply_uniform_values();
+			}
+		}
 
 		// Texture.
 		if( current_texture != state->texture.get() ) {
@@ -245,6 +272,13 @@ void Renderer::render() const {
 				-step->get_local_transform().get_origin().y,
 				-step->get_local_transform().get_origin().z
 			);
+
+			// If a shader program is active and the command is different, re-apply
+			// uniform values.
+			if( program != nullptr && program_command != step->get_render_state().program_command.get() ) {
+				program_command = step->get_render_state().program_command.get();
+				program_command->apply_uniform_values();
+			}
 
 			step->get_buffer_object()->render();
 		}

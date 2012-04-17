@@ -61,13 +61,21 @@ int main() {
 	// Register uniforms.
 	program->register_uniform( "color" );
 
-	sg::ProgramCommand::Ptr command( new sg::ProgramCommand( program ) );
+	sg::ProgramCommand::Ptr command_0( new sg::ProgramCommand( program ) );
+	sg::ProgramCommand::Ptr command_1( new sg::ProgramCommand( program ) );
 
-	command->set_argument( "color", 1.0f, 0.0f, 0.0f, 1.0f );
-	mesh_0->set_state( sg::ProgramCommandState( command ) );
+	mesh_0->set_state( sg::ProgramCommandState( command_0 ) );
+	mesh_1->set_state( sg::ProgramCommandState( command_1 ) );
+
+	command_0->set_argument( "color", 1.0f, 0.0f, 0.0f, 1.0f );
+	command_1->set_argument( "color", 0.0f, 1.0f, 0.0f, 1.0f );
 
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );
+
+	uint32_t color_mesh_0 = 0xff0000;
+	uint32_t color_mesh_1 = 0x00ff00;
+	sf::Clock timer;
 
 	while( window.isOpen() ) {
 		while( window.pollEvent( event ) ) {
@@ -83,6 +91,31 @@ int main() {
 
 		// Update scene graph.
 		root_node->update();
+
+		if( timer.getElapsedTime().asMilliseconds() >= 50 ) {
+			// Update colors.
+			color_mesh_0 += 10;
+			color_mesh_1 += 10;
+
+			// Update arguments.
+			command_0->set_argument(
+				"color",
+				1.0f,
+				static_cast<float>( (color_mesh_0 & 0x00ff00) >>  8 ) / 255.0f,
+				static_cast<float>( (color_mesh_0 & 0x0000ff) >>  0 ) / 255.0f,
+				0.0f
+			);
+
+			command_1->set_argument(
+				"color",
+				static_cast<float>( (color_mesh_1 & 0xff0000) >> 16 ) / 255.0f,
+				1.0f,
+				static_cast<float>( (color_mesh_1 & 0x0000ff) >>  0 ) / 255.0f,
+				0.0f
+			);
+
+			timer.restart();
+		}
 
 		// Rendering.
 		window.clear();

@@ -141,8 +141,6 @@ bool Program::register_uniform( const std::string& name ) {
 		return false;
 	}
 
-	use();
-
 	// Get location.
 	GLint location = glGetUniformLocation( m_program, name.c_str() );
 
