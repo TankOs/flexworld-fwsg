@@ -35,8 +35,11 @@ int main() {
 	// Setup renderer.
 	sg::Renderer renderer;
 
-	// Prepare texture.
-	std::shared_ptr<sf::Texture> texture( new sf::Texture );
+	// Prepare textures.
+	std::shared_ptr<sf::Texture> nearest_texture( new sf::Texture );
+	std::shared_ptr<sf::Texture> linear_texture( new sf::Texture );
+	std::shared_ptr<sf::Texture> nearest_mipmap_texture( new sf::Texture );
+	std::shared_ptr<sf::Texture> linear_mipmap_texture( new sf::Texture );
 
 	{
 		sf::Image image;
@@ -58,10 +61,18 @@ int main() {
 			}
 		}
 
-		texture->loadFromImage( image );
+		nearest_texture->loadFromImage( image );
+		nearest_texture->bind();
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
 
-		// Build mipmaps.
-		texture->bind();
+		linear_texture->loadFromImage( image );
+		linear_texture->bind();
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+		nearest_mipmap_texture->loadFromImage( image );
+		nearest_mipmap_texture->bind();
 
 		gluBuild2DMipmaps(
 			GL_TEXTURE_2D,
@@ -72,6 +83,26 @@ int main() {
 			GL_UNSIGNED_BYTE,
 			image.getPixelsPtr()
 		);
+
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+
+		linear_mipmap_texture->loadFromImage( image );
+		linear_mipmap_texture->bind();
+
+		gluBuild2DMipmaps(
+			GL_TEXTURE_2D,
+			GL_RGBA, 
+			image.getSize().x,
+			image.getSize().y,
+			GL_RGBA,
+			GL_UNSIGNED_BYTE,
+			image.getPixelsPtr()
+		);
+
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
 	}
 
 	// Setup the scene graph.
@@ -96,10 +127,10 @@ int main() {
 	root_node->attach( linear_mipmap_mesh );
 
 	// Set states.
-	nearest_mesh->set_state( sg::TextureState( texture, GL_NEAREST, GL_NEAREST ) );
-	linear_mesh->set_state( sg::TextureState( texture, GL_LINEAR, GL_LINEAR ) );
-	nearest_mipmap_mesh->set_state( sg::TextureState( texture, GL_NEAREST_MIPMAP_NEAREST, GL_NEAREST ) );
-	linear_mipmap_mesh->set_state( sg::TextureState( texture, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR ) );
+	nearest_mesh->set_state( sg::TextureState( nearest_texture ) );
+	linear_mesh->set_state( sg::TextureState( linear_texture ) );
+	nearest_mipmap_mesh->set_state( sg::TextureState( nearest_mipmap_texture ) );
+	linear_mipmap_mesh->set_state( sg::TextureState( linear_mipmap_texture ) );
 
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );

@@ -216,12 +216,12 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		sg::Leaf::Ptr leaf = sg::Leaf::create();
 
 		root->set_state( sg::ProgramCommandState( program_command_0 ) );
-		root->set_state( sg::TextureState( texture, GL_LINEAR_MIPMAP_NEAREST, GL_NEAREST_MIPMAP_LINEAR ) );
+		root->set_state( sg::TextureState( texture ) );
 		root->set_state( sg::WireframeState( false ) );
 		root->set_state( sg::DepthTestState( false ) );
 		root->set_state( sg::BackfaceCullingState( false ) );
 		child->set_state( sg::ProgramCommandState( program_command_1 ) );
-		child->set_state( sg::TextureState( texture2, GL_NEAREST, GL_LINEAR ) );
+		child->set_state( sg::TextureState( texture2 ) );
 		child->set_state( sg::WireframeState( true ) );
 		child->set_state( sg::DepthTestState( true ) );
 		child->set_state( sg::BackfaceCullingState( true ) );
@@ -234,8 +234,6 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			sg::RenderState r_state;
 			r_state.program_command = program_command_0;
 			r_state.texture = texture;
-			r_state.min_filter = GL_LINEAR_MIPMAP_NEAREST;
-			r_state.mag_filter = GL_NEAREST_MIPMAP_LINEAR;
 			r_state.wireframe = false;
 			r_state.depth_test = false;
 			r_state.backface_culling = false;
@@ -248,8 +246,6 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			sg::RenderState r_state;
 			r_state.program_command = program_command_1;
 			r_state.texture = texture2;
-			r_state.min_filter = GL_NEAREST;
-			r_state.mag_filter = GL_LINEAR;
 			r_state.wireframe = true;
 			r_state.depth_test = true;
 			r_state.backface_culling = true;

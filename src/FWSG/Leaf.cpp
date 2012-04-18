@@ -146,8 +146,6 @@ void Leaf::update_render_state() {
 
 	if( texture ) {
 		m_render_state.texture = texture->get_texture();
-		m_render_state.min_filter = texture->get_min_filter();
-		m_render_state.mag_filter = texture->get_mag_filter();
 	}
 
 	if( wireframe ) {

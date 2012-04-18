@@ -6,8 +6,6 @@
 namespace sg {
 
 RenderState::RenderState() :
-	min_filter( GL_LINEAR ),
-	mag_filter( GL_LINEAR ),
 	wireframe( false ),
 	depth_test( false ),
 	backface_culling( true )
@@ -25,8 +23,6 @@ bool RenderState::operator==( const RenderState& other ) const {
 			)
 		) &&
 		texture.get() == other.texture.get() &&
-		min_filter == other.min_filter &&
-		mag_filter == other.mag_filter &&
 		wireframe == other.wireframe &&
 		depth_test == other.depth_test &&
 		backface_culling == other.backface_culling
@@ -45,8 +41,6 @@ bool RenderState::operator!=( const RenderState& other ) const {
 			)
 		) ||
 		texture.get() != other.texture.get() ||
-		min_filter != other.min_filter ||
-		mag_filter != other.mag_filter ||
 		wireframe != other.wireframe ||
 		depth_test != other.depth_test ||
 		backface_culling != other.backface_culling
@@ -77,20 +71,6 @@ bool RenderState::operator<( const RenderState& other ) const {
 		return true;
 	}
 	else if( texture.get() > other.texture.get() ) {
-		return false;
-	}
-
-	if( min_filter < other.min_filter ) {
-		return true;
-	}
-	else if( min_filter > other.min_filter ) {
-		return false;
-	}
-
-	if( mag_filter < other.mag_filter ) {
-		return true;
-	}
-	else if( mag_filter > other.mag_filter ) {
 		return false;
 	}
 
