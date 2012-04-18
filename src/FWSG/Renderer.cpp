@@ -184,6 +184,10 @@ void Renderer::render() const {
 		if( current_texture != state->texture.get() ) {
 			current_texture = &*state->texture;
 
+			// Reset filters.
+			min_filter = nullptr;
+			mag_filter = nullptr;
+
 			if( current_texture ) {
 				current_texture->bind();
 			}
