@@ -3,7 +3,7 @@
 namespace sg {
 
 template <class StateType>
-const StateType* Leaf::find_state() const {
+const StateType* Node::find_state() const {
 	for( std::size_t state_idx = 0; state_idx < m_states.size(); ++state_idx ) {
 
 		if( m_states[state_idx]->get_type() == StateType::TYPE_ID ) {
@@ -17,7 +17,7 @@ const StateType* Leaf::find_state() const {
 }
 
 template <class StateType>
-void Leaf::reset_state() {
+void Node::reset_state() {
 	for( std::size_t state_idx = 0; state_idx < m_states.size(); ++state_idx ) {
 
 		if( m_states[state_idx]->get_type() == StateType::TYPE_ID ) {
@@ -34,7 +34,7 @@ void Leaf::reset_state() {
 }
 
 template <class StateType>
-void Leaf::set_state( const StateType& state ) {
+void Node::set_state( const StateType& state ) {
 	// Make sure previous state is reset. Do NOT use reset_state() here as it
 	// calls update_render_state() too which is unnecessary here.
 	for( std::size_t state_idx = 0; state_idx < m_states.size(); ++state_idx ) {

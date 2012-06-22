@@ -1,14 +1,14 @@
 #pragma once
 
-#include <FWSG/Leaf.hpp>
+#include <FWSG/Node.hpp>
 
 namespace sg {
 
 class Renderer;
 
-/** Abstract scene graph leaf used for rendering.
+/** Abstract scene graph node used for rendering.
  */
-class Drawable : public Leaf {
+class Drawable : public Node {
 	public:
 		/** Dtor.
 		 */

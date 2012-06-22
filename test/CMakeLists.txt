@@ -19,7 +19,6 @@ set(
 	${SRC_DIR}/TestBufferObject.cpp
 	${SRC_DIR}/TestDepthTestState.cpp
 	${SRC_DIR}/TestGeometry.cpp
-	${SRC_DIR}/TestLeaf.cpp
 	${SRC_DIR}/TestNode.cpp
 	${SRC_DIR}/TestProgram.cpp
 	${SRC_DIR}/TestProgramCommand.cpp

@@ -20,87 +20,263 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 	{
 		sg::Node::Ptr node = sg::Node::create();
 		BOOST_CHECK( node->get_num_children() == 0 );
+		BOOST_CHECK( node->get_parent() == false );
+		BOOST_CHECK( node->get_local_transform() == sg::Transform() );
+		BOOST_CHECK( node->get_global_transform() == sg::Transform() );
+		BOOST_CHECK( node->is_update_needed() == true );
+		BOOST_CHECK( node->get_num_states() == 0 );
+		BOOST_CHECK( node->get_render_state() == sg::RenderState() );
+	}
 
-		// Other properties are checked in TestLeaf.
+	// Set transform.
+	{
+		static const sg::Transform TRANSFORM(
+			sf::Vector3f( 10, 11, 12 ),
+			sf::Vector3f( 20, 21, 22 ),
+			sf::Vector3f( 30, 31, 32 ),
+			sf::Vector3f( 40, 41, 42 )
+		);
+
+		sg::Node::Ptr node = sg::Node::create();
+
+		node->set_local_transform( TRANSFORM );
+
+		BOOST_CHECK( node->get_local_transform() == TRANSFORM );
+
+		// No parent, so global == local.
+		BOOST_CHECK( node->get_global_transform() == sg::Transform() );
+	}
+
+	// Update.
+	{
+		sg::Node::Ptr node = sg::Node::create();
+
+		BOOST_CHECK( node->is_update_needed() == true );
+		node->update();
+		BOOST_CHECK( node->is_update_needed() == false );
+	}
+
+	// Parent.
+	{
+		sg::Node::Ptr node = sg::Node::create();
+		sg::Node::Ptr child = sg::Node::create();
+
+		child->set_parent( node );
+
+		BOOST_CHECK( child->get_parent() == node );
+		BOOST_CHECK( node->get_num_children() == 0 ); // set_parent won't really add the child to the parent!
+	}
+
+	// Queue update.
+	{
+		sg::Node::Ptr root = sg::Node::create();
+		sg::Node::Ptr child = sg::Node::create();
+		sg::Node::Ptr grandchild = sg::Node::create();
+
+		root->attach( child );
+		child->attach( grandchild );
+
+		// Make sure update flag is reset.
+		root->update();
+
+		BOOST_CHECK( root->is_update_needed() == false );
+		BOOST_CHECK( child->is_update_needed() == false );
+		BOOST_CHECK( grandchild->is_update_needed() == false );
+
+		// Queue update.
+		grandchild->queue_update();
+
+		BOOST_CHECK( root->is_update_needed() == true );
+		BOOST_CHECK( child->is_update_needed() == true );
+		BOOST_CHECK( grandchild->is_update_needed() == true );
+	}
+
+	std::shared_ptr<sf::Texture> texture( new sf::Texture );
+
+	// Create test program.
+	sg::Program::Ptr program( new sg::Program );
+	BOOST_REQUIRE( program->add_shader( "void main() { gl_FragColor = vec4( 1, 1, 1, 1 ); }", sg::Program::FRAGMENT_SHADER ) );
+	BOOST_REQUIRE( program->link() );
+
+	sg::ProgramCommand::Ptr program_command( new sg::ProgramCommand( program ) );
+
+	// States.
+	{
+		sg::Node::Ptr node = sg::Node::create();
+
+		// Program command.
+		BOOST_CHECK( node->find_state<sg::ProgramCommandState>() == nullptr );
+
+		node->set_state( sg::ProgramCommandState( program_command ) );
+		BOOST_CHECK( node->find_state<sg::ProgramCommandState>() != nullptr );
+		BOOST_CHECK( node->find_state<sg::ProgramCommandState>()->get_program_command() == program_command );
+
+		node->reset_state<sg::ProgramCommandState>();
+		BOOST_CHECK( node->find_state<sg::ProgramCommandState>() == nullptr );
+
+		// Texture.
+		BOOST_CHECK( node->find_state<sg::TextureState>() == nullptr );
+
+		node->set_state( sg::TextureState( texture ) );
+		BOOST_CHECK( node->find_state<sg::TextureState>() != nullptr );
+		BOOST_CHECK( node->find_state<sg::TextureState>()->get_texture() == texture );
+
+		{
+			sg::RenderState r_state;
+			r_state.texture = texture;
+			BOOST_CHECK( node->get_render_state() == r_state );
+		}
+
+		node->reset_state<sg::TextureState>();
+		BOOST_CHECK( node->find_state<sg::TextureState>() == nullptr );
+
+		// Wireframe.
+		BOOST_CHECK( node->find_state<sg::WireframeState>() == nullptr );
+
+		node->set_state( sg::WireframeState( true ) );
+		BOOST_CHECK( node->find_state<sg::WireframeState>() != nullptr );
+		BOOST_CHECK( node->find_state<sg::WireframeState>()->is_set() == true );
+
+		{
+			sg::RenderState r_state;
+			r_state.wireframe = true;
+			BOOST_CHECK( node->get_render_state() == r_state );
+		}
+
+		node->set_state( sg::WireframeState( false ) );
+		BOOST_CHECK( node->find_state<sg::WireframeState>() != nullptr );
+		BOOST_CHECK( node->find_state<sg::WireframeState>()->is_set() == false );
+
+		node->reset_state<sg::WireframeState>();
+		BOOST_CHECK( node->find_state<sg::WireframeState>() == nullptr );
+
+		// Backface culling.
+		BOOST_CHECK( node->find_state<sg::BackfaceCullingState>() == nullptr );
+
+		node->set_state( sg::BackfaceCullingState( true ) );
+		BOOST_CHECK( node->find_state<sg::BackfaceCullingState>() != nullptr );
+		BOOST_CHECK( node->find_state<sg::BackfaceCullingState>()->is_set() == true );
+
+		{
+			sg::RenderState r_state;
+			r_state.backface_culling = true;
+			BOOST_CHECK( node->get_render_state() == r_state );
+		}
+
+		node->set_state( sg::BackfaceCullingState( false ) );
+		BOOST_CHECK( node->find_state<sg::BackfaceCullingState>() != nullptr );
+		BOOST_CHECK( node->find_state<sg::BackfaceCullingState>()->is_set() == false );
+
+		{
+			sg::RenderState r_state;
+			r_state.backface_culling = false;
+			BOOST_CHECK( node->get_render_state() == r_state );
+		}
+
+		node->reset_state<sg::BackfaceCullingState>();
+		BOOST_CHECK( node->find_state<sg::BackfaceCullingState>() == nullptr );
+
+		// Depth test.
+		BOOST_CHECK( node->find_state<sg::DepthTestState>() == nullptr );
+
+		node->set_state( sg::DepthTestState( true ) );
+		BOOST_CHECK( node->find_state<sg::DepthTestState>() != nullptr );
+		BOOST_CHECK( node->find_state<sg::DepthTestState>()->is_set() == true );
+
+		{
+			sg::RenderState r_state;
+			r_state.depth_test = true;
+			BOOST_CHECK( node->get_render_state() == r_state );
+		}
+
+		node->set_state( sg::DepthTestState( false ) );
+		BOOST_CHECK( node->find_state<sg::DepthTestState>() != nullptr );
+		BOOST_CHECK( node->find_state<sg::DepthTestState>()->is_set() == false );
+
+		{
+			sg::RenderState r_state;
+			r_state.depth_test = false;
+			BOOST_CHECK( node->get_render_state() == r_state );
+		}
 	}
 
 	// Attach.
 	{
-		sg::Leaf::Ptr leaf0 = sg::Leaf::create();
-		sg::Leaf::Ptr leaf1 = sg::Leaf::create();
-		sg::Leaf::Ptr leaf2 = sg::Leaf::create();
+		sg::Node::Ptr child0 = sg::Node::create();
+		sg::Node::Ptr child1 = sg::Node::create();
+		sg::Node::Ptr child2 = sg::Node::create();
 		sg::Node::Ptr node = sg::Node::create();
 
-		node->attach( leaf0 );
-		node->attach( leaf1 );
-		node->attach( leaf2 );
+		node->attach( child0 );
+		node->attach( child1 );
+		node->attach( child2 );
 
 		BOOST_CHECK( node->get_num_children() == 3 );
-		BOOST_CHECK( node->has_child( leaf0 ) == true );
-		BOOST_CHECK( node->has_child( leaf1 ) == true );
-		BOOST_CHECK( node->has_child( leaf2 ) == true );
+		BOOST_CHECK( node->has_child( child0 ) == true );
+		BOOST_CHECK( node->has_child( child1 ) == true );
+		BOOST_CHECK( node->has_child( child2 ) == true );
 
-		BOOST_CHECK( leaf0->get_parent() == node );
-		BOOST_CHECK( leaf1->get_parent() == node );
-		BOOST_CHECK( leaf2->get_parent() == node );
+		BOOST_CHECK( child0->get_parent() == node );
+		BOOST_CHECK( child1->get_parent() == node );
+		BOOST_CHECK( child2->get_parent() == node );
 	}
 
 	// Detach.
 	{
-		sg::Leaf::Ptr leaf = sg::Leaf::create();
+		sg::Node::Ptr child = sg::Node::create();
 		sg::Node::Ptr node = sg::Node::create();
 
-		node->attach( leaf );
+		node->attach( child );
 		BOOST_CHECK( node->get_num_children() == 1 );
-		BOOST_CHECK( leaf->get_parent() == node );
+		BOOST_CHECK( child->get_parent() == node );
 
-		node->detach( leaf );
+		node->detach( child );
 		BOOST_CHECK( node->get_num_children() == 0 );
-		BOOST_CHECK( leaf->get_parent() == false );
+		BOOST_CHECK( child->get_parent() == false );
 	}
 
 	// Delegation of update call.
 	{
-		sg::Leaf::Ptr leaf0 = sg::Leaf::create();
-		sg::Leaf::Ptr leaf1 = sg::Leaf::create();
-		sg::Leaf::Ptr leaf2 = sg::Leaf::create();
+		sg::Node::Ptr child0 = sg::Node::create();
+		sg::Node::Ptr child1 = sg::Node::create();
+		sg::Node::Ptr child2 = sg::Node::create();
 		sg::Node::Ptr node = sg::Node::create();
 
-		node->attach( leaf0 );
-		node->attach( leaf1 );
-		node->attach( leaf2 );
+		node->attach( child0 );
+		node->attach( child1 );
+		node->attach( child2 );
 
 		BOOST_CHECK( node->is_update_needed() == true );
-		BOOST_CHECK( leaf0->is_update_needed() == true );
-		BOOST_CHECK( leaf1->is_update_needed() == true );
-		BOOST_CHECK( leaf2->is_update_needed() == true );
+		BOOST_CHECK( child0->is_update_needed() == true );
+		BOOST_CHECK( child1->is_update_needed() == true );
+		BOOST_CHECK( child2->is_update_needed() == true );
 
 		node->update();
 
 		BOOST_CHECK( node->is_update_needed() == false );
-		BOOST_CHECK( leaf0->is_update_needed() == false );
-		BOOST_CHECK( leaf1->is_update_needed() == false );
-		BOOST_CHECK( leaf2->is_update_needed() == false );
+		BOOST_CHECK( child0->is_update_needed() == false );
+		BOOST_CHECK( child1->is_update_needed() == false );
+		BOOST_CHECK( child2->is_update_needed() == false );
 	}
 
 	// Adding a child with queued update queues the update at the parent.
 	{
 		sg::Node::Ptr root = sg::Node::create();
 		sg::Node::Ptr child = sg::Node::create();
-		sg::Leaf::Ptr leaf = sg::Leaf::create();
+		sg::Node::Ptr grandchild = sg::Node::create();
 
 		root->attach( child );
 		root->update();
 
 		BOOST_CHECK( root->is_update_needed() == false );
 		BOOST_CHECK( child->is_update_needed() == false );
-		BOOST_CHECK( leaf->is_update_needed() == true );
+		BOOST_CHECK( grandchild->is_update_needed() == true );
 
-		child->attach( leaf );
+		child->attach( grandchild );
 
 		BOOST_CHECK( root->is_update_needed() == true );
 		BOOST_CHECK( child->is_update_needed() == true );
-		BOOST_CHECK( leaf->is_update_needed() == true );
+		BOOST_CHECK( grandchild->is_update_needed() == true );
 	}
 
 	// Transform delegation/recalculation.
@@ -141,58 +317,57 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		{
 			sg::Node::Ptr root = sg::Node::create();
 			sg::Node::Ptr child = sg::Node::create();
-			sg::Leaf::Ptr leaf = sg::Leaf::create();
+			sg::Node::Ptr grandchild = sg::Node::create();
 
 			root->set_local_transform( ROOT_TRANSFORM );
 			child->set_local_transform( CHILD_TRANSFORM );
-			leaf->set_local_transform( LEAF_TRANSFORM );
+			grandchild->set_local_transform( LEAF_TRANSFORM );
 
 			root->attach( child );
-			child->attach( leaf );
+			child->attach( grandchild );
 
 			BOOST_CHECK( root->get_global_transform() == GLOBAL_ROOT_TRANSFORM );
 			BOOST_CHECK( child->get_global_transform() == GLOBAL_CHILD_TRANSFORM );
-			BOOST_CHECK( leaf->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
+			BOOST_CHECK( grandchild->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
 		}
 
 		// Same, but other ordering.
 		{
 			sg::Node::Ptr root = sg::Node::create();
 			sg::Node::Ptr child = sg::Node::create();
-			sg::Leaf::Ptr leaf = sg::Leaf::create();
+			sg::Node::Ptr grandchild = sg::Node::create();
 
 			root->set_local_transform( ROOT_TRANSFORM );
 			child->set_local_transform( CHILD_TRANSFORM );
-			leaf->set_local_transform( LEAF_TRANSFORM );
+			grandchild->set_local_transform( LEAF_TRANSFORM );
 
-			child->attach( leaf );
+			child->attach( grandchild );
 			root->attach( child );
 
 			BOOST_CHECK( root->get_global_transform() == GLOBAL_ROOT_TRANSFORM );
 			BOOST_CHECK( child->get_global_transform() == GLOBAL_CHILD_TRANSFORM );
-			BOOST_CHECK( leaf->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
+			BOOST_CHECK( grandchild->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
 		}
 
 		// Update transformation after adding childs.
 		{
 			sg::Node::Ptr root = sg::Node::create();
 			sg::Node::Ptr child = sg::Node::create();
-			sg::Leaf::Ptr leaf = sg::Leaf::create();
+			sg::Node::Ptr grandchild = sg::Node::create();
 
-			child->attach( leaf );
+			child->attach( grandchild );
 			root->attach( child );
 
 			root->set_local_transform( ROOT_TRANSFORM );
 			child->set_local_transform( CHILD_TRANSFORM );
-			leaf->set_local_transform( LEAF_TRANSFORM );
+			grandchild->set_local_transform( LEAF_TRANSFORM );
 
 			BOOST_CHECK( root->get_global_transform() == GLOBAL_ROOT_TRANSFORM );
 			BOOST_CHECK( child->get_global_transform() == GLOBAL_CHILD_TRANSFORM );
-			BOOST_CHECK( leaf->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
+			BOOST_CHECK( grandchild->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
 		}
 	}
 
-	std::shared_ptr<sf::Texture> texture( new sf::Texture );
 	std::shared_ptr<sf::Texture> texture2( new sf::Texture );
 
 	// Create test programs.
@@ -213,7 +388,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 	{
 		sg::Node::Ptr root = sg::Node::create();
 		sg::Node::Ptr child = sg::Node::create();
-		sg::Leaf::Ptr leaf = sg::Leaf::create();
+		sg::Node::Ptr grandchild = sg::Node::create();
 
 		root->set_state( sg::ProgramCommandState( program_command_0 ) );
 		root->set_state( sg::TextureState( texture ) );
@@ -226,7 +401,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		child->set_state( sg::DepthTestState( true ) );
 		child->set_state( sg::BackfaceCullingState( true ) );
 
-		child->attach( leaf );
+		child->attach( grandchild );
 		root->attach( child );
 
 		// Check root.
@@ -241,7 +416,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			BOOST_CHECK( root->get_render_state() == r_state );
 		}
 
-		// Check child + leaf.
+		// Check child + grandchild.
 		{
 			sg::RenderState r_state;
 			r_state.program_command = program_command_1;
@@ -251,7 +426,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			r_state.backface_culling = true;
 
 			BOOST_CHECK( child->get_render_state() == r_state );
-			BOOST_CHECK( leaf->get_render_state() == r_state );
+			BOOST_CHECK( grandchild->get_render_state() == r_state );
 		}
 	}
 }

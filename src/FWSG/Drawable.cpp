@@ -6,7 +6,7 @@ Drawable::~Drawable() {
 }
 
 Drawable::Drawable( Renderer& renderer ) :
-	Leaf(),
+	Node(),
 	m_renderer( renderer )
 {
 }

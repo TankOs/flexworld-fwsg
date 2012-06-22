@@ -34,9 +34,8 @@ set(
 	${INC_DIR}/FWSG/DepthTestState.hpp
 	${INC_DIR}/FWSG/Drawable.hpp
 	${INC_DIR}/FWSG/Geometry.hpp
-	${INC_DIR}/FWSG/Leaf.hpp
-	${INC_DIR}/FWSG/Leaf.inl
 	${INC_DIR}/FWSG/Node.hpp
+	${INC_DIR}/FWSG/Node.inl
 	${INC_DIR}/FWSG/NonCopyable.hpp
 	${INC_DIR}/FWSG/Program.hpp
 	${INC_DIR}/FWSG/ProgramCommand.hpp
@@ -63,7 +62,6 @@ set(
 	${SRC_DIR}/FWSG/DepthTestState.cpp
 	${SRC_DIR}/FWSG/Drawable.cpp
 	${SRC_DIR}/FWSG/Geometry.cpp
-	${SRC_DIR}/FWSG/Leaf.cpp
 	${SRC_DIR}/FWSG/Node.cpp
 	${SRC_DIR}/FWSG/NonCopyable.cpp
 	${SRC_DIR}/FWSG/Program.cpp
