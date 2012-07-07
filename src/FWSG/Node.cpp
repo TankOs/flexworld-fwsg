@@ -21,6 +21,12 @@ Node::Node() :
 }
 
 Node::~Node() {
+	// Cleanup memory.
+	for( std::size_t state_idx = 0; state_idx < m_states.size(); ++state_idx ) {
+		delete m_states[state_idx];
+	}
+
+	m_states.clear();
 }
 
 void Node::update() {
