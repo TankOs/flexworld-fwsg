@@ -17,6 +17,7 @@ set(
 	${SRC_DIR}/TestBackfaceCullingState.cpp
 	${SRC_DIR}/TestBoolState.cpp
 	${SRC_DIR}/TestBufferObject.cpp
+	${SRC_DIR}/TestCamera.cpp
 	${SRC_DIR}/TestDepthTestState.cpp
 	${SRC_DIR}/TestGeometry.cpp
 	${SRC_DIR}/TestNode.cpp

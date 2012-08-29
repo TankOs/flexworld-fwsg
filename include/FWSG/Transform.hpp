@@ -5,7 +5,7 @@
 namespace sg {
 
 /** Transform.
- * Contains properties for translation, rotation and scale.
+ * Contains properties for translation, rotation, scale and origin.
  */
 class Transform {
 	public:

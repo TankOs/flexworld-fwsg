@@ -77,7 +77,10 @@ int main() {
 	window.setVerticalSyncEnabled( true );
 
 	// Setup UI.
-	sf::Text info_text( L"W: Toggle global wireframe / D: Toggle global depth test" );
+	sf::Font dejavu_font;
+	dejavu_font.loadFromFile( "data/DejaVuSans.ttf" );
+
+	sf::Text info_text( L"W: Toggle global wireframe / D: Toggle global depth test", dejavu_font, 14 );
 	info_text.setColor( sf::Color( 0xa2, 0xb4, 0xc6 ) );
 
 	while( window.isOpen() ) {

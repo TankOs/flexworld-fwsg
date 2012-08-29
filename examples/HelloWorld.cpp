@@ -48,7 +48,10 @@ int main() {
 	window.setVerticalSyncEnabled( true );
 
 	// Setup UI.
-	sf::Text info_text( L"Press W to toggle wireframe mode for all meshes." );
+	sf::Font dejavu_font;
+	dejavu_font.loadFromFile( "data/DejaVuSans.ttf" );
+
+	sf::Text info_text( L"Press W to toggle wireframe mode for all meshes.", dejavu_font, 14 );
 	info_text.setColor( sf::Color( 0xa2, 0xb4, 0xc6 ) );
 
 	while( window.isOpen() ) {

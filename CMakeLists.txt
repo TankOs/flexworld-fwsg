@@ -31,6 +31,7 @@ set(
 	${INC_DIR}/FWSG/BackfaceCullingState.hpp
 	${INC_DIR}/FWSG/BoolState.hpp
 	${INC_DIR}/FWSG/BufferObject.hpp
+	${INC_DIR}/FWSG/Camera.hpp
 	${INC_DIR}/FWSG/DepthTestState.hpp
 	${INC_DIR}/FWSG/Drawable.hpp
 	${INC_DIR}/FWSG/Geometry.hpp
@@ -59,6 +60,7 @@ set(
 	${SRC_DIR}/FWSG/BackfaceCullingState.cpp
 	${SRC_DIR}/FWSG/BoolState.cpp
 	${SRC_DIR}/FWSG/BufferObject.cpp
+	${SRC_DIR}/FWSG/Camera.cpp
 	${SRC_DIR}/FWSG/DepthTestState.cpp
 	${SRC_DIR}/FWSG/Drawable.cpp
 	${SRC_DIR}/FWSG/Geometry.cpp
