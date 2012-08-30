@@ -29,8 +29,7 @@ void StaticMesh::handle_update_render_state() {
 void StaticMesh::invalidate_step() {
 	m_step = get_renderer().create_step(
 		get_render_state(),
-		get_global_transform(),
-		get_local_transform(),
+		get_global_matrix(),
 		m_buffer_object
 	);
 }
