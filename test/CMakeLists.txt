@@ -20,13 +20,14 @@ set(
 	${SRC_DIR}/TestCamera.cpp
 	${SRC_DIR}/TestDepthTestState.cpp
 	${SRC_DIR}/TestGeometry.cpp
+	${SRC_DIR}/TestMatrix.cpp
 	${SRC_DIR}/TestNode.cpp
 	${SRC_DIR}/TestProgram.cpp
 	${SRC_DIR}/TestProgramCommand.cpp
 	${SRC_DIR}/TestProgramCommandState.cpp
 	${SRC_DIR}/TestRenderState.cpp
 	${SRC_DIR}/TestRenderer.cpp
-	${SRC_DIR}/TestStaticMesh.cpp
+	#${SRC_DIR}/TestStaticMesh.cpp
 	${SRC_DIR}/TestStep.cpp
 	${SRC_DIR}/TestStepProxy.cpp
 	${SRC_DIR}/TestTextureState.cpp

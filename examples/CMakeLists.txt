@@ -22,12 +22,12 @@ macro( build_example target sources )
 	endif()
 endmacro()
 
-build_example( helloworld HelloWorld.cpp )
-build_example( texture Texture.cpp )
-build_example( transform Transform.cpp )
-build_example( depthtest DepthTest.cpp )
-build_example( colors Colors.cpp )
-build_example( shader Shader.cpp )
+#build_example( helloworld HelloWorld.cpp )
+#build_example( texture Texture.cpp )
+#build_example( transform Transform.cpp )
+#build_example( depthtest DepthTest.cpp )
+#build_example( colors Colors.cpp )
+#build_example( shader Shader.cpp )
 
 if( NOT FWSG_SKIP_INSTALL )
 	install(

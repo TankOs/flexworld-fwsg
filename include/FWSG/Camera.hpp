@@ -45,6 +45,11 @@ class Camera {
 		 */
 		ProjectionMode get_projection_mode() const;
 
+		/** Get aspect ratio.
+		 * @return Aspect ratio.
+		 */
+		float get_aspect_ratio() const;
+
 		/** Set transform.
 		 * @param transform Transform.
 		 */
@@ -70,6 +75,11 @@ class Camera {
 		 */
 		void set_projection_mode( ProjectionMode mode );
 
+		/** Set aspect ratio.
+		 * @param aspect_ratio Aspect ratio.
+		 */
+		void set_aspect_ratio( float aspect_ratio );
+
 		/** Translate camera.
 		 * @param translation Translation.
 		 */
@@ -85,6 +95,7 @@ class Camera {
 		float m_field_of_view;
 		float m_near_clipping_plane;
 		float m_far_clipping_plane;
+		float m_aspect_ratio;
 		ProjectionMode m_projection_mode;
 };
 

@@ -19,10 +19,11 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 	// Initial state.
 	{
 		sg::Node::Ptr node = sg::Node::create();
+
 		BOOST_CHECK( node->get_num_children() == 0 );
 		BOOST_CHECK( node->get_parent() == false );
 		BOOST_CHECK( node->get_local_transform() == sg::Transform() );
-		BOOST_CHECK( node->get_global_transform() == sg::Transform() );
+		BOOST_CHECK( node->get_global_matrix() == sg::FloatMatrix() );
 		BOOST_CHECK( node->is_update_needed() == true );
 		BOOST_CHECK( node->get_num_states() == 0 );
 		BOOST_CHECK( node->get_render_state() == sg::RenderState() );
@@ -44,7 +45,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		BOOST_CHECK( node->get_local_transform() == TRANSFORM );
 
 		// No parent, so global == local.
-		BOOST_CHECK( node->get_global_transform() == sg::Transform() );
+		BOOST_CHECK( node->get_global_matrix() == TRANSFORM.get_matrix() );
 	}
 
 	// Update.
@@ -300,18 +301,13 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			sf::Vector3f( 33, 330, 3300 )
 		);
 
-		static const sg::Transform GLOBAL_ROOT_TRANSFORM = sg::Transform();
-		static const sg::Transform GLOBAL_CHILD_TRANSFORM = ROOT_TRANSFORM;
-		static const sg::Transform GLOBAL_LEAF_TRANSFORM(
-			ROOT_TRANSFORM.get_translation() + CHILD_TRANSFORM.get_translation(),
-			ROOT_TRANSFORM.get_rotation() + CHILD_TRANSFORM.get_rotation(),
-			sf::Vector3f(
-				ROOT_TRANSFORM.get_scale().x * CHILD_TRANSFORM.get_scale().x,
-				ROOT_TRANSFORM.get_scale().y * CHILD_TRANSFORM.get_scale().y,
-				ROOT_TRANSFORM.get_scale().z * CHILD_TRANSFORM.get_scale().z
-			),
-			ROOT_TRANSFORM.get_origin() + CHILD_TRANSFORM.get_origin()
-		);
+		sg::FloatMatrix GLOBAL_ROOT_MATRIX = ROOT_TRANSFORM.get_matrix();
+
+		sg::FloatMatrix GLOBAL_CHILD_MATRIX = GLOBAL_ROOT_MATRIX;
+		GLOBAL_CHILD_MATRIX.multiply( CHILD_TRANSFORM.get_matrix() );
+
+		sg::FloatMatrix GLOBAL_LEAF_MATRIX = GLOBAL_CHILD_MATRIX;
+		GLOBAL_LEAF_MATRIX.multiply( LEAF_TRANSFORM.get_matrix() );
 
 		// Recalculate when calling attach().
 		{
@@ -326,9 +322,9 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			root->attach( child );
 			child->attach( grandchild );
 
-			BOOST_CHECK( root->get_global_transform() == GLOBAL_ROOT_TRANSFORM );
-			BOOST_CHECK( child->get_global_transform() == GLOBAL_CHILD_TRANSFORM );
-			BOOST_CHECK( grandchild->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
+			BOOST_CHECK( root->get_global_matrix() == GLOBAL_ROOT_MATRIX );
+			BOOST_CHECK( child->get_global_matrix() == GLOBAL_CHILD_MATRIX );
+			BOOST_CHECK( grandchild->get_global_matrix() == GLOBAL_LEAF_MATRIX );
 		}
 
 		// Same, but other ordering.
@@ -344,9 +340,9 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			child->attach( grandchild );
 			root->attach( child );
 
-			BOOST_CHECK( root->get_global_transform() == GLOBAL_ROOT_TRANSFORM );
-			BOOST_CHECK( child->get_global_transform() == GLOBAL_CHILD_TRANSFORM );
-			BOOST_CHECK( grandchild->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
+			BOOST_CHECK( root->get_global_matrix() == GLOBAL_ROOT_MATRIX );
+			BOOST_CHECK( child->get_global_matrix() == GLOBAL_CHILD_MATRIX );
+			BOOST_CHECK( grandchild->get_global_matrix() == GLOBAL_LEAF_MATRIX );
 		}
 
 		// Update transformation after adding childs.
@@ -362,9 +358,9 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			child->set_local_transform( CHILD_TRANSFORM );
 			grandchild->set_local_transform( LEAF_TRANSFORM );
 
-			BOOST_CHECK( root->get_global_transform() == GLOBAL_ROOT_TRANSFORM );
-			BOOST_CHECK( child->get_global_transform() == GLOBAL_CHILD_TRANSFORM );
-			BOOST_CHECK( grandchild->get_global_transform() == GLOBAL_LEAF_TRANSFORM );
+			BOOST_CHECK( root->get_global_matrix() == GLOBAL_ROOT_MATRIX );
+			BOOST_CHECK( child->get_global_matrix() == GLOBAL_CHILD_MATRIX );
+			BOOST_CHECK( grandchild->get_global_matrix() == GLOBAL_LEAF_MATRIX );
 		}
 	}
 

@@ -6,6 +6,7 @@ Camera::Camera() :
 	m_field_of_view( 80.0f ),
 	m_near_clipping_plane( 0.1f ),
 	m_far_clipping_plane( 100.0f ),
+	m_aspect_ratio( 1.0f ),
 	m_projection_mode( PERSPECTIVE )
 {
 }
@@ -30,6 +31,10 @@ Camera::ProjectionMode Camera::get_projection_mode() const {
 	return m_projection_mode;
 }
 
+float Camera::get_aspect_ratio() const {
+	return m_aspect_ratio;
+}
+
 void Camera::set_transform( const Transform& transform ) {
 	m_transform = transform;
 }
@@ -48,6 +53,10 @@ void Camera::set_far_clipping_plane( float far_clipping_plane ) {
 
 void Camera::set_projection_mode( ProjectionMode mode ) {
 	m_projection_mode = mode;
+}
+
+void Camera::set_aspect_ratio( float aspect_ratio ) {
+	m_aspect_ratio = aspect_ratio;
 }
 
 void Camera::translate( const sf::Vector3f& translation ) {

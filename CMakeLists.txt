@@ -35,6 +35,8 @@ set(
 	${INC_DIR}/FWSG/DepthTestState.hpp
 	${INC_DIR}/FWSG/Drawable.hpp
 	${INC_DIR}/FWSG/Geometry.hpp
+	${INC_DIR}/FWSG/Matrix.hpp
+	${INC_DIR}/FWSG/Matrix.inl
 	${INC_DIR}/FWSG/Node.hpp
 	${INC_DIR}/FWSG/Node.inl
 	${INC_DIR}/FWSG/NonCopyable.hpp
@@ -44,7 +46,7 @@ set(
 	${INC_DIR}/FWSG/RenderState.hpp
 	${INC_DIR}/FWSG/Renderer.hpp
 	${INC_DIR}/FWSG/State.hpp
-	${INC_DIR}/FWSG/StaticMesh.hpp
+	#${INC_DIR}/FWSG/StaticMesh.hpp
 	${INC_DIR}/FWSG/Step.hpp
 	${INC_DIR}/FWSG/StepProxy.hpp
 	${INC_DIR}/FWSG/TextureState.hpp
@@ -72,7 +74,7 @@ set(
 	${SRC_DIR}/FWSG/RenderState.cpp
 	${SRC_DIR}/FWSG/Renderer.cpp
 	${SRC_DIR}/FWSG/State.cpp
-	${SRC_DIR}/FWSG/StaticMesh.cpp
+	#${SRC_DIR}/FWSG/StaticMesh.cpp
 	${SRC_DIR}/FWSG/Step.cpp
 	${SRC_DIR}/FWSG/StepProxy.cpp
 	${SRC_DIR}/FWSG/TextureState.cpp

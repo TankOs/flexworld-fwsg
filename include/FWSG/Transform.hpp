@@ -1,5 +1,7 @@
 #pragma once
 
+#include <FWSG/Matrix.hpp>
+
 #include <SFML/System/Vector3.hpp>
 
 namespace sg {
@@ -62,11 +64,18 @@ class Transform {
 		 */
 		void set_origin( const sf::Vector3f& origin );
 
+		/** Get transformation matrix.
+		 * @return Transformation matrix.
+		 */
+		const FloatMatrix& get_matrix() const;
+
 	private:
+		mutable FloatMatrix m_matrix;
 		sf::Vector3f m_translation;
 		sf::Vector3f m_rotation;
 		sf::Vector3f m_scale;
 		sf::Vector3f m_origin;
+		mutable bool m_update_matrix;
 };
 
 /** Check for equality.

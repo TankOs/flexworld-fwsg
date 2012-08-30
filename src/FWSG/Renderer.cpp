@@ -4,9 +4,11 @@
 #include <FWSG/Transform.hpp>
 #include <FWSG/ProgramCommand.hpp>
 #include <FWSG/Program.hpp>
+#include <FWSG/Camera.hpp>
 
 #include <algorithm>
 #include <cassert>
+#include <iostream> // XXX 
 
 namespace sg {
 
@@ -51,14 +53,13 @@ std::size_t Renderer::get_num_steps() const {
 
 StepProxy::Ptr Renderer::create_step(
 	const RenderState& render_state,
-	const Transform& global_transform,
-	const Transform& local_transform,
+	const FloatMatrix& transform_matrix,
 	BufferObject::PtrConst buffer_object
 ) {
 	lock();
 
 	// Create step.
-	Step::Ptr step( new Step( render_state, global_transform, local_transform, buffer_object ) );
+	Step::Ptr step( new Step( render_state, transform_matrix, buffer_object ) );
 
 	// Find render state.
 	GroupVector::iterator bound_iter = std::lower_bound( m_groups.begin(), m_groups.end(), render_state, GroupComparator() );
@@ -126,7 +127,7 @@ bool Renderer::GroupComparator::operator()( const RenderStateGroup* first, const
 	return first->render_state < second->render_state;
 }
 
-void Renderer::render() const {
+void Renderer::render( const Camera& camera, const sf::FloatRect& viewport ) const {
 	std::size_t group_idx = 0;
 	std::size_t step_idx = 0;
 	const RenderState* state = nullptr;
@@ -139,7 +140,38 @@ void Renderer::render() const {
 	const bool* backface_culling = nullptr;
 	const bool* depth_test = nullptr;
 
-	// Setup OpenGL.
+	// Setup projection.
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity();
+
+	if( camera.get_projection_mode() == Camera::PARALLEL ) {
+		glOrtho(
+			viewport.left,
+			viewport.left + viewport.width,
+			viewport.top,
+			viewport.top + viewport.height,
+			camera.get_near_clipping_plane(),
+			camera.get_far_clipping_plane()
+		);
+
+		glTranslatef(
+			-camera.get_transform().get_translation().x,
+			-camera.get_transform().get_translation().y,
+			-camera.get_transform().get_translation().z
+		);
+	}
+	else {
+		gluPerspective(
+			camera.get_field_of_view(),
+			viewport.width / viewport.height,
+			camera.get_near_clipping_plane(),
+			camera.get_far_clipping_plane()
+		);
+	}
+
+	glViewport( viewport.left, viewport.top, viewport.width, viewport.height );
+
+	// Setup misc OpenGL settings.
 	glMatrixMode( GL_MODELVIEW );
 	glBindTexture( GL_TEXTURE_2D, 0 );
 	glCullFace( GL_BACK );
@@ -225,38 +257,7 @@ void Renderer::render() const {
 			step = (*steps)[step_idx].get();
 
 			// Transform.
-			glLoadIdentity();
-
-			// Global transformation.
-			glRotatef( step->get_global_transform().get_rotation().x, 1, 0, 0 );
-			glRotatef( step->get_global_transform().get_rotation().y, 0, 1, 0 );
-			glRotatef( step->get_global_transform().get_rotation().z, 0, 0, 1 );
-
-			glTranslatef(
-				step->get_global_transform().get_translation().x + step->get_local_transform().get_translation().x,
-				step->get_global_transform().get_translation().y + step->get_local_transform().get_translation().y,
-				step->get_global_transform().get_translation().z + step->get_local_transform().get_translation().z
-			);
-
-			// Local transformation.
-			// Rotation.
-			glRotatef( step->get_local_transform().get_rotation().x, 1, 0, 0 );
-			glRotatef( step->get_local_transform().get_rotation().y, 0, 1, 0 );
-			glRotatef( step->get_local_transform().get_rotation().z, 0, 0, 1 );
-
-			// Scale.
-			glScalef(
-				step->get_local_transform().get_scale().x,
-				step->get_local_transform().get_scale().y,
-				step->get_local_transform().get_scale().z
-			);
-
-			// Origin.
-			glTranslatef(
-				-step->get_local_transform().get_origin().x,
-				-step->get_local_transform().get_origin().y,
-				-step->get_local_transform().get_origin().z
-			);
+			glLoadMatrixf( step->get_transform_matrix().values );
 
 			// If a shader program is active and the command is different, re-apply
 			// uniform values.

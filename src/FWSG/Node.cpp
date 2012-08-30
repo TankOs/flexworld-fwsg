@@ -62,15 +62,15 @@ const RenderState& Node::get_render_state() const {
 
 void Node::set_local_transform( const sg::Transform& transform ) {
 	m_local_transform = transform;
-	recalculate_global_transform();
+	recalculate_global_matrix();
 }
 
 const sg::Transform& Node::get_local_transform() const {
 	return m_local_transform;
 }
 
-const sg::Transform& Node::get_global_transform() const {
-	return m_global_transform;
+const FloatMatrix& Node::get_global_matrix() const {
+	return m_global_matrix;
 }
 
 std::size_t Node::get_num_states() const {
@@ -108,46 +108,25 @@ void Node::attach( Node::Ptr node ) {
 		queue_update();
 	}
 
-	// Recalculate global transform and update render state at child.
-	node->recalculate_global_transform();
+	// Recalculate global matrix and update render state at child.
+	node->recalculate_global_matrix();
 	node->update_render_state();
 }
 
-void Node::recalculate_global_transform() {
+void Node::recalculate_global_matrix() {
 	sg::Node::Ptr parent = m_parent.lock();
 
 	if( parent ) {
-		const sg::Transform& parent_global = parent->get_global_transform();
-		const sg::Transform& parent_local = parent->get_local_transform();
-
-		m_global_transform = sg::Transform(); /// XXX Remove
-
-		m_global_transform.set_translation(
-			parent_global.get_translation() + parent_local.get_translation()
-		);
-		m_global_transform.set_rotation(
-			parent_global.get_rotation() + parent_local.get_rotation()
-		);
-		m_global_transform.set_scale(
-			sf::Vector3f(
-				parent_global.get_scale().x * parent_local.get_scale().x,
-				parent_global.get_scale().y * parent_local.get_scale().y,
-				parent_global.get_scale().z * parent_local.get_scale().z
-			)
-		);
-		m_global_transform.set_origin(
-			parent_global.get_origin() + parent_local.get_origin()
-		);
+		m_global_matrix = parent->get_global_matrix();
+		m_global_matrix.multiply( m_local_transform.get_matrix() );
 	}
 	else {
-		m_global_transform = sg::Transform();
+		m_global_matrix = m_local_transform.get_matrix();
 	}
-
-	handle_recalculate_global_transform();
 
 	// Delegate to children.
 	for( std::size_t child_idx = 0; child_idx < m_children.size(); ++child_idx ) {
-		m_children[child_idx]->recalculate_global_transform();
+		m_children[child_idx]->recalculate_global_matrix();
 	}
 }
 
@@ -214,7 +193,7 @@ bool Node::has_child( Node::Ptr node ) const {
 	return std::find( m_children.begin(), m_children.end(), node ) != m_children.end();
 }
 
-void Node::handle_recalculate_global_transform() {
+void Node::handle_recalculate_global_matrix() {
 }
 
 void Node::handle_update_render_state() {

@@ -43,12 +43,12 @@ class Node : public std::enable_shared_from_this<Node> {
 		/** Get local transform.
 		 * @return Local transform.
 		 */
-		const sg::Transform& get_local_transform() const;
+		const Transform& get_local_transform() const;
 
-		/** Get global transform.
-		 * @return Global transform.
+		/** Get global matrix.
+		 * @return Global matrix.
 		 */
-		const sg::Transform& get_global_transform() const;
+		const FloatMatrix& get_global_matrix() const;
 
 		/** Check if update is needed.
 		 * @return true if update needed.
@@ -65,9 +65,9 @@ class Node : public std::enable_shared_from_this<Node> {
 		 */
 		void queue_update();
 
-		/** Recalculate global transform.
+		/** Recalculate global matrix.
 		 */
-		void recalculate_global_transform();
+		void recalculate_global_matrix();
 
 		/** Update render state.
 		 */
@@ -136,10 +136,10 @@ class Node : public std::enable_shared_from_this<Node> {
 		 */
 		virtual void handle_update();
 
-		/** Handle recaculation of global transform.
-		 * Called after recalculate_global_transform().
+		/** Handle recalculation of global matrix.
+		 * Called after recalculate_global_matrix().
 		 */
-		virtual void handle_recalculate_global_transform();
+		virtual void handle_recalculate_global_matrix();
 
 		/** Handle update of render state.
 		 * Called after update_render_state().
@@ -159,8 +159,8 @@ class Node : public std::enable_shared_from_this<Node> {
 		RenderState m_render_state;
 		NodeVector m_children;
 
-		Transform m_global_transform;
 		Transform m_local_transform;
+		FloatMatrix m_global_matrix;
 		sf::Vector3f m_scale;
 
 		StateVector m_states;

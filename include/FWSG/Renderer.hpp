@@ -5,10 +5,13 @@
 #include <FWSG/StepProxy.hpp>
 #include <FWSG/BufferObject.hpp>
 
+#include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Mutex.hpp>
 #include <vector>
 
 namespace sg {
+
+class Camera;
 
 /** OpenGL renderer.
  *
@@ -41,14 +44,13 @@ class Renderer {
 		 * It's safe to call this method from a thread not having an active OpenGL
 		 * context.
 		 * @param render_state Render state the step belongs to.
-		 * @param transform Transform (reference is being held).
+		 * @param transform_matrix Transform matrix (referenced!).
 		 * @param buffer_object Buffer object to render.
 		 * @return Proxied step.
 		 */
 		StepProxy::Ptr create_step(
 			const RenderState& render_state,
-			const Transform& global_transform,
-			const Transform& local_transform,
+			const FloatMatrix& transform_matrix,
 			BufferObject::PtrConst buffer_object
 		);
 
@@ -58,8 +60,10 @@ class Renderer {
 		void remove_step( const StepProxy& proxy );
 
 		/** Render.
+		 * @param camera Camera.
+		 * @param viewport Viewport.
 		 */
-		void render() const;
+		void render( const Camera& camera, const sf::FloatRect& viewport ) const;
 
 		/** Lock.
 		 * A call to this method will block until a previous blocker releases the

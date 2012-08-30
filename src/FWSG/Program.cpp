@@ -164,11 +164,11 @@ void Program::use() const {
 	if( m_program && m_is_linked ) {
 		glUseProgram( m_program );
 
-		if( glGetError() != 0 ) {
 #if !defined( NDEBUG )
+		if( glGetError() != 0 ) {
 			std::cout << "WARNING: Can't use shader program." << std::endl;
-#endif
 		}
+#endif
 	}
 }
 

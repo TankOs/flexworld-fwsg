@@ -7,6 +7,7 @@
 #include <FWSG/WireframeState.hpp>
 #include <FWSG/TextureState.hpp>
 #include <FWSG/DepthTestState.hpp>
+#include <FWSG/Camera.hpp>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
@@ -73,6 +74,12 @@ int main() {
 	root_node->attach( wireframe_static_mesh );
 	root_node->set_state( sg::TextureState( texture ) );
 
+	// Setup camera and viewport.
+	sf::FloatRect viewport( 0.0f, 0.0f, 800.0f, 600.0f );
+	sg::Camera camera;
+
+	camera.set_projection_mode( sg::Camera::PARALLEL );
+
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );
 
@@ -120,7 +127,7 @@ int main() {
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 		// Call renderer and save GL states from being changed by SFML.
-		renderer.render();
+		renderer.render( camera, viewport );
 		window.pushGLStates();
 
 		// Make SFML work again.

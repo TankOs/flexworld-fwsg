@@ -3,6 +3,7 @@
 #include <FWSG/BufferObject.hpp>
 #include <FWSG/RenderState.hpp>
 #include <FWSG/NonCopyable.hpp>
+#include <FWSG/Matrix.hpp>
 
 #include <memory>
 
@@ -22,14 +23,12 @@ class Step : public NonCopyable {
 
 		/** Ctor.
 		 * @param render_state Render state.
-		 * @param global_transform Global transform (reference is being held).
-		 * @param local_transform Local transform (reference is being held).
+		 * @param transform_matrix Transform matrix (referenced!).
 		 * @param buffer_object Buffer object.
 		 */
 		Step(
 			const RenderState& render_state,
-			const Transform& global_transform,
-			const Transform& local_transform,
+			const FloatMatrix& transform_matrix,
 			BufferObject::PtrConst buffer_object
 		);
 
@@ -38,15 +37,10 @@ class Step : public NonCopyable {
 		 */
 		BufferObject::PtrConst get_buffer_object() const;
 
-		/** Get global transform.
-		 * @return Global transform.
+		/** Get transform matrix.
+		 * @return Transform matrix.
 		 */
-		const Transform& get_global_transform() const;
-
-		/** Get local transform.
-		 * @return Local transform.
-		 */
-		const Transform& get_local_transform() const;
+		const FloatMatrix& get_transform_matrix() const;
 
 		/** Get render state.
 		 * @return Render state.
@@ -56,8 +50,7 @@ class Step : public NonCopyable {
 	private:
 		const RenderState m_render_state;
 		BufferObject::PtrConst m_buffer_object;
-		const sg::Transform& m_global_transform;
-		const sg::Transform& m_local_transform;
+		const FloatMatrix& m_transform_matrix;
 };
 
 }

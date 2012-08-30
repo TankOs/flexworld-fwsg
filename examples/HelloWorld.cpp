@@ -5,6 +5,7 @@
 #include <FWSG/Node.hpp>
 #include <FWSG/StaticMesh.hpp>
 #include <FWSG/WireframeState.hpp>
+#include <FWSG/Camera.hpp>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
@@ -17,9 +18,9 @@ int main() {
 	sg::TriangleGeometry geometry;
 
 	geometry.add_triangle(
-		sg::Vertex( sf::Vector3f( 0, 0, 0 ) ),
-		sg::Vertex( sf::Vector3f( 1, 0, 0 ) ),
-		sg::Vertex( sf::Vector3f( 0, 1, 0 ) )
+		sg::Vertex( sf::Vector3f( 100, 100, 0.0f ) ),
+		sg::Vertex( sf::Vector3f( 400, 100, 0.0f ) ),
+		sg::Vertex( sf::Vector3f( 100, 400, 0.0f ) )
 	);
 
 	// Create the buffer object and load the geometry into it.
@@ -33,16 +34,22 @@ int main() {
 	// Static mesh.
 	sg::StaticMesh::Ptr static_mesh = sg::StaticMesh::create( buffer_object, renderer );
 
-	// Same mesh, but in wireframe mode. Also translate it a little bit so it's
-	// visible.
+	// Same mesh, but in wireframe mode.
 	sg::StaticMesh::Ptr wireframe_static_mesh = sg::StaticMesh::create( buffer_object, renderer );
 	wireframe_static_mesh->set_state( sg::WireframeState( true ) );
-	wireframe_static_mesh->set_local_transform( sg::Transform( sf::Vector3f( -1, 0, 0 ) ) );
 
 	// Create root node and add meshes to it.
 	sg::Node::Ptr root_node = sg::Node::create();
 	root_node->attach( static_mesh );
 	root_node->attach( wireframe_static_mesh );
+
+	// Setup camera and viewport.
+	sf::FloatRect viewport( 0.0f, 0.0f, 300.0f, 600.0f );
+	sg::Camera camera;
+
+	camera.set_projection_mode( sg::Camera::PARALLEL );
+	camera.set_near_clipping_plane( -1.0f );
+	camera.set_far_clipping_plane( 1.0f );
 
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );
@@ -81,9 +88,8 @@ int main() {
 		// Rendering.
 		window.clear();
 
-		// Call renderer and save GL states from being changed by SFML.
-		renderer.render();
-		window.pushGLStates();
+		// Call renderer.
+		renderer.render( camera, viewport );
 
 		// Make SFML work again.
 		glEnableClientState( GL_VERTEX_ARRAY );
@@ -97,11 +103,12 @@ int main() {
 		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
 		// Render UI.
+		window.pushGLStates();
 		window.draw( info_text );
-
-		// Flip buffers and restore states.
-		window.display();
 		window.popGLStates();
+
+		// Flip buffers.
+		window.display();
 	}
 
 	return 0;

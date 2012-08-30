@@ -15,11 +15,11 @@ BOOST_AUTO_TEST_CASE( TestStep ) {
 	{
 		sg::Transform trans;
 		sg::RenderState r_state;
-		sg::Step step( r_state, trans, trans, bo );
+		sg::FloatMatrix transform_matrix;
+		sg::Step step( r_state, transform_matrix, bo );
 
 		BOOST_CHECK( step.get_render_state() == r_state );
-		BOOST_CHECK( &step.get_global_transform() == &trans );
-		BOOST_CHECK( &step.get_local_transform() == &trans );
+		BOOST_CHECK( step.get_transform_matrix() == transform_matrix );
 		BOOST_CHECK( step.get_buffer_object() == bo );
 	}
 }

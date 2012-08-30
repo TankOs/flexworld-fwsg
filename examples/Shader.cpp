@@ -7,6 +7,7 @@
 #include <FWSG/Program.hpp>
 #include <FWSG/ProgramCommand.hpp>
 #include <FWSG/ProgramCommandState.hpp>
+#include <FWSG/Camera.hpp>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
@@ -73,6 +74,12 @@ int main() {
 	command_0->set_argument( "color", 1.0f, 0.0f, 0.0f, 1.0f );
 	command_1->set_argument( "color", 0.0f, 1.0f, 0.0f, 1.0f );
 
+	// Setup camera and viewport.
+	sf::FloatRect viewport( 0.0f, 0.0f, 800.0f, 600.0f );
+	sg::Camera camera;
+
+	camera.set_projection_mode( sg::Camera::PARALLEL );
+
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );
 
@@ -124,7 +131,7 @@ int main() {
 		window.clear();
 
 		// Call renderer and save GL states from being changed by SFML.
-		renderer.render();
+		renderer.render( camera, viewport );
 		window.pushGLStates();
 
 		// Make SFML work again.
