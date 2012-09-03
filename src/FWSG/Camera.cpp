@@ -2,7 +2,8 @@
 
 namespace sg {
 
-Camera::Camera() :
+Camera::Camera( const sf::FloatRect& viewport ) :
+	m_viewport( viewport ),
 	m_update_combined_matrix( false )
 {
 }
@@ -39,6 +40,14 @@ void Camera::set_transform( const Transform& transform ) {
 	m_transform = transform;
 
 	m_update_combined_matrix = true;
+}
+
+const sf::FloatRect& Camera::get_viewport() const {
+	return m_viewport;
+}
+
+void Camera::set_viewport( const sf::FloatRect& viewport ) {
+	m_viewport = viewport;
 }
 
 const FloatMatrix& Camera::get_projection_matrix() const {

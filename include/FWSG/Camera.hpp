@@ -3,6 +3,8 @@
 #include <FWSG/Transform.hpp>
 #include <FWSG/Matrix.hpp>
 
+#include <SFML/Graphics/Rect.hpp>
+
 namespace sg {
 
 /** Camera.
@@ -10,8 +12,9 @@ namespace sg {
 class Camera {
 	public:
 		/** Ctor.
+		 * @param viewport Viewport.
 		 */
-		Camera();
+		Camera( const sf::FloatRect& viewport );
 
 		/** Setup parallel projection.
 		 * @param left Left plane.
@@ -41,6 +44,16 @@ class Camera {
 		 */
 		void set_transform( const Transform& transform );
 
+		/** Get viewport.
+		 * @return Viewport.
+		 */
+		const sf::FloatRect& get_viewport() const;
+
+		/** Set viewport.
+		 * @param viewport Viewport.
+		 */
+		void set_viewport( const sf::FloatRect& viewport );
+
 		/** Get projection matrix.
 		 * @return Projection matrix.
 		 */
@@ -65,6 +78,7 @@ class Camera {
 		Transform m_transform;
 		FloatMatrix m_projection_matrix;
 		mutable FloatMatrix m_combined_matrix;
+		sf::FloatRect m_viewport;
 		mutable bool m_update_combined_matrix;
 };
 

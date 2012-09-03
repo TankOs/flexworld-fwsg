@@ -60,8 +60,7 @@ int main() {
 	root_node->set_state( sg::BackfaceCullingState( false ) );
 
 	// Setup camera and viewport.
-	sf::FloatRect viewport( 0.0f, 0.0f, 800.0f, 600.0f );
-	sg::Camera camera;
+	sg::Camera camera( sf::FloatRect( 0.0f, 0.0f, 800.0f, 600.0f ) );
 
 	camera.setup_parallel_projection( -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f );
 
@@ -146,7 +145,7 @@ int main() {
 		window.clear();
 
 		// Call renderer and save GL states from being changed by SFML.
-		renderer.render( camera, viewport );
+		renderer.render( camera );
 		window.pushGLStates();
 
 		// Make SFML work again.

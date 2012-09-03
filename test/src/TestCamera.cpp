@@ -7,16 +7,26 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 
 	// Initial state.
 	{
-		Camera camera;
+		Camera camera( sf::FloatRect( 0.0f, 0.0f, 100.0f, 100.0f ) );
 
 		BOOST_CHECK( camera.get_transform() == Transform() );
 		BOOST_CHECK( camera.get_projection_matrix() == FloatMatrix() );
 		BOOST_CHECK( camera.get_combined_matrix() == FloatMatrix() );
+		BOOST_CHECK( camera.get_viewport() == sf::FloatRect( 0.0f, 0.0f, 100.0f, 100.0f ) );
+	}
+
+	// Basic properties.
+	{
+		Camera camera( sf::FloatRect( 0.0f, 0.0f, 100.0f, 100.0f ) );
+
+		camera.set_viewport( sf::FloatRect( 1.0f, 2.0f, 3.0f, 4.0f ) );
+
+		BOOST_CHECK( camera.get_viewport() == sf::FloatRect( 1.0f, 2.0f, 3.0f, 4.0f ) );
 	}
 
 	// Setup parallel projection camera.
 	{
-		Camera camera;
+		Camera camera( sf::FloatRect( 0.0f, 0.0f, 100.0f, 100.0f ) );
 		
 		camera.setup_parallel_projection(
 			1.0f, 2.0f, // L R
@@ -54,7 +64,7 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 		static const float NEAR = 1.0f;
 		static const float FAR = 100.0f;
 
-		Camera camera;
+		Camera camera( sf::FloatRect( 0.0f, 0.0f, 100.0f, 100.0f ) );
 		
 		camera.setup_perspective_projection(
 			FOV,
@@ -86,7 +96,7 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 			sf::Vector3f( 1000.0f, 2000.0f, 3000.0f )
 		);
 
-		Camera camera;
+		Camera camera( sf::FloatRect( 0.0f, 0.0f, 100.0f, 100.0f ) );
 		camera.set_transform( TRANSFORM );
 
 		BOOST_CHECK( camera.get_transform() == TRANSFORM );
@@ -94,7 +104,7 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 
 	// Translate camera.
 	{
-		Camera camera;
+		Camera camera( sf::FloatRect( 0.0f, 0.0f, 100.0f, 100.0f ) );
 
 		camera.translate( sf::Vector3f( 1.0f, 2.0f, 3.0f ) );
 		camera.translate( sf::Vector3f( 10.0f, 20.0f, 30.0f ) );
@@ -113,7 +123,7 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 
 	// Rotate camera.
 	{
-		Camera camera;
+		Camera camera( sf::FloatRect( 0.0f, 0.0f, 100.0f, 100.0f ) );
 
 		camera.rotate( sf::Vector3f( 1.0f, 0.0f, 0.0f ) );
 		camera.rotate( sf::Vector3f( 0.0f, 2.0f, 0.0f ) );
@@ -133,7 +143,7 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 
 	// Check a combined matrix.
 	{
-		Camera camera;
+		Camera camera( sf::FloatRect( 0.0f, 0.0f, 100.0f, 100.0f ) );
 
 		camera.setup_parallel_projection( 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f );
 		camera.translate( sf::Vector3f( 1.0f, 2.0f, 3.0f ) );

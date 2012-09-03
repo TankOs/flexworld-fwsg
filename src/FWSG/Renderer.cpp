@@ -127,7 +127,7 @@ bool Renderer::GroupComparator::operator()( const RenderStateGroup* first, const
 	return first->render_state < second->render_state;
 }
 
-void Renderer::render( const Camera& camera, const sf::FloatRect& viewport ) const {
+void Renderer::render( const Camera& camera ) const {
 	std::size_t group_idx = 0;
 	std::size_t step_idx = 0;
 	const RenderState* state = nullptr;
@@ -154,6 +154,7 @@ void Renderer::render( const Camera& camera, const sf::FloatRect& viewport ) con
 
 	glEnable( GL_TEXTURE_2D );
 
+	const sf::FloatRect& viewport = camera.get_viewport();
 	glViewport( viewport.left, viewport.top, viewport.width, viewport.height );
 
 	lock();

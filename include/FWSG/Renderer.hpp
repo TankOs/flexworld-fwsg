@@ -5,7 +5,6 @@
 #include <FWSG/StepProxy.hpp>
 #include <FWSG/BufferObject.hpp>
 
-#include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Mutex.hpp>
 #include <vector>
 
@@ -61,9 +60,8 @@ class Renderer {
 
 		/** Render.
 		 * @param camera Camera.
-		 * @param viewport Viewport.
 		 */
-		void render( const Camera& camera, const sf::FloatRect& viewport ) const;
+		void render( const Camera& camera ) const;
 
 		/** Lock.
 		 * A call to this method will block until a previous blocker releases the
