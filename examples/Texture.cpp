@@ -137,7 +137,7 @@ int main() {
 	sf::FloatRect viewport( 0.0f, 0.0f, 800.0f, 600.0f );
 	sg::Camera camera;
 
-	camera.set_projection_mode( sg::Camera::PARALLEL );
+	camera.setup_parallel_projection( -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f );
 
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );
@@ -148,7 +148,7 @@ int main() {
 
 	sf::Text info_text( L"W: Toggle global wireframe", dejavu_font, 14 );
 	info_text.setPosition( 5.0f, static_cast<float>( window.getSize().y ) - info_text.getGlobalBounds().height - 5.0f );
-	info_text.setColor( sf::Color::Blue );
+	info_text.setColor( sf::Color( 0, 100, 255 ) );
 
 	sf::Text filter_nearest = info_text;
 	filter_nearest.setString( "GL_NEAREST" );

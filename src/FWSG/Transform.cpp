@@ -77,9 +77,10 @@ const sf::Vector3f& Transform::get_origin() const {
 const FloatMatrix& Transform::get_matrix() const {
 	if( m_update_matrix ) {
 		m_matrix.reset();
-		m_matrix.translate( sf::Vector3f( -m_origin.x, -m_origin.y, -m_origin.z ) );
-		m_matrix.rotate( m_rotation );
 		m_matrix.translate( m_translation );
+		m_matrix.rotate( m_rotation );
+		m_matrix.scale( m_scale );
+		m_matrix.translate( sf::Vector3f( -m_origin.x, -m_origin.y, -m_origin.z ) );
 
 		m_update_matrix = false;
 	}

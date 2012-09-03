@@ -142,34 +142,7 @@ void Renderer::render( const Camera& camera, const sf::FloatRect& viewport ) con
 
 	// Setup projection.
 	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity();
-
-	if( camera.get_projection_mode() == Camera::PARALLEL ) {
-		glOrtho(
-			viewport.left,
-			viewport.left + viewport.width,
-			viewport.top,
-			viewport.top + viewport.height,
-			camera.get_near_clipping_plane(),
-			camera.get_far_clipping_plane()
-		);
-
-		glTranslatef(
-			-camera.get_transform().get_translation().x,
-			-camera.get_transform().get_translation().y,
-			-camera.get_transform().get_translation().z
-		);
-	}
-	else {
-		gluPerspective(
-			camera.get_field_of_view(),
-			viewport.width / viewport.height,
-			camera.get_near_clipping_plane(),
-			camera.get_far_clipping_plane()
-		);
-	}
-
-	glViewport( viewport.left, viewport.top, viewport.width, viewport.height );
+	glLoadMatrixf( camera.get_combined_matrix().values );
 
 	// Setup misc OpenGL settings.
 	glMatrixMode( GL_MODELVIEW );
@@ -180,6 +153,8 @@ void Renderer::render( const Camera& camera, const sf::FloatRect& viewport ) con
 	glDisable( GL_DEPTH_TEST );
 
 	glEnable( GL_TEXTURE_2D );
+
+	glViewport( viewport.left, viewport.top, viewport.width, viewport.height );
 
 	lock();
 

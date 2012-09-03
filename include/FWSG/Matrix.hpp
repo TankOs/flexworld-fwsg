@@ -82,6 +82,11 @@ struct Matrix {
 	 */
 	void rotate( const sf::Vector3<T>& rotation );
 
+	/** Scale matrix.
+	 * @param factor Scale factor.
+	 */
+	void scale( const sf::Vector3<T>& factor );
+
 	T values[16];
 };
 

@@ -42,14 +42,18 @@ BOOST_AUTO_TEST_CASE( TestTransform ) {
 
 		trans.set_rotation( sf::Vector3f( 10.0f, 20.0f, 30.0f ) );
 		matrix.reset();
-		matrix.rotate( sf::Vector3f( 10.0f, 20.0f, 30.0f ) );
 		matrix.translate( sf::Vector3f( 10.0f, 20.0f, 30.0f ) );
+		matrix.rotate( sf::Vector3f( 10.0f, 20.0f, 30.0f ) );
+
+		BOOST_CHECK( trans.get_matrix() == matrix );
 
 		trans.set_origin( sf::Vector3f( 1.0f, 2.0f, 3.0f ) );
+		trans.set_scale( sf::Vector3f( 10.0f, 100.0f, 1000.0f ) );
 		matrix.reset();
-		matrix.translate( sf::Vector3f( -1.0f, -2.0f, -3.0f ) );
-		matrix.rotate( sf::Vector3f( 10.0f, 20.0f, 30.0f ) );
 		matrix.translate( sf::Vector3f( 10.0f, 20.0f, 30.0f ) );
+		matrix.rotate( sf::Vector3f( 10.0f, 20.0f, 30.0f ) );
+		matrix.scale( sf::Vector3f( 10.0f, 100.0f, 1000.0f ) );
+		matrix.translate( sf::Vector3f( -1.0f, -2.0f, -3.0f ) );
 
 		BOOST_CHECK( trans.get_matrix() == matrix );
 	}

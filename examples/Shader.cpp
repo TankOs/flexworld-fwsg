@@ -78,7 +78,7 @@ int main() {
 	sf::FloatRect viewport( 0.0f, 0.0f, 800.0f, 600.0f );
 	sg::Camera camera;
 
-	camera.set_projection_mode( sg::Camera::PARALLEL );
+	camera.setup_parallel_projection( -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f );
 
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );

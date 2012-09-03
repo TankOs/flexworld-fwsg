@@ -63,7 +63,7 @@ int main() {
 	sf::FloatRect viewport( 0.0f, 0.0f, 800.0f, 600.0f );
 	sg::Camera camera;
 
-	camera.set_projection_mode( sg::Camera::PARALLEL );
+	camera.setup_parallel_projection( -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f );
 
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );
@@ -105,7 +105,7 @@ int main() {
 		root_node->set_local_transform(
 			sg::Transform(
 				root_node->get_local_transform().get_translation(),
-				root_node->get_local_transform().get_rotation() + sf::Vector3f( 0, 0, ROTATE_SPEED * secs ),
+				root_node->get_local_transform().get_rotation(),// + sf::Vector3f( 0, 0, ROTATE_SPEED * secs ),
 				root_node->get_local_transform().get_scale(),
 				root_node->get_local_transform().get_origin()
 			)

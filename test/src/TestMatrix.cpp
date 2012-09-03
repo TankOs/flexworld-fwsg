@@ -265,4 +265,25 @@ BOOST_AUTO_TEST_CASE( TestMatrix ) {
 
 		BOOST_CHECK( tolerance_check( matrix, pitch_rot_matrix ) == true );
 	}
+
+	// Scale.
+	{
+		Matrix<float> matrix(
+			 1.0f,  2.0f,  3.0f,  4.0f,
+			 5.0f,  6.0f,  7.0f,  8.0f,
+			 9.0f, 10.0f, 11.0f, 12.0f,
+			13.0f, 14.0f, 15.0f, 16.0f
+		);
+
+		matrix.scale( sf::Vector3f( 10.0f, 100.0f, 1000.0f ) );
+
+		BOOST_CHECK(
+			matrix == Matrix<float>(
+				10.0f, 200.0f, 3000.0f, 4.0f,
+				50.0f, 600.0f, 7000.0f, 8.0f,
+				90.0f, 1000.0f, 11000.0f, 12.0f,
+				130.0f, 1400.0f, 15000.0f, 16.0f
+			)
+		);
+	}
 }

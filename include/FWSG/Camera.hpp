@@ -1,6 +1,7 @@
 #pragma once
 
 #include <FWSG/Transform.hpp>
+#include <FWSG/Matrix.hpp>
 
 namespace sg {
 
@@ -8,77 +9,47 @@ namespace sg {
  */
 class Camera {
 	public:
-		/** Projection mode.
-		 */
-		enum ProjectionMode {
-			PERSPECTIVE = 0, ///< Perspective projection.
-			PARALLEL, ///< Parallel projection.
-			NUM_PROJECTION_MODES ///< Total number of projection modes.
-		};
-
 		/** Ctor.
 		 */
 		Camera();
+
+		/** Setup parallel projection.
+		 * @param left Left plane.
+		 * @param right Right plane.
+		 * @param bottom Bottom plane.
+		 * @param top Top plane.
+		 * @param near Near plane.
+		 * @param far Far plane.
+		 */
+		void setup_parallel_projection( float left, float right, float bottom, float top, float near, float far );
+
+		/** Setup perspective projection.
+		 * @param fov Field of view.
+		 * @param aspect Aspect ratio (width/height).
+		 * @param near Near clipping plane.
+		 * @param far Far clipping plane.
+		 */
+		void setup_perspective_projection( float fov, float aspect, float near, float far );
 
 		/** Get transform.
 		 * @return Transform.
 		 */
 		const Transform& get_transform() const;
 
-		/** Get field of view.
-		 * @return Field of view.
-		 */
-		float get_field_of_view() const;
-
-		/** Get near clipping plane.
-		 * @return Near clipping plane.
-		 */
-		float get_near_clipping_plane() const;
-
-		/** Get far clipping plane.
-		 * @return Far clipping plane.
-		 */
-		float get_far_clipping_plane() const;
-
-		/** Get projection mode.
-		 * @return Projection mode.
-		 */
-		ProjectionMode get_projection_mode() const;
-
-		/** Get aspect ratio.
-		 * @return Aspect ratio.
-		 */
-		float get_aspect_ratio() const;
-
 		/** Set transform.
 		 * @param transform Transform.
 		 */
 		void set_transform( const Transform& transform );
 
-		/** Set field of view.
-		 * @param field_of_view Field of view (in degrees).
+		/** Get projection matrix.
+		 * @return Projection matrix.
 		 */
-		void set_field_of_view( float field_of_view );
+		const FloatMatrix& get_projection_matrix() const;
 
-		/** Set near clipping plane.
-		 * @param near_clipping_plane Near clipping plane.
+		/** Get combined matrix.
+		 * @return Combined matrix (projection * transformation matrix).
 		 */
-		void set_near_clipping_plane( float near_clipping_plane );
-
-		/** Set far clipping plane.
-		 * @param far_clipping_plane Far clipping plane.
-		 */
-		void set_far_clipping_plane( float far_clipping_plane );
-
-		/** Set projection mode.
-		 * @param mode Projection mode.
-		 */
-		void set_projection_mode( ProjectionMode mode );
-
-		/** Set aspect ratio.
-		 * @param aspect_ratio Aspect ratio.
-		 */
-		void set_aspect_ratio( float aspect_ratio );
+		const FloatMatrix& get_combined_matrix() const;
 
 		/** Translate camera.
 		 * @param translation Translation.
@@ -92,11 +63,9 @@ class Camera {
 
 	private:
 		Transform m_transform;
-		float m_field_of_view;
-		float m_near_clipping_plane;
-		float m_far_clipping_plane;
-		float m_aspect_ratio;
-		ProjectionMode m_projection_mode;
+		FloatMatrix m_projection_matrix;
+		mutable FloatMatrix m_combined_matrix;
+		mutable bool m_update_combined_matrix;
 };
 
 }

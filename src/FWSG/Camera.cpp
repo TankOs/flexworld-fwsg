@@ -3,68 +3,69 @@
 namespace sg {
 
 Camera::Camera() :
-	m_field_of_view( 80.0f ),
-	m_near_clipping_plane( 0.1f ),
-	m_far_clipping_plane( 100.0f ),
-	m_aspect_ratio( 1.0f ),
-	m_projection_mode( PERSPECTIVE )
+	m_update_combined_matrix( false )
 {
+}
+
+void Camera::setup_parallel_projection( float left, float right, float bottom, float top, float near, float far ) {
+	m_projection_matrix = FloatMatrix(
+		2.0f / (right - left), 0.0f, 0.0f, -((right + left) / (right - left)),
+		0.0f, 2.0f / (top - bottom), 0.0f, -((top + bottom) / (top - bottom)),
+		0.0f, 0.0f, -2.0f / (far - near),  -((far + near)   / (far - near)),
+		0.0f, 0.0f, 0.0f, 1.0f
+	);
+
+	m_update_combined_matrix = true;
+}
+
+void Camera::setup_perspective_projection( float fov, float aspect, float near, float far ) {
+	float f = 1.0f / std::tan( (fov * PI / 180.0f) / 2.0f );
+
+	m_projection_matrix = FloatMatrix(
+		f / aspect, 0.0f, 0.0f, 0.0f,
+		0.0f, f, 0.0f, 0.0f,
+		0.0f, 0.0f, (far + near) / (near - far), (2.0f * far * near) / (near - far),
+		0.0f, 0.0f, -1.0f, 0.0f
+	);
+
+	m_update_combined_matrix = true;
 }
 
 const Transform& Camera::get_transform() const {
 	return m_transform;
 }
 
-float Camera::get_field_of_view() const {
-	return m_field_of_view;
-}
-
-float Camera::get_near_clipping_plane() const {
-	return m_near_clipping_plane;
-}
-
-float Camera::get_far_clipping_plane() const {
-	return m_far_clipping_plane;
-}
-
-Camera::ProjectionMode Camera::get_projection_mode() const {
-	return m_projection_mode;
-}
-
-float Camera::get_aspect_ratio() const {
-	return m_aspect_ratio;
-}
-
 void Camera::set_transform( const Transform& transform ) {
 	m_transform = transform;
+
+	m_update_combined_matrix = true;
 }
 
-void Camera::set_field_of_view( float field_of_view ) {
-	m_field_of_view = field_of_view;
-}
-
-void Camera::set_near_clipping_plane( float near_clipping_plane ) {
-	m_near_clipping_plane = near_clipping_plane;
-}
-
-void Camera::set_far_clipping_plane( float far_clipping_plane ) {
-	m_far_clipping_plane = far_clipping_plane;
-}
-
-void Camera::set_projection_mode( ProjectionMode mode ) {
-	m_projection_mode = mode;
-}
-
-void Camera::set_aspect_ratio( float aspect_ratio ) {
-	m_aspect_ratio = aspect_ratio;
+const FloatMatrix& Camera::get_projection_matrix() const {
+	return m_projection_matrix;
 }
 
 void Camera::translate( const sf::Vector3f& translation ) {
 	m_transform.set_translation( m_transform.get_translation() + translation );
+
+	m_update_combined_matrix = true;
 }
 
 void Camera::rotate( const sf::Vector3f& rotation ) {
 	m_transform.set_rotation( m_transform.get_rotation() + rotation );
+
+	m_update_combined_matrix = true;
+}
+
+const FloatMatrix& Camera::get_combined_matrix() const {
+	if( m_update_combined_matrix ) {
+		m_combined_matrix = m_projection_matrix;
+		m_combined_matrix.multiply( m_transform.get_matrix() );
+
+		m_update_combined_matrix = false;
+	}
+
+	return m_combined_matrix;
 }
 
 }

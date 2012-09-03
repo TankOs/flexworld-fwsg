@@ -121,6 +121,18 @@ void Matrix<T>::rotate( const sf::Vector3<T>& rotation ) {
 }
 
 template <class T>
+void Matrix<T>::scale( const sf::Vector3<T>& factor ) {
+	multiply(
+		Matrix<T>(
+			factor.x, 0, 0, 0,
+			0, factor.y, 0, 0,
+			0, 0, factor.z, 0,
+			0, 0, 0, 1
+		)
+	);
+}
+
+template <class T>
 bool Matrix<T>::operator==( const Matrix<T>& other ) const {
 	return
 		(values[ 0] == other.values[ 0]) &&

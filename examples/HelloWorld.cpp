@@ -18,9 +18,9 @@ int main() {
 	sg::TriangleGeometry geometry;
 
 	geometry.add_triangle(
-		sg::Vertex( sf::Vector3f( 100, 100, 0.0f ) ),
-		sg::Vertex( sf::Vector3f( 400, 100, 0.0f ) ),
-		sg::Vertex( sf::Vector3f( 100, 400, 0.0f ) )
+		sg::Vertex( sf::Vector3f( 0.0f, 0.0f, 0.0f ) ),
+		sg::Vertex( sf::Vector3f( 1.0f, 0.0f, 0.0f ) ),
+		sg::Vertex( sf::Vector3f( 0.0f, 1.0f, 0.0f ) )
 	);
 
 	// Create the buffer object and load the geometry into it.
@@ -44,12 +44,10 @@ int main() {
 	root_node->attach( wireframe_static_mesh );
 
 	// Setup camera and viewport.
-	sf::FloatRect viewport( 0.0f, 0.0f, 300.0f, 600.0f );
+	sf::FloatRect viewport( 0.0f, 0.0f, 800.0f, 600.0f );
 	sg::Camera camera;
 
-	camera.set_projection_mode( sg::Camera::PARALLEL );
-	camera.set_near_clipping_plane( -1.0f );
-	camera.set_far_clipping_plane( 1.0f );
+	camera.setup_parallel_projection( -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f );
 
 	// Setup SFML window.
 	window.setVerticalSyncEnabled( true );
@@ -58,7 +56,7 @@ int main() {
 	sf::Font dejavu_font;
 	dejavu_font.loadFromFile( "data/DejaVuSans.ttf" );
 
-	sf::Text info_text( L"Press W to toggle wireframe mode for all meshes.", dejavu_font, 14 );
+	sf::Text info_text( L"Press W to toggle wireframe mode.", dejavu_font, 16 );
 	info_text.setColor( sf::Color( 0xa2, 0xb4, 0xc6 ) );
 
 	while( window.isOpen() ) {
