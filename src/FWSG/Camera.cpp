@@ -69,7 +69,29 @@ void Camera::rotate( const sf::Vector3f& rotation ) {
 const FloatMatrix& Camera::get_combined_matrix() const {
 	if( m_update_combined_matrix ) {
 		m_combined_matrix = m_projection_matrix;
-		m_combined_matrix.multiply( m_transform.get_matrix() );
+
+		// Calculate negation of current transform matrix, because the scene is
+		// about to be shifted in the opposite direction.
+		Transform negated_transform(
+			sf::Vector3f(
+				-m_transform.get_translation().x,
+				-m_transform.get_translation().y,
+				-m_transform.get_translation().z
+			),
+			sf::Vector3f(
+				-m_transform.get_rotation().x,
+				-m_transform.get_rotation().y,
+				-m_transform.get_rotation().z
+			),
+			m_transform.get_scale(),
+			sf::Vector3f(
+				-m_transform.get_origin().x,
+				-m_transform.get_origin().y,
+				-m_transform.get_origin().z
+			)
+		);
+
+		m_combined_matrix.multiply( negated_transform.get_matrix() );
 
 		m_update_combined_matrix = false;
 	}
