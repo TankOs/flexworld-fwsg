@@ -1,12 +1,29 @@
 cmake_minimum_required( VERSION 2.8 )
 project( FWSG )
 
-find_package( SFML 2.0 REQUIRED GRAPHICS WINDOW SYSTEM )
+if( ${CMAKE_SYSTEM_NAME} MATCHES "Windows" )
+	set( WINDOWS 1 )
+endif()
 
 set( FWSG_BUILD_SHARED_LIBS FALSE CACHE BOOL "Build shared libraries." )
 set( FWSG_BUILD_TEST FALSE CACHE BOOL "Build test suite." )
 set( FWSG_BUILD_EXAMPLES FALSE CACHE BOOL "Build examples." )
 
+if( WINDOWS )
+	set( SFML_STATIC_LIBRARIES TRUE CACHE BOOL "Was SFML built as a static library?" )
+else()
+	set( SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Was SFML built as a static library?" )
+endif()
+
+find_package( SFML 2.0 REQUIRED GRAPHICS WINDOW SYSTEM )
+
+if( WINDOWS )	
+	if( MINGW )
+		find_package( GLEW REQUIRED )
+		add_definitions( -DGLEW_STATIC )
+	endif()
+endif()
+	
 if( FWSG_BUILD_SHARED_LIBS )
 	set( LIB_TYPE SHARED )
 else()

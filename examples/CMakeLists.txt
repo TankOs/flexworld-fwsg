@@ -14,6 +14,11 @@ macro( build_example target sources )
 	target_link_libraries( ${target} ${SFML_WINDOW_LIBRARY} )
 	target_link_libraries( ${target} ${SFML_SYSTEM_LIBRARY} )
 
+	if( ${CMAKE_SYSTEM_NAME} MATCHES "Windows" )
+		find_package( OpenGL REQUIRED )
+		target_link_libraries( ${target} ${OPENGL_LIBRARIES} )
+	endif()
+	
 	if( NOT FWSG_SKIP_INSTALL )
 		install(
 			TARGETS ${target}

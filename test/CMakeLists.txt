@@ -3,9 +3,16 @@ project( FWSG-test )
 
 find_package( Boost 1.46 REQUIRED thread unit_test_framework )
 
+if( ${CMAKE_SYSTEM_NAME} MATCHES "Windows" )
+	set( Boost_USE_STATIC_LIBS TRUE CACHE BOOL "Use Boost's static libraries." )
+else()
+	set( Boost_USE_STATIC_LIBS FALSE CACHE BOOL "Use Boost's static libraries." )
+endif()
+
 if( NOT Boost_USE_STATIC_LIBS )
 	add_definitions( -DBOOST_TEST_DYN_LINK )
 endif()
+
 
 set( SRC_DIR "src" )
 set( INC_DIR "src" )

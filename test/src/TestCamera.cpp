@@ -75,14 +75,17 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 
 		float f = 1.0f / std::tan( (FOV * PI / 180.0f) / 2.0f );
 
-		BOOST_CHECK(
-			camera.get_projection_matrix() == FloatMatrix(
-				f / ASPECT, 0.0f, 0.0f, 0.0f,
-				0.0f, f, 0.0f, 0.0f,
-				0.0f, 0.0f, (FAR + NEAR) / (NEAR - FAR), (2.0f * FAR * NEAR) / (NEAR - FAR),
-				0.0f, 0.0f, -1.0f, 0.0f
-			)
+		static const FloatMatrix PROJECTION_MATRIX(
+			f / ASPECT, 0.0f, 0.0f, 0.0f,
+			0.0f, f, 0.0f, 0.0f,
+			0.0f, 0.0f, (FAR + NEAR) / (NEAR - FAR), (2.0f * FAR * NEAR) / (NEAR - FAR),
+			0.0f, 0.0f, -1.0f, 0.0f
 		);
+		
+		for(unsigned int i = 0; i < 15; ++i)
+		{
+			BOOST_CHECK( std::abs( camera.get_projection_matrix()[i] - PROJECTION_MATRIX[i] ) <= 0.000001f );
+		}
 
 		BOOST_CHECK( camera.get_combined_matrix() == camera.get_projection_matrix() );
 	}
