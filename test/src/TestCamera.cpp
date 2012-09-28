@@ -118,7 +118,26 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 			)
 		);
 
-		BOOST_CHECK( camera.get_combined_matrix() == camera.get_transform().get_matrix() );
+		BOOST_CHECK(
+			camera.get_combined_matrix() == Transform(
+				sf::Vector3f(
+					-camera.get_transform().get_translation().x,
+					-camera.get_transform().get_translation().y,
+					-camera.get_transform().get_translation().z
+				),
+				sf::Vector3f(
+					-camera.get_transform().get_rotation().x,
+					-camera.get_transform().get_rotation().y,
+					-camera.get_transform().get_rotation().z
+				),
+				camera.get_transform().get_scale(),
+				sf::Vector3f(
+					-camera.get_transform().get_origin().x,
+					-camera.get_transform().get_origin().y,
+					-camera.get_transform().get_origin().z
+				)
+			).get_matrix()
+		);
 	}
 
 	// Rotate camera.
@@ -138,7 +157,26 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 			)
 		);
 
-		BOOST_CHECK( camera.get_combined_matrix() == camera.get_transform().get_matrix() );
+		BOOST_CHECK(
+			camera.get_combined_matrix() == Transform(
+				sf::Vector3f(
+					-camera.get_transform().get_translation().x,
+					-camera.get_transform().get_translation().y,
+					-camera.get_transform().get_translation().z
+				),
+				sf::Vector3f(
+					-camera.get_transform().get_rotation().x,
+					-camera.get_transform().get_rotation().y,
+					-camera.get_transform().get_rotation().z
+				),
+				camera.get_transform().get_scale(),
+				sf::Vector3f(
+					-camera.get_transform().get_origin().x,
+					-camera.get_transform().get_origin().y,
+					-camera.get_transform().get_origin().z
+				)
+			).get_matrix()
+		);
 	}
 
 	// Check a combined matrix.
@@ -150,7 +188,26 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 		camera.rotate( sf::Vector3f( 4.0f, 5.0f, 6.0f ) );
 
 		FloatMatrix expected_matrix = camera.get_projection_matrix();
-		expected_matrix.multiply( camera.get_transform().get_matrix() );
+		expected_matrix.multiply(
+			Transform(
+				sf::Vector3f(
+					-camera.get_transform().get_translation().x,
+					-camera.get_transform().get_translation().y,
+					-camera.get_transform().get_translation().z
+				),
+				sf::Vector3f(
+					-camera.get_transform().get_rotation().x,
+					-camera.get_transform().get_rotation().y,
+					-camera.get_transform().get_rotation().z
+				),
+				camera.get_transform().get_scale(),
+				sf::Vector3f(
+					-camera.get_transform().get_origin().x,
+					-camera.get_transform().get_origin().y,
+					-camera.get_transform().get_origin().z
+				)
+			).get_matrix()
+		);
 
 		BOOST_CHECK( camera.get_combined_matrix() == expected_matrix );
 	}
