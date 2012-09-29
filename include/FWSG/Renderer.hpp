@@ -8,6 +8,8 @@
 #include <SFML/System/Mutex.hpp>
 #include <vector>
 
+/** FlexWorld Scene Graph.
+ */
 namespace sg {
 
 class Camera;

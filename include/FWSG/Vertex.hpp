@@ -13,6 +13,7 @@ struct Vertex {
 	 * @param vector_ Vector.
 	 * @param normal_ Normal.
 	 * @param uv_ Texture coordinate.
+	 * @param color_ Color.
 	 */
 	Vertex(
 		const sf::Vector3f& vector_ = sf::Vector3f( 0, 0, 0 ),

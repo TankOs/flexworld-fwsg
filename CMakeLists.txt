@@ -8,6 +8,7 @@ endif()
 set( FWSG_BUILD_SHARED_LIBS FALSE CACHE BOOL "Build shared libraries." )
 set( FWSG_BUILD_TEST FALSE CACHE BOOL "Build test suite." )
 set( FWSG_BUILD_EXAMPLES FALSE CACHE BOOL "Build examples." )
+set( FWSG_BUILD_DOCS FALSE CACHE BOOL "Build Doxygen API documentation." )
 
 if( WINDOWS )
 	set( SFML_STATIC_LIBRARIES TRUE CACHE BOOL "Was SFML built as a static library?" )
@@ -131,4 +132,8 @@ endif()
 
 if( FWSG_BUILD_TEST )
 	add_subdirectory( test )
+endif()
+
+if( FWSG_BUILD_DOCS )
+	add_subdirectory( "doc/doxygen" )
 endif()

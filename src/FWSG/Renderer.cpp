@@ -155,7 +155,12 @@ void Renderer::render( const Camera& camera ) const {
 	glEnable( GL_TEXTURE_2D );
 
 	const sf::FloatRect& viewport = camera.get_viewport();
-	glViewport( viewport.left, viewport.top, viewport.width, viewport.height );
+	glViewport(
+		static_cast<GLint>( viewport.left ),
+		static_cast<GLint>( viewport.top ),
+		static_cast<GLsizei>( viewport.width ),
+		static_cast<GLsizei>( viewport.height )
+	);
 
 	lock();
 

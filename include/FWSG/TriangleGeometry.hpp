@@ -21,7 +21,7 @@ class TriangleGeometry : public Geometry {
 		 * @param a Vertex 0.
 		 * @param b Vertex 1.
 		 * @param c Vertex 2.
-		 * @param bool reuse Reuse same previously added vertices.
+		 * @param reuse Reuse same previously added vertices.
 		 */
 		void add_triangle( const Vertex& a, const Vertex& b, const Vertex& c, bool reuse = true );
 

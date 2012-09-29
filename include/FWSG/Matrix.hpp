@@ -87,7 +87,7 @@ struct Matrix {
 	 */
 	void scale( const sf::Vector3<T>& factor );
 
-	T values[16];
+	T values[16]; ///< Matrix values.
 };
 
 typedef Matrix<float> FloatMatrix; ///< Float matrix.

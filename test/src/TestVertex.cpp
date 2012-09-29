@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE( TestVertex ) {
 		BOOST_CHECK( !(first == second) );
 		second = first;
 
-		second.color.r += 1;
+		second.color.r = static_cast<sf::Uint8>( second.color.r + 1 );
 		BOOST_CHECK( !(first == second) );
 		second = first;
 	}
