@@ -1,7 +1,5 @@
 #pragma once
 
-#include <FWSG/NonCopyable.hpp>
-
 #include <SFML/OpenGL.hpp>
 #include <map>
 #include <vector>
@@ -21,7 +19,7 @@ namespace sg {
  * At any time sources can be added. Just make sure to link the program before
  * it's being used. Removing sources is not possible.
  */
-class Program : public NonCopyable {
+class Program {
 	public:
 		typedef std::shared_ptr<Program> Ptr; ///< Shared pointer.
 		typedef std::shared_ptr<Program> PtrConst; ///< Shared pointer to const.
@@ -41,6 +39,16 @@ class Program : public NonCopyable {
 		/** Dtor.
 		 */
 		~Program();
+
+		/** Copy ctor.
+		 * @param other Other.
+		 */
+		Program( const Program& other ) = delete;
+
+		/** Assignment.
+		 * @param other Other.
+		 */
+		Program& operator=( const Program& other ) = delete;
 
 		/** Program linked?
 		 * @return true if linked.

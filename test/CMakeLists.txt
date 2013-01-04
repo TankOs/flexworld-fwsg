@@ -27,7 +27,6 @@ set(
 	${SRC_DIR}/TestCamera.cpp
 	${SRC_DIR}/TestDepthTestState.cpp
 	${SRC_DIR}/TestGeometry.cpp
-	${SRC_DIR}/TestMatrix.cpp
 	${SRC_DIR}/TestNode.cpp
 	${SRC_DIR}/TestProgram.cpp
 	${SRC_DIR}/TestProgramCommand.cpp

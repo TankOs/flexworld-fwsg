@@ -9,7 +9,7 @@
 BOOST_AUTO_TEST_CASE( TestStepProxy ) {
 	sg::Renderer renderer;
 	sg::BufferObject::Ptr bo( new sg::BufferObject );
-	sg::FloatMatrix matrix;
+	util::FloatMatrix matrix;
 
 	// Initial state.
 	{

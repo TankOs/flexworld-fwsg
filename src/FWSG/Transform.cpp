@@ -74,7 +74,7 @@ const sf::Vector3f& Transform::get_origin() const {
 	return m_origin;
 }
 
-const FloatMatrix& Transform::get_matrix() const {
+const util::FloatMatrix& Transform::get_matrix() const {
 	if( m_update_matrix ) {
 		m_matrix.reset();
 		m_matrix.translate( m_translation );

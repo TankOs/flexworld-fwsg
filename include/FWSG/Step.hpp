@@ -2,9 +2,8 @@
 
 #include <FWSG/BufferObject.hpp>
 #include <FWSG/RenderState.hpp>
-#include <FWSG/NonCopyable.hpp>
-#include <FWSG/Matrix.hpp>
 
+#include <FWU/Matrix.hpp>
 #include <memory>
 
 namespace sg {
@@ -16,7 +15,7 @@ class Transform;
  * usually renders a single object using a buffer object.
  * The step also includes the transformations that shall be applied.
  */
-class Step : public NonCopyable {
+class Step {
 	public:
 		typedef std::shared_ptr<Step> Ptr; ///< Shared pointer.
 		typedef std::shared_ptr<const Step> PtrConst; ///< Shared pointer to const.
@@ -28,9 +27,19 @@ class Step : public NonCopyable {
 		 */
 		Step(
 			const RenderState& render_state,
-			const FloatMatrix& transform_matrix,
+			const util::FloatMatrix& transform_matrix,
 			BufferObject::PtrConst buffer_object
 		);
+
+		/** Copy ctor.
+		 * @param other Other.
+		 */
+		Step( const Step& other ) = delete;
+
+		/** Assignment.
+		 * @param other Other.
+		 */
+		Step& operator=( const Step& other ) = delete;
 
 		/** Get buffer object.
 		 * @return Buffer object.
@@ -40,7 +49,7 @@ class Step : public NonCopyable {
 		/** Get transform matrix.
 		 * @return Transform matrix.
 		 */
-		const FloatMatrix& get_transform_matrix() const;
+		const util::FloatMatrix& get_transform_matrix() const;
 
 		/** Get render state.
 		 * @return Render state.
@@ -50,7 +59,7 @@ class Step : public NonCopyable {
 	private:
 		const RenderState m_render_state;
 		BufferObject::PtrConst m_buffer_object;
-		const FloatMatrix& m_transform_matrix;
+		const util::FloatMatrix& m_transform_matrix;
 };
 
 }

@@ -1,6 +1,6 @@
 #include <FWSG/Transform.hpp>
-#include <FWSG/Matrix.hpp>
 
+#include <FWU/Matrix.hpp>
 #include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_CASE( TestTransform ) {
@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_CASE( TestTransform ) {
 		BOOST_CHECK( trans.get_rotation() == sf::Vector3f( 0, 0, 0 ) );
 		BOOST_CHECK( trans.get_scale() == sf::Vector3f( 1, 1, 1 ) );
 		BOOST_CHECK( trans.get_origin() == sf::Vector3f( 0, 0, 0 ) );
-		BOOST_CHECK( trans.get_matrix() == sg::FloatMatrix() );
+		BOOST_CHECK( trans.get_matrix() == util::FloatMatrix() );
 	}
 
 	// Basic properties.
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE( TestTransform ) {
 	// Matrix updates.
 	{
 		sg::Transform trans;
-		sg::FloatMatrix matrix;
+		util::FloatMatrix matrix;
 
 		trans.set_translation( sf::Vector3f( 10.0f, 20.0f, 30.0f ) );
 		matrix.translate( sf::Vector3f( 10.0f, 20.0f, 30.0f ) );

@@ -69,7 +69,7 @@ const sg::Transform& Node::get_local_transform() const {
 	return m_local_transform;
 }
 
-const FloatMatrix& Node::get_global_matrix() const {
+const util::FloatMatrix& Node::get_global_matrix() const {
 	return m_global_matrix;
 }
 

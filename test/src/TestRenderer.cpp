@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE( TestRenderer ) {
 		sg::Renderer renderer;
 		sg::RenderState r_state;
 		sg::BufferObject::Ptr buffer_object( new sg::BufferObject );
-		sg::FloatMatrix matrix;
+		util::FloatMatrix matrix;
 
 		// Do in own scope to check auto-removal of the step.
 		{
@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE( TestRenderer ) {
 		sg::Renderer renderer;
 		sg::RenderState r_state;
 		sg::BufferObject::Ptr buffer_object( new sg::BufferObject );
-		sg::FloatMatrix matrix;
+		util::FloatMatrix matrix;
 
 		// Create two steps within same render state.
 		sg::StepProxy::Ptr step0 = renderer.create_step( r_state, matrix, buffer_object );

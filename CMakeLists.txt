@@ -16,6 +16,9 @@ else()
 	set( SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Was SFML built as a static library?" )
 endif()
 
+set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/extlibs/FWU/cmake" )
+
+find_package( FWU REQUIRED )
 find_package( SFML 2.0 REQUIRED GRAPHICS WINDOW SYSTEM )
 
 if( WINDOWS )	
@@ -33,7 +36,7 @@ endif()
 
 if( CMAKE_COMPILER_IS_GNUCXX )
 	if( NOT CMAKE_CXX_FLAGS )
-		set( CMAKE_CXX_FLAGS "-std=c++0x -Wall -Wextra -Wshadow -Wconversion -pedantic" CACHE STRING "C++ compiler flags." FORCE )
+		set( CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -Wshadow -Wconversion -pedantic" CACHE STRING "C++ compiler flags." FORCE )
 	endif()
 endif()
 
@@ -53,11 +56,8 @@ set(
 	${INC_DIR}/FWSG/DepthTestState.hpp
 	${INC_DIR}/FWSG/Drawable.hpp
 	${INC_DIR}/FWSG/Geometry.hpp
-	${INC_DIR}/FWSG/Matrix.hpp
-	${INC_DIR}/FWSG/Matrix.inl
 	${INC_DIR}/FWSG/Node.hpp
 	${INC_DIR}/FWSG/Node.inl
-	${INC_DIR}/FWSG/NonCopyable.hpp
 	${INC_DIR}/FWSG/Program.hpp
 	${INC_DIR}/FWSG/ProgramCommand.hpp
 	${INC_DIR}/FWSG/ProgramCommandState.hpp
@@ -85,7 +85,6 @@ set(
 	${SRC_DIR}/FWSG/Drawable.cpp
 	${SRC_DIR}/FWSG/Geometry.cpp
 	${SRC_DIR}/FWSG/Node.cpp
-	${SRC_DIR}/FWSG/NonCopyable.cpp
 	${SRC_DIR}/FWSG/Program.cpp
 	${SRC_DIR}/FWSG/ProgramCommand.cpp
 	${SRC_DIR}/FWSG/ProgramCommandState.cpp
@@ -123,6 +122,11 @@ if( NOT FWSG_SKIP_INSTALL )
 		RUNTIME DESTINATION bin COMPONENT bin
 		LIBRARY DESTINATION lib COMPONENT bin
 		ARCHIVE DESTINATION lib COMPONENT dev
+	)
+
+	install(
+		DIRECTORY include/FWSG
+		DESTINATION include
 	)
 endif()
 

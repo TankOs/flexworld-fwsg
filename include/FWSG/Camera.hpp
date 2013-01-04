@@ -1,8 +1,8 @@
 #pragma once
 
 #include <FWSG/Transform.hpp>
-#include <FWSG/Matrix.hpp>
 
+#include <FWU/Matrix.hpp>
 #include <SFML/Graphics/Rect.hpp>
 
 namespace sg {
@@ -57,12 +57,12 @@ class Camera {
 		/** Get projection matrix.
 		 * @return Projection matrix.
 		 */
-		const FloatMatrix& get_projection_matrix() const;
+		const util::FloatMatrix& get_projection_matrix() const;
 
 		/** Get combined matrix.
 		 * @return Combined matrix (projection * transformation matrix).
 		 */
-		const FloatMatrix& get_combined_matrix() const;
+		const util::FloatMatrix& get_combined_matrix() const;
 
 		/** Translate camera.
 		 * @param translation Translation.
@@ -76,8 +76,8 @@ class Camera {
 
 	private:
 		Transform m_transform;
-		FloatMatrix m_projection_matrix;
-		mutable FloatMatrix m_combined_matrix;
+		util::FloatMatrix m_projection_matrix;
+		mutable util::FloatMatrix m_combined_matrix;
 		sf::FloatRect m_viewport;
 		mutable bool m_update_combined_matrix;
 };

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <FWSG/Vertex.hpp>
-#include <FWSG/NonCopyable.hpp>
 
 #include <SFML/OpenGL.hpp>
 #include <vector>
@@ -22,7 +21,7 @@ class Geometry;
  * All other methods except render() can be safely called from an
  * OpenGL-inactive thread.
  */
-class BufferObject : public NonCopyable {
+class BufferObject {
 	public:
 		typedef std::shared_ptr<BufferObject> Ptr; ///< Shared pointer.
 		typedef std::shared_ptr<const BufferObject> PtrConst; ///< Shared pointer to const.
@@ -47,6 +46,16 @@ class BufferObject : public NonCopyable {
 		/** Dtor.
 		 */
 		~BufferObject();
+
+		/** Copy ctor.
+		 * @param other Other.
+		 */
+		BufferObject( const BufferObject& other ) = delete;
+
+		/** Assignment.
+		 * @param other Other.
+		 */
+		BufferObject& operator=( const BufferObject& other ) = delete;
 
 		/** Render.
 		 * Make sure to upload() before.

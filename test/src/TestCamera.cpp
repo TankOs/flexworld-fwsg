@@ -10,8 +10,8 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 		Camera camera( sf::FloatRect( 0.0f, 0.0f, 100.0f, 100.0f ) );
 
 		BOOST_CHECK( camera.get_transform() == Transform() );
-		BOOST_CHECK( camera.get_projection_matrix() == FloatMatrix() );
-		BOOST_CHECK( camera.get_combined_matrix() == FloatMatrix() );
+		BOOST_CHECK( camera.get_projection_matrix() == util::FloatMatrix() );
+		BOOST_CHECK( camera.get_combined_matrix() == util::FloatMatrix() );
 		BOOST_CHECK( camera.get_viewport() == sf::FloatRect( 0.0f, 0.0f, 100.0f, 100.0f ) );
 	}
 
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 
 		float f = 1.0f / std::tan( (FOV * PI / 180.0f) / 2.0f );
 
-		static const FloatMatrix PROJECTION_MATRIX(
+		static const util::FloatMatrix PROJECTION_MATRIX(
 			f / ASPECT, 0.0f, 0.0f, 0.0f,
 			0.0f, f, 0.0f, 0.0f,
 			0.0f, 0.0f, (FAR + NEAR) / (NEAR - FAR), (2.0f * FAR * NEAR) / (NEAR - FAR),
@@ -190,7 +190,7 @@ BOOST_AUTO_TEST_CASE( TestCamera ) {
 		camera.translate( sf::Vector3f( 1.0f, 2.0f, 3.0f ) );
 		camera.rotate( sf::Vector3f( 4.0f, 5.0f, 6.0f ) );
 
-		FloatMatrix expected_matrix = camera.get_projection_matrix();
+		util::FloatMatrix expected_matrix = camera.get_projection_matrix();
 		expected_matrix.multiply(
 			Transform(
 				sf::Vector3f(

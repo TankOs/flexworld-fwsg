@@ -5,6 +5,7 @@
 #include <FWSG/StepProxy.hpp>
 #include <FWSG/BufferObject.hpp>
 
+#include <FWU/Matrix.hpp>
 #include <SFML/System/Mutex.hpp>
 #include <vector>
 
@@ -51,7 +52,7 @@ class Renderer {
 		 */
 		StepProxy::Ptr create_step(
 			const RenderState& render_state,
-			const FloatMatrix& transform_matrix,
+			const util::FloatMatrix& transform_matrix,
 			BufferObject::PtrConst buffer_object
 		);
 

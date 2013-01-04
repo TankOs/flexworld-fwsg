@@ -48,7 +48,7 @@ class Node : public std::enable_shared_from_this<Node> {
 		/** Get global matrix.
 		 * @return Global matrix.
 		 */
-		const FloatMatrix& get_global_matrix() const;
+		const util::FloatMatrix& get_global_matrix() const;
 
 		/** Check if update is needed.
 		 * @return true if update needed.
@@ -160,7 +160,7 @@ class Node : public std::enable_shared_from_this<Node> {
 		NodeVector m_children;
 
 		Transform m_local_transform;
-		FloatMatrix m_global_matrix;
+		util::FloatMatrix m_global_matrix;
 		sf::Vector3f m_scale;
 
 		StateVector m_states;

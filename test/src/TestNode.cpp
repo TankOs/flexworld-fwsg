@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 		BOOST_CHECK( node->get_num_children() == 0 );
 		BOOST_CHECK( node->get_parent() == false );
 		BOOST_CHECK( node->get_local_transform() == sg::Transform() );
-		BOOST_CHECK( node->get_global_matrix() == sg::FloatMatrix() );
+		BOOST_CHECK( node->get_global_matrix() == util::FloatMatrix() );
 		BOOST_CHECK( node->is_update_needed() == true );
 		BOOST_CHECK( node->get_num_states() == 0 );
 		BOOST_CHECK( node->get_render_state() == sg::RenderState() );
@@ -301,12 +301,12 @@ BOOST_AUTO_TEST_CASE( TestNode ) {
 			sf::Vector3f( 33, 330, 3300 )
 		);
 
-		sg::FloatMatrix GLOBAL_ROOT_MATRIX = ROOT_TRANSFORM.get_matrix();
+		util::FloatMatrix GLOBAL_ROOT_MATRIX = ROOT_TRANSFORM.get_matrix();
 
-		sg::FloatMatrix GLOBAL_CHILD_MATRIX = GLOBAL_ROOT_MATRIX;
+		util::FloatMatrix GLOBAL_CHILD_MATRIX = GLOBAL_ROOT_MATRIX;
 		GLOBAL_CHILD_MATRIX.multiply( CHILD_TRANSFORM.get_matrix() );
 
-		sg::FloatMatrix GLOBAL_LEAF_MATRIX = GLOBAL_CHILD_MATRIX;
+		util::FloatMatrix GLOBAL_LEAF_MATRIX = GLOBAL_CHILD_MATRIX;
 		GLOBAL_LEAF_MATRIX.multiply( LEAF_TRANSFORM.get_matrix() );
 
 		// Recalculate when calling attach().

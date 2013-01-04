@@ -53,7 +53,7 @@ std::size_t Renderer::get_num_steps() const {
 
 StepProxy::Ptr Renderer::create_step(
 	const RenderState& render_state,
-	const FloatMatrix& transform_matrix,
+	const util::FloatMatrix& transform_matrix,
 	BufferObject::PtrConst buffer_object
 ) {
 	lock();
