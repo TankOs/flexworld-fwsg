@@ -33,7 +33,7 @@ find_path(
 
 find_library(
 	FWSG_LIBRARY_RELEASE
-	FWSG${FWSG_SUFFIX}
+	fwsg${FWSG_SUFFIX}
 	PATH_SUFFIXES
 		lib
 		lib64
