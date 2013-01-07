@@ -1,32 +1,21 @@
 cmake_minimum_required( VERSION 2.8 )
 project( FWSG )
 
-if( ${CMAKE_SYSTEM_NAME} MATCHES "Windows" )
-	set( WINDOWS 1 )
-endif()
-
-set( FWSG_BUILD_SHARED_LIBS FALSE CACHE BOOL "Build shared libraries." )
-set( FWSG_BUILD_TEST FALSE CACHE BOOL "Build test suite." )
+set( FWSG_BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared libraries." )
+set( FWSG_BUILD_TEST TRUE CACHE BOOL "Build test suite." )
 set( FWSG_BUILD_EXAMPLES FALSE CACHE BOOL "Build examples." )
 set( FWSG_BUILD_DOCS FALSE CACHE BOOL "Build Doxygen API documentation." )
+set( SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Was SFML built as a static library?" )
 
-if( WINDOWS )
-	set( SFML_STATIC_LIBRARIES TRUE CACHE BOOL "Was SFML built as a static library?" )
-else()
-	set( SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Was SFML built as a static library?" )
+if( NOT CMAKE_BUILD_TYPE )
+	set( CMAKE_BUILD_TYPE "MinSizeRel" CACHE STRING "Build type." FORCE )
 endif()
-
-set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/extlibs/FWU/cmake" )
 
 find_package( FWU REQUIRED )
 find_package( SFML 2.0 REQUIRED GRAPHICS WINDOW SYSTEM )
 
-if( WINDOWS )	
-	if( MINGW )
-		find_package( GLEW REQUIRED )
-		add_definitions( -DGLEW_STATIC )
-	endif()
-endif()
+find_package( GLEW REQUIRED )
+find_package( OPENGL REQUIRED )
 	
 if( FWSG_BUILD_SHARED_LIBS )
 	set( LIB_TYPE SHARED )
@@ -38,10 +27,6 @@ if( CMAKE_COMPILER_IS_GNUCXX )
 	if( NOT CMAKE_CXX_FLAGS )
 		set( CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -Wshadow -Wconversion -pedantic" CACHE STRING "C++ compiler flags." FORCE )
 	endif()
-endif()
-
-if( NOT CMAKE_BUILD_TYPE )
-	set( CMAKE_BUILD_TYPE "MinSizeRel" CACHE STRING "Build type." FORCE )
 endif()
 
 set( SRC_DIR "src" )
@@ -107,11 +92,14 @@ set(
 )
 
 include_directories( ${INC_DIR} )
-include_directories( extlibs/GLEW/include/ )
+include_directories( ${GLEW_INCLUDE_DIR} )
 include_directories( ${SFML_INCLUDE_DIR} )
+include_directories( ${FWU_INCLUDE_DIR} )
 
 add_library( fwsg ${LIB_TYPE} ${SOURCES} )
 
+target_link_libraries( fwsg ${GLEW_LIBRARY} )
+target_link_libraries( fwsg ${OPENGL_LIBRARY} )
 target_link_libraries( fwsg ${SFML_GRAPHICS_LIBRARY} )
 target_link_libraries( fwsg ${SFML_WINDOW_LIBRARY} )
 target_link_libraries( fwsg ${SFML_SYSTEM_LIBRARY} )
