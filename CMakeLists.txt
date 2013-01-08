@@ -11,11 +11,13 @@ if( NOT CMAKE_BUILD_TYPE )
 	set( CMAKE_BUILD_TYPE "MinSizeRel" CACHE STRING "Build type." FORCE )
 endif()
 
+set( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake" )
+
 find_package( FWU REQUIRED )
 find_package( SFML 2.0 REQUIRED GRAPHICS WINDOW SYSTEM )
 
 find_package( GLEW REQUIRED )
-find_package( OPENGL REQUIRED )
+find_package( OpenGL REQUIRED )
 	
 if( FWSG_BUILD_SHARED_LIBS )
 	set( LIB_TYPE SHARED )
@@ -103,6 +105,14 @@ target_link_libraries( fwsg ${OPENGL_LIBRARY} )
 target_link_libraries( fwsg ${SFML_GRAPHICS_LIBRARY} )
 target_link_libraries( fwsg ${SFML_WINDOW_LIBRARY} )
 target_link_libraries( fwsg ${SFML_SYSTEM_LIBRARY} )
+
+if( FWSG_BUILD_SHARED_LIBS )
+	set_target_properties( fwsg PROPERTIES DEBUG_POSTFIX -d )
+else()
+	set_target_properties( fwsg PROPERTIES DEBUG_POSTFIX -s-d )
+	set_target_properties( fwsg PROPERTIES RELEASE_POSTFIX -s )
+	set_target_properties( fwsg PROPERTIES MINSIZEREL_POSTFIX -s )
+endif()
 
 if( NOT FWSG_SKIP_INSTALL )
 	install(

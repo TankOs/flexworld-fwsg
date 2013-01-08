@@ -196,10 +196,10 @@ void Renderer::render( const Camera& camera ) const {
 			current_texture = &*state->texture;
 
 			if( current_texture ) {
-				current_texture->bind();
+				sf::Texture::bind( current_texture );
 			}
 			else {
-				glBindTexture( GL_TEXTURE_2D, 0 );
+				sf::Texture::bind( nullptr );
 			}
 		}
 
