@@ -63,17 +63,17 @@ int main() {
 		}
 
 		nearest_texture->loadFromImage( image );
-		nearest_texture->bind();
+		sf::Texture::bind( nearest_texture.get() );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
 
 		linear_texture->loadFromImage( image );
-		linear_texture->bind();
+		sf::Texture::bind( linear_texture.get() );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
 		nearest_mipmap_texture->loadFromImage( image );
-		nearest_mipmap_texture->bind();
+		sf::Texture::bind( nearest_mipmap_texture.get() );
 
 		gluBuild2DMipmaps(
 			GL_TEXTURE_2D,
@@ -89,7 +89,7 @@ int main() {
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
 
 		linear_mipmap_texture->loadFromImage( image );
-		linear_mipmap_texture->bind();
+		sf::Texture::bind( linear_mipmap_texture.get() );
 
 		gluBuild2DMipmaps(
 			GL_TEXTURE_2D,
